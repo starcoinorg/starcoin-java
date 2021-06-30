@@ -1,0 +1,21 @@
+# Mac OS X
+*.DS_Store
+deployer.sh
+
+# Generated files
+build/
+*.iml
+*.ipr
+.classpath
+.project
+.settings/
+.idea
+*/.idea
+target
+*/target
+*.class
+web/nb-configuration.xml
+nb-configuration.xml
+*.log
+*.log.*
+makefile

@@ -30,6 +30,33 @@ public final class BlockMetadata {
         this.parent_gas_used = parent_gas_used;
     }
 
+    public static BlockMetadata deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        deserializer.increase_container_depth();
+        Builder builder = new Builder();
+        builder.parent_hash = HashValue.deserialize(deserializer);
+        builder.timestamp = deserializer.deserialize_u64();
+        builder.author = AccountAddress.deserialize(deserializer);
+        builder.author_auth_key = TraitHelpers.deserialize_option_AuthenticationKey(deserializer);
+        builder.uncles = deserializer.deserialize_u64();
+        builder.number = deserializer.deserialize_u64();
+        builder.chain_id = ChainId.deserialize(deserializer);
+        builder.parent_gas_used = deserializer.deserialize_u64();
+        deserializer.decrease_container_depth();
+        return builder.build();
+    }
+
+    public static BlockMetadata bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        BlockMetadata value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         serializer.increase_container_depth();
         parent_hash.serialize(serializer);
@@ -49,46 +76,35 @@ public final class BlockMetadata {
         return serializer.get_bytes();
     }
 
-    public static BlockMetadata deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
-        deserializer.increase_container_depth();
-        Builder builder = new Builder();
-        builder.parent_hash = HashValue.deserialize(deserializer);
-        builder.timestamp = deserializer.deserialize_u64();
-        builder.author = AccountAddress.deserialize(deserializer);
-        builder.author_auth_key = TraitHelpers.deserialize_option_AuthenticationKey(deserializer);
-        builder.uncles = deserializer.deserialize_u64();
-        builder.number = deserializer.deserialize_u64();
-        builder.chain_id = ChainId.deserialize(deserializer);
-        builder.parent_gas_used = deserializer.deserialize_u64();
-        deserializer.decrease_container_depth();
-        return builder.build();
-    }
-
-    public static BlockMetadata bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        BlockMetadata value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         BlockMetadata other = (BlockMetadata) obj;
-        if (!java.util.Objects.equals(this.parent_hash, other.parent_hash)) { return false; }
-        if (!java.util.Objects.equals(this.timestamp, other.timestamp)) { return false; }
-        if (!java.util.Objects.equals(this.author, other.author)) { return false; }
-        if (!java.util.Objects.equals(this.author_auth_key, other.author_auth_key)) { return false; }
-        if (!java.util.Objects.equals(this.uncles, other.uncles)) { return false; }
-        if (!java.util.Objects.equals(this.number, other.number)) { return false; }
-        if (!java.util.Objects.equals(this.chain_id, other.chain_id)) { return false; }
-        if (!java.util.Objects.equals(this.parent_gas_used, other.parent_gas_used)) { return false; }
+        if (!java.util.Objects.equals(this.parent_hash, other.parent_hash)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.timestamp, other.timestamp)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.author, other.author)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.author_auth_key, other.author_auth_key)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.uncles, other.uncles)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.number, other.number)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.chain_id, other.chain_id)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.parent_gas_used, other.parent_gas_used)) {
+            return false;
+        }
         return true;
     }
 
@@ -117,14 +133,14 @@ public final class BlockMetadata {
 
         public BlockMetadata build() {
             return new BlockMetadata(
-                parent_hash,
-                timestamp,
-                author,
-                author_auth_key,
-                uncles,
-                number,
-                chain_id,
-                parent_gas_used
+                    parent_hash,
+                    timestamp,
+                    author,
+                    author_auth_key,
+                    uncles,
+                    number,
+                    chain_id,
+                    parent_gas_used
             );
         }
     }

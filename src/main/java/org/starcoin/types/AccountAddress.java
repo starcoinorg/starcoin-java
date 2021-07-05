@@ -2,23 +2,12 @@ package org.starcoin.types;
 
 
 public final class AccountAddress {
-    public final java.util.@com.novi.serde.ArrayLen(length=16) List<@com.novi.serde.Unsigned Byte> value;
+    static final int LENGTH = 16;
+    public final java.util.@com.novi.serde.ArrayLen(length = 16) List<@com.novi.serde.Unsigned Byte> value;
 
-    public AccountAddress(java.util.@com.novi.serde.ArrayLen(length=16) List<@com.novi.serde.Unsigned Byte> value) {
+    public AccountAddress(java.util.@com.novi.serde.ArrayLen(length = 16) List<@com.novi.serde.Unsigned Byte> value) {
         java.util.Objects.requireNonNull(value, "value must not be null");
         this.value = value;
-    }
-
-    public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-        serializer.increase_container_depth();
-        TraitHelpers.serialize_array16_u8_array(value, serializer);
-        serializer.decrease_container_depth();
-    }
-
-    public byte[] bcsSerialize() throws com.novi.serde.SerializationError {
-        com.novi.serde.Serializer serializer = new com.novi.bcs.BcsSerializer();
-        serialize(serializer);
-        return serializer.get_bytes();
     }
 
     public static AccountAddress deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
@@ -41,33 +30,6 @@ public final class AccountAddress {
         return value;
     }
 
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        AccountAddress other = (AccountAddress) obj;
-        if (!java.util.Objects.equals(this.value, other.value)) { return false; }
-        return true;
-    }
-
-    public int hashCode() {
-        int value = 7;
-        value = 31 * value + (this.value != null ? this.value.hashCode() : 0);
-        return value;
-    }
-
-    public static final class Builder {
-        public java.util.@com.novi.serde.ArrayLen(length=16) List<@com.novi.serde.Unsigned Byte> value;
-
-        public AccountAddress build() {
-            return new AccountAddress(
-                    value
-            );
-        }
-    }
-
-    static final int LENGTH = 16;
-
     public static AccountAddress valueOf(byte[] values) {
         if (values.length != LENGTH) {
             throw new java.lang.IllegalArgumentException("Invalid length for AccountAddress");
@@ -79,6 +41,35 @@ public final class AccountAddress {
         return new AccountAddress(address);
     }
 
+    public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+        serializer.increase_container_depth();
+        TraitHelpers.serialize_array16_u8_array(value, serializer);
+        serializer.decrease_container_depth();
+    }
+
+    public byte[] bcsSerialize() throws com.novi.serde.SerializationError {
+        com.novi.serde.Serializer serializer = new com.novi.bcs.BcsSerializer();
+        serialize(serializer);
+        return serializer.get_bytes();
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        AccountAddress other = (AccountAddress) obj;
+        if (!java.util.Objects.equals(this.value, other.value)) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int value = 7;
+        value = 31 * value + (this.value != null ? this.value.hashCode() : 0);
+        return value;
+    }
+
     public byte[] toBytes() {
         byte[] bytes = new byte[LENGTH];
         int i = 0;
@@ -86,6 +77,16 @@ public final class AccountAddress {
             bytes[i++] = item.byteValue();
         }
         return bytes;
+    }
+
+    public static final class Builder {
+        public java.util.@com.novi.serde.ArrayLen(length = 16) List<@com.novi.serde.Unsigned Byte> value;
+
+        public AccountAddress build() {
+            return new AccountAddress(
+                    value
+            );
+        }
     }
 
 }

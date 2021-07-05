@@ -9,6 +9,26 @@ public final class Module {
         this.code = code;
     }
 
+    public static Module deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        deserializer.increase_container_depth();
+        Builder builder = new Builder();
+        builder.code = deserializer.deserialize_bytes();
+        deserializer.decrease_container_depth();
+        return builder.build();
+    }
+
+    public static Module bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        Module value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         serializer.increase_container_depth();
         serializer.serialize_bytes(code);
@@ -21,32 +41,14 @@ public final class Module {
         return serializer.get_bytes();
     }
 
-    public static Module deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
-        deserializer.increase_container_depth();
-        Builder builder = new Builder();
-        builder.code = deserializer.deserialize_bytes();
-        deserializer.decrease_container_depth();
-        return builder.build();
-    }
-
-    public static Module bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        Module value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         Module other = (Module) obj;
-        if (!java.util.Objects.equals(this.code, other.code)) { return false; }
+        if (!java.util.Objects.equals(this.code, other.code)) {
+            return false;
+        }
         return true;
     }
 
@@ -61,7 +63,7 @@ public final class Module {
 
         public Module build() {
             return new Module(
-                code
+                    code
             );
         }
     }

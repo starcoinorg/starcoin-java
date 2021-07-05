@@ -12,6 +12,27 @@ public final class SignedUserTransaction {
         this.authenticator = authenticator;
     }
 
+    public static SignedUserTransaction deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        deserializer.increase_container_depth();
+        Builder builder = new Builder();
+        builder.raw_txn = RawUserTransaction.deserialize(deserializer);
+        builder.authenticator = TransactionAuthenticator.deserialize(deserializer);
+        deserializer.decrease_container_depth();
+        return builder.build();
+    }
+
+    public static SignedUserTransaction bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        SignedUserTransaction value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         serializer.increase_container_depth();
         raw_txn.serialize(serializer);
@@ -25,34 +46,17 @@ public final class SignedUserTransaction {
         return serializer.get_bytes();
     }
 
-    public static SignedUserTransaction deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
-        deserializer.increase_container_depth();
-        Builder builder = new Builder();
-        builder.raw_txn = RawUserTransaction.deserialize(deserializer);
-        builder.authenticator = TransactionAuthenticator.deserialize(deserializer);
-        deserializer.decrease_container_depth();
-        return builder.build();
-    }
-
-    public static SignedUserTransaction bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        SignedUserTransaction value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         SignedUserTransaction other = (SignedUserTransaction) obj;
-        if (!java.util.Objects.equals(this.raw_txn, other.raw_txn)) { return false; }
-        if (!java.util.Objects.equals(this.authenticator, other.authenticator)) { return false; }
+        if (!java.util.Objects.equals(this.raw_txn, other.raw_txn)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.authenticator, other.authenticator)) {
+            return false;
+        }
         return true;
     }
 
@@ -69,8 +73,8 @@ public final class SignedUserTransaction {
 
         public SignedUserTransaction build() {
             return new SignedUserTransaction(
-                raw_txn,
-                authenticator
+                    raw_txn,
+                    authenticator
             );
         }
     }

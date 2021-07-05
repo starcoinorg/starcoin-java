@@ -3,33 +3,36 @@ package org.starcoin.types;
 
 public abstract class TransactionAuthenticator {
 
-    abstract public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError;
-
     public static TransactionAuthenticator deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
         int index = deserializer.deserialize_variant_index();
         switch (index) {
-            case 0: return Ed25519.load(deserializer);
-            case 1: return MultiEd25519.load(deserializer);
-            default: throw new com.novi.serde.DeserializationError("Unknown variant index for TransactionAuthenticator: " + index);
+            case 0:
+                return Ed25519.load(deserializer);
+            case 1:
+                return MultiEd25519.load(deserializer);
+            default:
+                throw new com.novi.serde.DeserializationError("Unknown variant index for TransactionAuthenticator: " + index);
         }
     }
+
+    public static TransactionAuthenticator bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        TransactionAuthenticator value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
+    abstract public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError;
 
     public byte[] bcsSerialize() throws com.novi.serde.SerializationError {
         com.novi.serde.Serializer serializer = new com.novi.bcs.BcsSerializer();
         serialize(serializer);
         return serializer.get_bytes();
-    }
-
-    public static TransactionAuthenticator bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        TransactionAuthenticator value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
     }
 
     public static final class Ed25519 extends TransactionAuthenticator {
@@ -43,14 +46,6 @@ public abstract class TransactionAuthenticator {
             this.signature = signature;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(0);
-            public_key.serialize(serializer);
-            signature.serialize(serializer);
-            serializer.decrease_container_depth();
-        }
-
         static Ed25519 load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -60,13 +55,25 @@ public abstract class TransactionAuthenticator {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(0);
+            public_key.serialize(serializer);
+            signature.serialize(serializer);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             Ed25519 other = (Ed25519) obj;
-            if (!java.util.Objects.equals(this.public_key, other.public_key)) { return false; }
-            if (!java.util.Objects.equals(this.signature, other.signature)) { return false; }
+            if (!java.util.Objects.equals(this.public_key, other.public_key)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.signature, other.signature)) {
+                return false;
+            }
             return true;
         }
 
@@ -83,8 +90,8 @@ public abstract class TransactionAuthenticator {
 
             public Ed25519 build() {
                 return new Ed25519(
-                    public_key,
-                    signature
+                        public_key,
+                        signature
                 );
             }
         }
@@ -101,14 +108,6 @@ public abstract class TransactionAuthenticator {
             this.signature = signature;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(1);
-            public_key.serialize(serializer);
-            signature.serialize(serializer);
-            serializer.decrease_container_depth();
-        }
-
         static MultiEd25519 load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -118,13 +117,25 @@ public abstract class TransactionAuthenticator {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(1);
+            public_key.serialize(serializer);
+            signature.serialize(serializer);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             MultiEd25519 other = (MultiEd25519) obj;
-            if (!java.util.Objects.equals(this.public_key, other.public_key)) { return false; }
-            if (!java.util.Objects.equals(this.signature, other.signature)) { return false; }
+            if (!java.util.Objects.equals(this.public_key, other.public_key)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.signature, other.signature)) {
+                return false;
+            }
             return true;
         }
 
@@ -141,8 +152,8 @@ public abstract class TransactionAuthenticator {
 
             public MultiEd25519 build() {
                 return new MultiEd25519(
-                    public_key,
-                    signature
+                        public_key,
+                        signature
                 );
             }
         }

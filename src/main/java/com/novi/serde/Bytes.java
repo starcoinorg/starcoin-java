@@ -8,13 +8,12 @@ import java.util.Objects;
 
 /**
  * Immutable wrapper class around byte[].
- *
+ * <p>
  * Enforces value-semantice for `equals` and `hashCode`.
  */
 public final class Bytes {
-    private final byte[] content;
-
     private static final Bytes EMPTY = new Bytes(new byte[0]);
+    private final byte[] content;
 
     /// Low-level constructor (use with care).
     public Bytes(byte[] content) {

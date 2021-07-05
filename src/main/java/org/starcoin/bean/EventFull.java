@@ -2,12 +2,12 @@ package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-public class EventFull extends Event{
+public class EventFull extends Event {
 
     @JSONField(name = "event_address")
     private String eventAddress;
 
-    @JSONField(name="tag_address")
+    @JSONField(name = "tag_address")
     private String tagAddress;
 
     @JSONField(name = "tag_module")

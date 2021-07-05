@@ -20,7 +20,7 @@ public final class Tuple2<T0, T1> {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        Tuple2<?,?> other = (Tuple2) obj;
+        Tuple2<?, ?> other = (Tuple2) obj;
         if (!Objects.equals(this.field0, other.field0)) {
             return false;
         }

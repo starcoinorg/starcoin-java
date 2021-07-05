@@ -30,6 +30,33 @@ public final class RawUserTransaction {
         this.chain_id = chain_id;
     }
 
+    public static RawUserTransaction deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        deserializer.increase_container_depth();
+        Builder builder = new Builder();
+        builder.sender = AccountAddress.deserialize(deserializer);
+        builder.sequence_number = deserializer.deserialize_u64();
+        builder.payload = TransactionPayload.deserialize(deserializer);
+        builder.max_gas_amount = deserializer.deserialize_u64();
+        builder.gas_unit_price = deserializer.deserialize_u64();
+        builder.gas_token_code = deserializer.deserialize_str();
+        builder.expiration_timestamp_secs = deserializer.deserialize_u64();
+        builder.chain_id = ChainId.deserialize(deserializer);
+        deserializer.decrease_container_depth();
+        return builder.build();
+    }
+
+    public static RawUserTransaction bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        RawUserTransaction value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         serializer.increase_container_depth();
         sender.serialize(serializer);
@@ -49,46 +76,35 @@ public final class RawUserTransaction {
         return serializer.get_bytes();
     }
 
-    public static RawUserTransaction deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
-        deserializer.increase_container_depth();
-        Builder builder = new Builder();
-        builder.sender = AccountAddress.deserialize(deserializer);
-        builder.sequence_number = deserializer.deserialize_u64();
-        builder.payload = TransactionPayload.deserialize(deserializer);
-        builder.max_gas_amount = deserializer.deserialize_u64();
-        builder.gas_unit_price = deserializer.deserialize_u64();
-        builder.gas_token_code = deserializer.deserialize_str();
-        builder.expiration_timestamp_secs = deserializer.deserialize_u64();
-        builder.chain_id = ChainId.deserialize(deserializer);
-        deserializer.decrease_container_depth();
-        return builder.build();
-    }
-
-    public static RawUserTransaction bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        RawUserTransaction value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         RawUserTransaction other = (RawUserTransaction) obj;
-        if (!java.util.Objects.equals(this.sender, other.sender)) { return false; }
-        if (!java.util.Objects.equals(this.sequence_number, other.sequence_number)) { return false; }
-        if (!java.util.Objects.equals(this.payload, other.payload)) { return false; }
-        if (!java.util.Objects.equals(this.max_gas_amount, other.max_gas_amount)) { return false; }
-        if (!java.util.Objects.equals(this.gas_unit_price, other.gas_unit_price)) { return false; }
-        if (!java.util.Objects.equals(this.gas_token_code, other.gas_token_code)) { return false; }
-        if (!java.util.Objects.equals(this.expiration_timestamp_secs, other.expiration_timestamp_secs)) { return false; }
-        if (!java.util.Objects.equals(this.chain_id, other.chain_id)) { return false; }
+        if (!java.util.Objects.equals(this.sender, other.sender)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.sequence_number, other.sequence_number)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.payload, other.payload)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.max_gas_amount, other.max_gas_amount)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.gas_unit_price, other.gas_unit_price)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.gas_token_code, other.gas_token_code)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.expiration_timestamp_secs, other.expiration_timestamp_secs)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.chain_id, other.chain_id)) {
+            return false;
+        }
         return true;
     }
 
@@ -117,14 +133,14 @@ public final class RawUserTransaction {
 
         public RawUserTransaction build() {
             return new RawUserTransaction(
-                sender,
-                sequence_number,
-                payload,
-                max_gas_amount,
-                gas_unit_price,
-                gas_token_code,
-                expiration_timestamp_secs,
-                chain_id
+                    sender,
+                    sequence_number,
+                    payload,
+                    max_gas_amount,
+                    gas_unit_price,
+                    gas_token_code,
+                    expiration_timestamp_secs,
+                    chain_id
             );
         }
     }

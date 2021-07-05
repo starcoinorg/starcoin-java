@@ -23,7 +23,7 @@ public final class Tuple3<T0, T1, T2> {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        Tuple3<?,?,?> other = (Tuple3) obj;
+        Tuple3<?, ?, ?> other = (Tuple3) obj;
         if (!Objects.equals(this.field0, other.field0)) {
             return false;
         }

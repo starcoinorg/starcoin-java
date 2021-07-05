@@ -9,6 +9,26 @@ public final class TypeArgumentABI {
         this.name = name;
     }
 
+    public static TypeArgumentABI deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        deserializer.increase_container_depth();
+        Builder builder = new Builder();
+        builder.name = deserializer.deserialize_str();
+        deserializer.decrease_container_depth();
+        return builder.build();
+    }
+
+    public static TypeArgumentABI bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        TypeArgumentABI value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         serializer.increase_container_depth();
         serializer.serialize_str(name);
@@ -21,32 +41,14 @@ public final class TypeArgumentABI {
         return serializer.get_bytes();
     }
 
-    public static TypeArgumentABI deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
-        deserializer.increase_container_depth();
-        Builder builder = new Builder();
-        builder.name = deserializer.deserialize_str();
-        deserializer.decrease_container_depth();
-        return builder.build();
-    }
-
-    public static TypeArgumentABI bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        TypeArgumentABI value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         TypeArgumentABI other = (TypeArgumentABI) obj;
-        if (!java.util.Objects.equals(this.name, other.name)) { return false; }
+        if (!java.util.Objects.equals(this.name, other.name)) {
+            return false;
+        }
         return true;
     }
 
@@ -61,7 +63,7 @@ public final class TypeArgumentABI {
 
         public TypeArgumentABI build() {
             return new TypeArgumentABI(
-                name
+                    name
             );
         }
     }

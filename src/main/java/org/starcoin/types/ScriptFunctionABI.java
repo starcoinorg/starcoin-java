@@ -21,6 +21,30 @@ public final class ScriptFunctionABI {
         this.args = args;
     }
 
+    public static ScriptFunctionABI deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        deserializer.increase_container_depth();
+        Builder builder = new Builder();
+        builder.name = deserializer.deserialize_str();
+        builder.module_name = ModuleId.deserialize(deserializer);
+        builder.doc = deserializer.deserialize_str();
+        builder.ty_args = TraitHelpers.deserialize_vector_TypeArgumentABI(deserializer);
+        builder.args = TraitHelpers.deserialize_vector_ArgumentABI(deserializer);
+        deserializer.decrease_container_depth();
+        return builder.build();
+    }
+
+    public static ScriptFunctionABI bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        ScriptFunctionABI value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         serializer.increase_container_depth();
         serializer.serialize_str(name);
@@ -37,40 +61,26 @@ public final class ScriptFunctionABI {
         return serializer.get_bytes();
     }
 
-    public static ScriptFunctionABI deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
-        deserializer.increase_container_depth();
-        Builder builder = new Builder();
-        builder.name = deserializer.deserialize_str();
-        builder.module_name = ModuleId.deserialize(deserializer);
-        builder.doc = deserializer.deserialize_str();
-        builder.ty_args = TraitHelpers.deserialize_vector_TypeArgumentABI(deserializer);
-        builder.args = TraitHelpers.deserialize_vector_ArgumentABI(deserializer);
-        deserializer.decrease_container_depth();
-        return builder.build();
-    }
-
-    public static ScriptFunctionABI bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        ScriptFunctionABI value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         ScriptFunctionABI other = (ScriptFunctionABI) obj;
-        if (!java.util.Objects.equals(this.name, other.name)) { return false; }
-        if (!java.util.Objects.equals(this.module_name, other.module_name)) { return false; }
-        if (!java.util.Objects.equals(this.doc, other.doc)) { return false; }
-        if (!java.util.Objects.equals(this.ty_args, other.ty_args)) { return false; }
-        if (!java.util.Objects.equals(this.args, other.args)) { return false; }
+        if (!java.util.Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.module_name, other.module_name)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.doc, other.doc)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.ty_args, other.ty_args)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.args, other.args)) {
+            return false;
+        }
         return true;
     }
 
@@ -93,11 +103,11 @@ public final class ScriptFunctionABI {
 
         public ScriptFunctionABI build() {
             return new ScriptFunctionABI(
-                name,
-                module_name,
-                doc,
-                ty_args,
-                args
+                    name,
+                    module_name,
+                    doc,
+                    ty_args,
+                    args
             );
         }
     }

@@ -9,6 +9,26 @@ public final class KeyRotationCapabilityResource {
         this.account_address = account_address;
     }
 
+    public static KeyRotationCapabilityResource deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        deserializer.increase_container_depth();
+        Builder builder = new Builder();
+        builder.account_address = AccountAddress.deserialize(deserializer);
+        deserializer.decrease_container_depth();
+        return builder.build();
+    }
+
+    public static KeyRotationCapabilityResource bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        KeyRotationCapabilityResource value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         serializer.increase_container_depth();
         account_address.serialize(serializer);
@@ -21,32 +41,14 @@ public final class KeyRotationCapabilityResource {
         return serializer.get_bytes();
     }
 
-    public static KeyRotationCapabilityResource deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
-        deserializer.increase_container_depth();
-        Builder builder = new Builder();
-        builder.account_address = AccountAddress.deserialize(deserializer);
-        deserializer.decrease_container_depth();
-        return builder.build();
-    }
-
-    public static KeyRotationCapabilityResource bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        KeyRotationCapabilityResource value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         KeyRotationCapabilityResource other = (KeyRotationCapabilityResource) obj;
-        if (!java.util.Objects.equals(this.account_address, other.account_address)) { return false; }
+        if (!java.util.Objects.equals(this.account_address, other.account_address)) {
+            return false;
+        }
         return true;
     }
 
@@ -61,7 +63,7 @@ public final class KeyRotationCapabilityResource {
 
         public KeyRotationCapabilityResource build() {
             return new KeyRotationCapabilityResource(
-                account_address
+                    account_address
             );
         }
     }

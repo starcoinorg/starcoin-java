@@ -3,16 +3,31 @@ package org.starcoin.types;
 
 public abstract class WriteOp {
 
-    abstract public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError;
-
     public static WriteOp deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
         int index = deserializer.deserialize_variant_index();
         switch (index) {
-            case 0: return Deletion.load(deserializer);
-            case 1: return Value.load(deserializer);
-            default: throw new com.novi.serde.DeserializationError("Unknown variant index for WriteOp: " + index);
+            case 0:
+                return Deletion.load(deserializer);
+            case 1:
+                return Value.load(deserializer);
+            default:
+                throw new com.novi.serde.DeserializationError("Unknown variant index for WriteOp: " + index);
         }
     }
+
+    public static WriteOp bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        WriteOp value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
+    abstract public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError;
 
     public byte[] bcsSerialize() throws com.novi.serde.SerializationError {
         com.novi.serde.Serializer serializer = new com.novi.bcs.BcsSerializer();
@@ -20,26 +35,8 @@ public abstract class WriteOp {
         return serializer.get_bytes();
     }
 
-    public static WriteOp bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        WriteOp value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public static final class Deletion extends WriteOp {
         public Deletion() {
-        }
-
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(0);
-            serializer.decrease_container_depth();
         }
 
         static Deletion load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
@@ -47,6 +44,12 @@ public abstract class WriteOp {
             Builder builder = new Builder();
             deserializer.decrease_container_depth();
             return builder.build();
+        }
+
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(0);
+            serializer.decrease_container_depth();
         }
 
         public boolean equals(Object obj) {
@@ -78,13 +81,6 @@ public abstract class WriteOp {
             this.value = value;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(1);
-            serializer.serialize_bytes(value);
-            serializer.decrease_container_depth();
-        }
-
         static Value load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -93,12 +89,21 @@ public abstract class WriteOp {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(1);
+            serializer.serialize_bytes(value);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             Value other = (Value) obj;
-            if (!java.util.Objects.equals(this.value, other.value)) { return false; }
+            if (!java.util.Objects.equals(this.value, other.value)) {
+                return false;
+            }
             return true;
         }
 
@@ -113,7 +118,7 @@ public abstract class WriteOp {
 
             public Value build() {
                 return new Value(
-                    value
+                        value
                 );
             }
         }

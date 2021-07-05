@@ -4,7 +4,7 @@ package org.starcoin.stdlib;
 public abstract class ScriptFunctionCall {
 
     /**
-
+     *
      */
     public static final class AcceptToken extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token_type;
@@ -19,7 +19,9 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             AcceptToken other = (AcceptToken) obj;
-            if (!java.util.Objects.equals(this.token_type, other.token_type)) { return false; }
+            if (!java.util.Objects.equals(this.token_type, other.token_type)) {
+                return false;
+            }
             return true;
         }
 
@@ -34,14 +36,14 @@ public abstract class ScriptFunctionCall {
 
             public AcceptToken build() {
                 return new AcceptToken(
-                    token_type
+                        token_type
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class CancelUpgradePlan extends ScriptFunctionCall {
         public CancelUpgradePlan() {
@@ -69,7 +71,7 @@ public abstract class ScriptFunctionCall {
     }
 
     /**
-
+     *
      */
     public static final class CastVote extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token;
@@ -99,12 +101,24 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             CastVote other = (CastVote) obj;
-            if (!java.util.Objects.equals(this.token, other.token)) { return false; }
-            if (!java.util.Objects.equals(this.action_t, other.action_t)) { return false; }
-            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) { return false; }
-            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) { return false; }
-            if (!java.util.Objects.equals(this.agree, other.agree)) { return false; }
-            if (!java.util.Objects.equals(this.votes, other.votes)) { return false; }
+            if (!java.util.Objects.equals(this.token, other.token)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.action_t, other.action_t)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.agree, other.agree)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.votes, other.votes)) {
+                return false;
+            }
             return true;
         }
 
@@ -129,19 +143,19 @@ public abstract class ScriptFunctionCall {
 
             public CastVote build() {
                 return new CastVote(
-                    token,
-                    action_t,
-                    proposer_address,
-                    proposal_id,
-                    agree,
-                    votes
+                        token,
+                        action_t,
+                        proposer_address,
+                        proposal_id,
+                        agree,
+                        votes
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class ConvertTwoPhaseUpgradeToTwoPhaseUpgradeV2 extends ScriptFunctionCall {
         public final org.starcoin.types.AccountAddress package_address;
@@ -156,7 +170,9 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             ConvertTwoPhaseUpgradeToTwoPhaseUpgradeV2 other = (ConvertTwoPhaseUpgradeToTwoPhaseUpgradeV2) obj;
-            if (!java.util.Objects.equals(this.package_address, other.package_address)) { return false; }
+            if (!java.util.Objects.equals(this.package_address, other.package_address)) {
+                return false;
+            }
             return true;
         }
 
@@ -171,14 +187,14 @@ public abstract class ScriptFunctionCall {
 
             public ConvertTwoPhaseUpgradeToTwoPhaseUpgradeV2 build() {
                 return new ConvertTwoPhaseUpgradeToTwoPhaseUpgradeV2(
-                    package_address
+                        package_address
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class CreateAccountWithInitialAmount extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token_type;
@@ -202,10 +218,18 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             CreateAccountWithInitialAmount other = (CreateAccountWithInitialAmount) obj;
-            if (!java.util.Objects.equals(this.token_type, other.token_type)) { return false; }
-            if (!java.util.Objects.equals(this.fresh_address, other.fresh_address)) { return false; }
-            if (!java.util.Objects.equals(this._auth_key, other._auth_key)) { return false; }
-            if (!java.util.Objects.equals(this.initial_amount, other.initial_amount)) { return false; }
+            if (!java.util.Objects.equals(this.token_type, other.token_type)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.fresh_address, other.fresh_address)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this._auth_key, other._auth_key)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.initial_amount, other.initial_amount)) {
+                return false;
+            }
             return true;
         }
 
@@ -226,17 +250,17 @@ public abstract class ScriptFunctionCall {
 
             public CreateAccountWithInitialAmount build() {
                 return new CreateAccountWithInitialAmount(
-                    token_type,
-                    fresh_address,
-                    _auth_key,
-                    initial_amount
+                        token_type,
+                        fresh_address,
+                        _auth_key,
+                        initial_amount
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class CreateAccountWithInitialAmountV2 extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token_type;
@@ -257,9 +281,15 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             CreateAccountWithInitialAmountV2 other = (CreateAccountWithInitialAmountV2) obj;
-            if (!java.util.Objects.equals(this.token_type, other.token_type)) { return false; }
-            if (!java.util.Objects.equals(this.fresh_address, other.fresh_address)) { return false; }
-            if (!java.util.Objects.equals(this.initial_amount, other.initial_amount)) { return false; }
+            if (!java.util.Objects.equals(this.token_type, other.token_type)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.fresh_address, other.fresh_address)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.initial_amount, other.initial_amount)) {
+                return false;
+            }
             return true;
         }
 
@@ -278,9 +308,9 @@ public abstract class ScriptFunctionCall {
 
             public CreateAccountWithInitialAmountV2 build() {
                 return new CreateAccountWithInitialAmountV2(
-                    token_type,
-                    fresh_address,
-                    initial_amount
+                        token_type,
+                        fresh_address,
+                        initial_amount
                 );
             }
         }
@@ -311,10 +341,18 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             DestroyTerminatedProposal other = (DestroyTerminatedProposal) obj;
-            if (!java.util.Objects.equals(this.token_t, other.token_t)) { return false; }
-            if (!java.util.Objects.equals(this.action_t, other.action_t)) { return false; }
-            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) { return false; }
-            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) { return false; }
+            if (!java.util.Objects.equals(this.token_t, other.token_t)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.action_t, other.action_t)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) {
+                return false;
+            }
             return true;
         }
 
@@ -335,17 +373,17 @@ public abstract class ScriptFunctionCall {
 
             public DestroyTerminatedProposal build() {
                 return new DestroyTerminatedProposal(
-                    token_t,
-                    action_t,
-                    proposer_address,
-                    proposal_id
+                        token_t,
+                        action_t,
+                        proposer_address,
+                        proposal_id
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class EmptyScript extends ScriptFunctionCall {
         public EmptyScript() {
@@ -394,9 +432,15 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             Execute other = (Execute) obj;
-            if (!java.util.Objects.equals(this.token_t, other.token_t)) { return false; }
-            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) { return false; }
-            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) { return false; }
+            if (!java.util.Objects.equals(this.token_t, other.token_t)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) {
+                return false;
+            }
             return true;
         }
 
@@ -415,16 +459,16 @@ public abstract class ScriptFunctionCall {
 
             public Execute build() {
                 return new Execute(
-                    token_t,
-                    proposer_address,
-                    proposal_id
+                        token_t,
+                        proposer_address,
+                        proposal_id
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class ExecuteOnChainConfigProposal extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag config_t;
@@ -442,8 +486,12 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             ExecuteOnChainConfigProposal other = (ExecuteOnChainConfigProposal) obj;
-            if (!java.util.Objects.equals(this.config_t, other.config_t)) { return false; }
-            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) { return false; }
+            if (!java.util.Objects.equals(this.config_t, other.config_t)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) {
+                return false;
+            }
             return true;
         }
 
@@ -460,15 +508,15 @@ public abstract class ScriptFunctionCall {
 
             public ExecuteOnChainConfigProposal build() {
                 return new ExecuteOnChainConfigProposal(
-                    config_t,
-                    proposal_id
+                        config_t,
+                        proposal_id
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class ExecuteWithdrawProposal extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token_t;
@@ -489,9 +537,15 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             ExecuteWithdrawProposal other = (ExecuteWithdrawProposal) obj;
-            if (!java.util.Objects.equals(this.token_t, other.token_t)) { return false; }
-            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) { return false; }
-            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) { return false; }
+            if (!java.util.Objects.equals(this.token_t, other.token_t)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) {
+                return false;
+            }
             return true;
         }
 
@@ -510,16 +564,16 @@ public abstract class ScriptFunctionCall {
 
             public ExecuteWithdrawProposal build() {
                 return new ExecuteWithdrawProposal(
-                    token_t,
-                    proposer_address,
-                    proposal_id
+                        token_t,
+                        proposer_address,
+                        proposal_id
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class Initialize extends ScriptFunctionCall {
         public final @com.novi.serde.Unsigned Long stdlib_version;
@@ -654,47 +708,129 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             Initialize other = (Initialize) obj;
-            if (!java.util.Objects.equals(this.stdlib_version, other.stdlib_version)) { return false; }
-            if (!java.util.Objects.equals(this.reward_delay, other.reward_delay)) { return false; }
-            if (!java.util.Objects.equals(this.pre_mine_stc_amount, other.pre_mine_stc_amount)) { return false; }
-            if (!java.util.Objects.equals(this.time_mint_stc_amount, other.time_mint_stc_amount)) { return false; }
-            if (!java.util.Objects.equals(this.time_mint_stc_period, other.time_mint_stc_period)) { return false; }
-            if (!java.util.Objects.equals(this.parent_hash, other.parent_hash)) { return false; }
-            if (!java.util.Objects.equals(this.association_auth_key, other.association_auth_key)) { return false; }
-            if (!java.util.Objects.equals(this.genesis_auth_key, other.genesis_auth_key)) { return false; }
-            if (!java.util.Objects.equals(this.chain_id, other.chain_id)) { return false; }
-            if (!java.util.Objects.equals(this.genesis_timestamp, other.genesis_timestamp)) { return false; }
-            if (!java.util.Objects.equals(this.uncle_rate_target, other.uncle_rate_target)) { return false; }
-            if (!java.util.Objects.equals(this.epoch_block_count, other.epoch_block_count)) { return false; }
-            if (!java.util.Objects.equals(this.base_block_time_target, other.base_block_time_target)) { return false; }
-            if (!java.util.Objects.equals(this.base_block_difficulty_window, other.base_block_difficulty_window)) { return false; }
-            if (!java.util.Objects.equals(this.base_reward_per_block, other.base_reward_per_block)) { return false; }
-            if (!java.util.Objects.equals(this.base_reward_per_uncle_percent, other.base_reward_per_uncle_percent)) { return false; }
-            if (!java.util.Objects.equals(this.min_block_time_target, other.min_block_time_target)) { return false; }
-            if (!java.util.Objects.equals(this.max_block_time_target, other.max_block_time_target)) { return false; }
-            if (!java.util.Objects.equals(this.base_max_uncles_per_block, other.base_max_uncles_per_block)) { return false; }
-            if (!java.util.Objects.equals(this.base_block_gas_limit, other.base_block_gas_limit)) { return false; }
-            if (!java.util.Objects.equals(this.strategy, other.strategy)) { return false; }
-            if (!java.util.Objects.equals(this.script_allowed, other.script_allowed)) { return false; }
-            if (!java.util.Objects.equals(this.module_publishing_allowed, other.module_publishing_allowed)) { return false; }
-            if (!java.util.Objects.equals(this.instruction_schedule, other.instruction_schedule)) { return false; }
-            if (!java.util.Objects.equals(this.native_schedule, other.native_schedule)) { return false; }
-            if (!java.util.Objects.equals(this.global_memory_per_byte_cost, other.global_memory_per_byte_cost)) { return false; }
-            if (!java.util.Objects.equals(this.global_memory_per_byte_write_cost, other.global_memory_per_byte_write_cost)) { return false; }
-            if (!java.util.Objects.equals(this.min_transaction_gas_units, other.min_transaction_gas_units)) { return false; }
-            if (!java.util.Objects.equals(this.large_transaction_cutoff, other.large_transaction_cutoff)) { return false; }
-            if (!java.util.Objects.equals(this.instrinsic_gas_per_byte, other.instrinsic_gas_per_byte)) { return false; }
-            if (!java.util.Objects.equals(this.maximum_number_of_gas_units, other.maximum_number_of_gas_units)) { return false; }
-            if (!java.util.Objects.equals(this.min_price_per_gas_unit, other.min_price_per_gas_unit)) { return false; }
-            if (!java.util.Objects.equals(this.max_price_per_gas_unit, other.max_price_per_gas_unit)) { return false; }
-            if (!java.util.Objects.equals(this.max_transaction_size_in_bytes, other.max_transaction_size_in_bytes)) { return false; }
-            if (!java.util.Objects.equals(this.gas_unit_scaling_factor, other.gas_unit_scaling_factor)) { return false; }
-            if (!java.util.Objects.equals(this.default_account_size, other.default_account_size)) { return false; }
-            if (!java.util.Objects.equals(this.voting_delay, other.voting_delay)) { return false; }
-            if (!java.util.Objects.equals(this.voting_period, other.voting_period)) { return false; }
-            if (!java.util.Objects.equals(this.voting_quorum_rate, other.voting_quorum_rate)) { return false; }
-            if (!java.util.Objects.equals(this.min_action_delay, other.min_action_delay)) { return false; }
-            if (!java.util.Objects.equals(this.transaction_timeout, other.transaction_timeout)) { return false; }
+            if (!java.util.Objects.equals(this.stdlib_version, other.stdlib_version)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.reward_delay, other.reward_delay)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.pre_mine_stc_amount, other.pre_mine_stc_amount)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.time_mint_stc_amount, other.time_mint_stc_amount)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.time_mint_stc_period, other.time_mint_stc_period)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.parent_hash, other.parent_hash)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.association_auth_key, other.association_auth_key)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.genesis_auth_key, other.genesis_auth_key)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.chain_id, other.chain_id)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.genesis_timestamp, other.genesis_timestamp)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.uncle_rate_target, other.uncle_rate_target)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.epoch_block_count, other.epoch_block_count)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_block_time_target, other.base_block_time_target)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_block_difficulty_window, other.base_block_difficulty_window)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_reward_per_block, other.base_reward_per_block)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_reward_per_uncle_percent, other.base_reward_per_uncle_percent)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.min_block_time_target, other.min_block_time_target)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.max_block_time_target, other.max_block_time_target)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_max_uncles_per_block, other.base_max_uncles_per_block)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_block_gas_limit, other.base_block_gas_limit)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.strategy, other.strategy)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.script_allowed, other.script_allowed)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.module_publishing_allowed, other.module_publishing_allowed)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.instruction_schedule, other.instruction_schedule)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.native_schedule, other.native_schedule)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.global_memory_per_byte_cost, other.global_memory_per_byte_cost)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.global_memory_per_byte_write_cost, other.global_memory_per_byte_write_cost)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.min_transaction_gas_units, other.min_transaction_gas_units)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.large_transaction_cutoff, other.large_transaction_cutoff)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.instrinsic_gas_per_byte, other.instrinsic_gas_per_byte)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.maximum_number_of_gas_units, other.maximum_number_of_gas_units)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.min_price_per_gas_unit, other.min_price_per_gas_unit)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.max_price_per_gas_unit, other.max_price_per_gas_unit)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.max_transaction_size_in_bytes, other.max_transaction_size_in_bytes)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.gas_unit_scaling_factor, other.gas_unit_scaling_factor)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.default_account_size, other.default_account_size)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.voting_delay, other.voting_delay)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.voting_period, other.voting_period)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.voting_quorum_rate, other.voting_quorum_rate)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.min_action_delay, other.min_action_delay)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.transaction_timeout, other.transaction_timeout)) {
+                return false;
+            }
             return true;
         }
 
@@ -789,54 +925,54 @@ public abstract class ScriptFunctionCall {
 
             public Initialize build() {
                 return new Initialize(
-                    stdlib_version,
-                    reward_delay,
-                    pre_mine_stc_amount,
-                    time_mint_stc_amount,
-                    time_mint_stc_period,
-                    parent_hash,
-                    association_auth_key,
-                    genesis_auth_key,
-                    chain_id,
-                    genesis_timestamp,
-                    uncle_rate_target,
-                    epoch_block_count,
-                    base_block_time_target,
-                    base_block_difficulty_window,
-                    base_reward_per_block,
-                    base_reward_per_uncle_percent,
-                    min_block_time_target,
-                    max_block_time_target,
-                    base_max_uncles_per_block,
-                    base_block_gas_limit,
-                    strategy,
-                    script_allowed,
-                    module_publishing_allowed,
-                    instruction_schedule,
-                    native_schedule,
-                    global_memory_per_byte_cost,
-                    global_memory_per_byte_write_cost,
-                    min_transaction_gas_units,
-                    large_transaction_cutoff,
-                    instrinsic_gas_per_byte,
-                    maximum_number_of_gas_units,
-                    min_price_per_gas_unit,
-                    max_price_per_gas_unit,
-                    max_transaction_size_in_bytes,
-                    gas_unit_scaling_factor,
-                    default_account_size,
-                    voting_delay,
-                    voting_period,
-                    voting_quorum_rate,
-                    min_action_delay,
-                    transaction_timeout
+                        stdlib_version,
+                        reward_delay,
+                        pre_mine_stc_amount,
+                        time_mint_stc_amount,
+                        time_mint_stc_period,
+                        parent_hash,
+                        association_auth_key,
+                        genesis_auth_key,
+                        chain_id,
+                        genesis_timestamp,
+                        uncle_rate_target,
+                        epoch_block_count,
+                        base_block_time_target,
+                        base_block_difficulty_window,
+                        base_reward_per_block,
+                        base_reward_per_uncle_percent,
+                        min_block_time_target,
+                        max_block_time_target,
+                        base_max_uncles_per_block,
+                        base_block_gas_limit,
+                        strategy,
+                        script_allowed,
+                        module_publishing_allowed,
+                        instruction_schedule,
+                        native_schedule,
+                        global_memory_per_byte_cost,
+                        global_memory_per_byte_write_cost,
+                        min_transaction_gas_units,
+                        large_transaction_cutoff,
+                        instrinsic_gas_per_byte,
+                        maximum_number_of_gas_units,
+                        min_price_per_gas_unit,
+                        max_price_per_gas_unit,
+                        max_transaction_size_in_bytes,
+                        gas_unit_scaling_factor,
+                        default_account_size,
+                        voting_delay,
+                        voting_period,
+                        voting_quorum_rate,
+                        min_action_delay,
+                        transaction_timeout
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class InitializeV2 extends ScriptFunctionCall {
         public final @com.novi.serde.Unsigned Long stdlib_version;
@@ -974,48 +1110,132 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             InitializeV2 other = (InitializeV2) obj;
-            if (!java.util.Objects.equals(this.stdlib_version, other.stdlib_version)) { return false; }
-            if (!java.util.Objects.equals(this.reward_delay, other.reward_delay)) { return false; }
-            if (!java.util.Objects.equals(this.total_stc_amount, other.total_stc_amount)) { return false; }
-            if (!java.util.Objects.equals(this.pre_mine_stc_amount, other.pre_mine_stc_amount)) { return false; }
-            if (!java.util.Objects.equals(this.time_mint_stc_amount, other.time_mint_stc_amount)) { return false; }
-            if (!java.util.Objects.equals(this.time_mint_stc_period, other.time_mint_stc_period)) { return false; }
-            if (!java.util.Objects.equals(this.parent_hash, other.parent_hash)) { return false; }
-            if (!java.util.Objects.equals(this.association_auth_key, other.association_auth_key)) { return false; }
-            if (!java.util.Objects.equals(this.genesis_auth_key, other.genesis_auth_key)) { return false; }
-            if (!java.util.Objects.equals(this.chain_id, other.chain_id)) { return false; }
-            if (!java.util.Objects.equals(this.genesis_timestamp, other.genesis_timestamp)) { return false; }
-            if (!java.util.Objects.equals(this.uncle_rate_target, other.uncle_rate_target)) { return false; }
-            if (!java.util.Objects.equals(this.epoch_block_count, other.epoch_block_count)) { return false; }
-            if (!java.util.Objects.equals(this.base_block_time_target, other.base_block_time_target)) { return false; }
-            if (!java.util.Objects.equals(this.base_block_difficulty_window, other.base_block_difficulty_window)) { return false; }
-            if (!java.util.Objects.equals(this.base_reward_per_block, other.base_reward_per_block)) { return false; }
-            if (!java.util.Objects.equals(this.base_reward_per_uncle_percent, other.base_reward_per_uncle_percent)) { return false; }
-            if (!java.util.Objects.equals(this.min_block_time_target, other.min_block_time_target)) { return false; }
-            if (!java.util.Objects.equals(this.max_block_time_target, other.max_block_time_target)) { return false; }
-            if (!java.util.Objects.equals(this.base_max_uncles_per_block, other.base_max_uncles_per_block)) { return false; }
-            if (!java.util.Objects.equals(this.base_block_gas_limit, other.base_block_gas_limit)) { return false; }
-            if (!java.util.Objects.equals(this.strategy, other.strategy)) { return false; }
-            if (!java.util.Objects.equals(this.script_allowed, other.script_allowed)) { return false; }
-            if (!java.util.Objects.equals(this.module_publishing_allowed, other.module_publishing_allowed)) { return false; }
-            if (!java.util.Objects.equals(this.instruction_schedule, other.instruction_schedule)) { return false; }
-            if (!java.util.Objects.equals(this.native_schedule, other.native_schedule)) { return false; }
-            if (!java.util.Objects.equals(this.global_memory_per_byte_cost, other.global_memory_per_byte_cost)) { return false; }
-            if (!java.util.Objects.equals(this.global_memory_per_byte_write_cost, other.global_memory_per_byte_write_cost)) { return false; }
-            if (!java.util.Objects.equals(this.min_transaction_gas_units, other.min_transaction_gas_units)) { return false; }
-            if (!java.util.Objects.equals(this.large_transaction_cutoff, other.large_transaction_cutoff)) { return false; }
-            if (!java.util.Objects.equals(this.instrinsic_gas_per_byte, other.instrinsic_gas_per_byte)) { return false; }
-            if (!java.util.Objects.equals(this.maximum_number_of_gas_units, other.maximum_number_of_gas_units)) { return false; }
-            if (!java.util.Objects.equals(this.min_price_per_gas_unit, other.min_price_per_gas_unit)) { return false; }
-            if (!java.util.Objects.equals(this.max_price_per_gas_unit, other.max_price_per_gas_unit)) { return false; }
-            if (!java.util.Objects.equals(this.max_transaction_size_in_bytes, other.max_transaction_size_in_bytes)) { return false; }
-            if (!java.util.Objects.equals(this.gas_unit_scaling_factor, other.gas_unit_scaling_factor)) { return false; }
-            if (!java.util.Objects.equals(this.default_account_size, other.default_account_size)) { return false; }
-            if (!java.util.Objects.equals(this.voting_delay, other.voting_delay)) { return false; }
-            if (!java.util.Objects.equals(this.voting_period, other.voting_period)) { return false; }
-            if (!java.util.Objects.equals(this.voting_quorum_rate, other.voting_quorum_rate)) { return false; }
-            if (!java.util.Objects.equals(this.min_action_delay, other.min_action_delay)) { return false; }
-            if (!java.util.Objects.equals(this.transaction_timeout, other.transaction_timeout)) { return false; }
+            if (!java.util.Objects.equals(this.stdlib_version, other.stdlib_version)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.reward_delay, other.reward_delay)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.total_stc_amount, other.total_stc_amount)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.pre_mine_stc_amount, other.pre_mine_stc_amount)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.time_mint_stc_amount, other.time_mint_stc_amount)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.time_mint_stc_period, other.time_mint_stc_period)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.parent_hash, other.parent_hash)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.association_auth_key, other.association_auth_key)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.genesis_auth_key, other.genesis_auth_key)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.chain_id, other.chain_id)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.genesis_timestamp, other.genesis_timestamp)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.uncle_rate_target, other.uncle_rate_target)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.epoch_block_count, other.epoch_block_count)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_block_time_target, other.base_block_time_target)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_block_difficulty_window, other.base_block_difficulty_window)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_reward_per_block, other.base_reward_per_block)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_reward_per_uncle_percent, other.base_reward_per_uncle_percent)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.min_block_time_target, other.min_block_time_target)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.max_block_time_target, other.max_block_time_target)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_max_uncles_per_block, other.base_max_uncles_per_block)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_block_gas_limit, other.base_block_gas_limit)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.strategy, other.strategy)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.script_allowed, other.script_allowed)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.module_publishing_allowed, other.module_publishing_allowed)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.instruction_schedule, other.instruction_schedule)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.native_schedule, other.native_schedule)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.global_memory_per_byte_cost, other.global_memory_per_byte_cost)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.global_memory_per_byte_write_cost, other.global_memory_per_byte_write_cost)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.min_transaction_gas_units, other.min_transaction_gas_units)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.large_transaction_cutoff, other.large_transaction_cutoff)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.instrinsic_gas_per_byte, other.instrinsic_gas_per_byte)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.maximum_number_of_gas_units, other.maximum_number_of_gas_units)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.min_price_per_gas_unit, other.min_price_per_gas_unit)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.max_price_per_gas_unit, other.max_price_per_gas_unit)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.max_transaction_size_in_bytes, other.max_transaction_size_in_bytes)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.gas_unit_scaling_factor, other.gas_unit_scaling_factor)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.default_account_size, other.default_account_size)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.voting_delay, other.voting_delay)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.voting_period, other.voting_period)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.voting_quorum_rate, other.voting_quorum_rate)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.min_action_delay, other.min_action_delay)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.transaction_timeout, other.transaction_timeout)) {
+                return false;
+            }
             return true;
         }
 
@@ -1112,55 +1332,55 @@ public abstract class ScriptFunctionCall {
 
             public InitializeV2 build() {
                 return new InitializeV2(
-                    stdlib_version,
-                    reward_delay,
-                    total_stc_amount,
-                    pre_mine_stc_amount,
-                    time_mint_stc_amount,
-                    time_mint_stc_period,
-                    parent_hash,
-                    association_auth_key,
-                    genesis_auth_key,
-                    chain_id,
-                    genesis_timestamp,
-                    uncle_rate_target,
-                    epoch_block_count,
-                    base_block_time_target,
-                    base_block_difficulty_window,
-                    base_reward_per_block,
-                    base_reward_per_uncle_percent,
-                    min_block_time_target,
-                    max_block_time_target,
-                    base_max_uncles_per_block,
-                    base_block_gas_limit,
-                    strategy,
-                    script_allowed,
-                    module_publishing_allowed,
-                    instruction_schedule,
-                    native_schedule,
-                    global_memory_per_byte_cost,
-                    global_memory_per_byte_write_cost,
-                    min_transaction_gas_units,
-                    large_transaction_cutoff,
-                    instrinsic_gas_per_byte,
-                    maximum_number_of_gas_units,
-                    min_price_per_gas_unit,
-                    max_price_per_gas_unit,
-                    max_transaction_size_in_bytes,
-                    gas_unit_scaling_factor,
-                    default_account_size,
-                    voting_delay,
-                    voting_period,
-                    voting_quorum_rate,
-                    min_action_delay,
-                    transaction_timeout
+                        stdlib_version,
+                        reward_delay,
+                        total_stc_amount,
+                        pre_mine_stc_amount,
+                        time_mint_stc_amount,
+                        time_mint_stc_period,
+                        parent_hash,
+                        association_auth_key,
+                        genesis_auth_key,
+                        chain_id,
+                        genesis_timestamp,
+                        uncle_rate_target,
+                        epoch_block_count,
+                        base_block_time_target,
+                        base_block_difficulty_window,
+                        base_reward_per_block,
+                        base_reward_per_uncle_percent,
+                        min_block_time_target,
+                        max_block_time_target,
+                        base_max_uncles_per_block,
+                        base_block_gas_limit,
+                        strategy,
+                        script_allowed,
+                        module_publishing_allowed,
+                        instruction_schedule,
+                        native_schedule,
+                        global_memory_per_byte_cost,
+                        global_memory_per_byte_write_cost,
+                        min_transaction_gas_units,
+                        large_transaction_cutoff,
+                        instrinsic_gas_per_byte,
+                        maximum_number_of_gas_units,
+                        min_price_per_gas_unit,
+                        max_price_per_gas_unit,
+                        max_transaction_size_in_bytes,
+                        gas_unit_scaling_factor,
+                        default_account_size,
+                        voting_delay,
+                        voting_period,
+                        voting_quorum_rate,
+                        min_action_delay,
+                        transaction_timeout
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class PeerToPeer extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token_type;
@@ -1184,10 +1404,18 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             PeerToPeer other = (PeerToPeer) obj;
-            if (!java.util.Objects.equals(this.token_type, other.token_type)) { return false; }
-            if (!java.util.Objects.equals(this.payee, other.payee)) { return false; }
-            if (!java.util.Objects.equals(this._payee_auth_key, other._payee_auth_key)) { return false; }
-            if (!java.util.Objects.equals(this.amount, other.amount)) { return false; }
+            if (!java.util.Objects.equals(this.token_type, other.token_type)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.payee, other.payee)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this._payee_auth_key, other._payee_auth_key)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.amount, other.amount)) {
+                return false;
+            }
             return true;
         }
 
@@ -1208,17 +1436,17 @@ public abstract class ScriptFunctionCall {
 
             public PeerToPeer build() {
                 return new PeerToPeer(
-                    token_type,
-                    payee,
-                    _payee_auth_key,
-                    amount
+                        token_type,
+                        payee,
+                        _payee_auth_key,
+                        amount
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class PeerToPeerBatch extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token_type;
@@ -1242,10 +1470,18 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             PeerToPeerBatch other = (PeerToPeerBatch) obj;
-            if (!java.util.Objects.equals(this.token_type, other.token_type)) { return false; }
-            if (!java.util.Objects.equals(this._payeees, other._payeees)) { return false; }
-            if (!java.util.Objects.equals(this._payee_auth_keys, other._payee_auth_keys)) { return false; }
-            if (!java.util.Objects.equals(this._amount, other._amount)) { return false; }
+            if (!java.util.Objects.equals(this.token_type, other.token_type)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this._payeees, other._payeees)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this._payee_auth_keys, other._payee_auth_keys)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this._amount, other._amount)) {
+                return false;
+            }
             return true;
         }
 
@@ -1266,17 +1502,17 @@ public abstract class ScriptFunctionCall {
 
             public PeerToPeerBatch build() {
                 return new PeerToPeerBatch(
-                    token_type,
-                    _payeees,
-                    _payee_auth_keys,
-                    _amount
+                        token_type,
+                        _payeees,
+                        _payee_auth_keys,
+                        _amount
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class PeerToPeerV2 extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token_type;
@@ -1297,9 +1533,15 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             PeerToPeerV2 other = (PeerToPeerV2) obj;
-            if (!java.util.Objects.equals(this.token_type, other.token_type)) { return false; }
-            if (!java.util.Objects.equals(this.payee, other.payee)) { return false; }
-            if (!java.util.Objects.equals(this.amount, other.amount)) { return false; }
+            if (!java.util.Objects.equals(this.token_type, other.token_type)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.payee, other.payee)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.amount, other.amount)) {
+                return false;
+            }
             return true;
         }
 
@@ -1318,16 +1560,16 @@ public abstract class ScriptFunctionCall {
 
             public PeerToPeerV2 build() {
                 return new PeerToPeerV2(
-                    token_type,
-                    payee,
-                    amount
+                        token_type,
+                        payee,
+                        amount
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class PeerToPeerWithMetadata extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token_type;
@@ -1354,11 +1596,21 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             PeerToPeerWithMetadata other = (PeerToPeerWithMetadata) obj;
-            if (!java.util.Objects.equals(this.token_type, other.token_type)) { return false; }
-            if (!java.util.Objects.equals(this.payee, other.payee)) { return false; }
-            if (!java.util.Objects.equals(this._payee_auth_key, other._payee_auth_key)) { return false; }
-            if (!java.util.Objects.equals(this.amount, other.amount)) { return false; }
-            if (!java.util.Objects.equals(this.metadata, other.metadata)) { return false; }
+            if (!java.util.Objects.equals(this.token_type, other.token_type)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.payee, other.payee)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this._payee_auth_key, other._payee_auth_key)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.amount, other.amount)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.metadata, other.metadata)) {
+                return false;
+            }
             return true;
         }
 
@@ -1381,18 +1633,18 @@ public abstract class ScriptFunctionCall {
 
             public PeerToPeerWithMetadata build() {
                 return new PeerToPeerWithMetadata(
-                    token_type,
-                    payee,
-                    _payee_auth_key,
-                    amount,
-                    metadata
+                        token_type,
+                        payee,
+                        _payee_auth_key,
+                        amount,
+                        metadata
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class PeerToPeerWithMetadataV2 extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token_type;
@@ -1416,10 +1668,18 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             PeerToPeerWithMetadataV2 other = (PeerToPeerWithMetadataV2) obj;
-            if (!java.util.Objects.equals(this.token_type, other.token_type)) { return false; }
-            if (!java.util.Objects.equals(this.payee, other.payee)) { return false; }
-            if (!java.util.Objects.equals(this.amount, other.amount)) { return false; }
-            if (!java.util.Objects.equals(this.metadata, other.metadata)) { return false; }
+            if (!java.util.Objects.equals(this.token_type, other.token_type)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.payee, other.payee)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.amount, other.amount)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.metadata, other.metadata)) {
+                return false;
+            }
             return true;
         }
 
@@ -1440,10 +1700,10 @@ public abstract class ScriptFunctionCall {
 
             public PeerToPeerWithMetadataV2 build() {
                 return new PeerToPeerWithMetadataV2(
-                    token_type,
-                    payee,
-                    amount,
-                    metadata
+                        token_type,
+                        payee,
+                        amount,
+                        metadata
                 );
             }
         }
@@ -1480,12 +1740,24 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             Propose other = (Propose) obj;
-            if (!java.util.Objects.equals(this.token_t, other.token_t)) { return false; }
-            if (!java.util.Objects.equals(this.voting_delay, other.voting_delay)) { return false; }
-            if (!java.util.Objects.equals(this.voting_period, other.voting_period)) { return false; }
-            if (!java.util.Objects.equals(this.voting_quorum_rate, other.voting_quorum_rate)) { return false; }
-            if (!java.util.Objects.equals(this.min_action_delay, other.min_action_delay)) { return false; }
-            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) { return false; }
+            if (!java.util.Objects.equals(this.token_t, other.token_t)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.voting_delay, other.voting_delay)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.voting_period, other.voting_period)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.voting_quorum_rate, other.voting_quorum_rate)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.min_action_delay, other.min_action_delay)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) {
+                return false;
+            }
             return true;
         }
 
@@ -1510,19 +1782,19 @@ public abstract class ScriptFunctionCall {
 
             public Propose build() {
                 return new Propose(
-                    token_t,
-                    voting_delay,
-                    voting_period,
-                    voting_quorum_rate,
-                    min_action_delay,
-                    exec_delay
+                        token_t,
+                        voting_delay,
+                        voting_period,
+                        voting_quorum_rate,
+                        min_action_delay,
+                        exec_delay
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class ProposeModuleUpgradeV2 extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token;
@@ -1552,12 +1824,24 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             ProposeModuleUpgradeV2 other = (ProposeModuleUpgradeV2) obj;
-            if (!java.util.Objects.equals(this.token, other.token)) { return false; }
-            if (!java.util.Objects.equals(this.module_address, other.module_address)) { return false; }
-            if (!java.util.Objects.equals(this.package_hash, other.package_hash)) { return false; }
-            if (!java.util.Objects.equals(this.version, other.version)) { return false; }
-            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) { return false; }
-            if (!java.util.Objects.equals(this.enforced, other.enforced)) { return false; }
+            if (!java.util.Objects.equals(this.token, other.token)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.module_address, other.module_address)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.package_hash, other.package_hash)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.version, other.version)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.enforced, other.enforced)) {
+                return false;
+            }
             return true;
         }
 
@@ -1582,19 +1866,19 @@ public abstract class ScriptFunctionCall {
 
             public ProposeModuleUpgradeV2 build() {
                 return new ProposeModuleUpgradeV2(
-                    token,
-                    module_address,
-                    package_hash,
-                    version,
-                    exec_delay,
-                    enforced
+                        token,
+                        module_address,
+                        package_hash,
+                        version,
+                        exec_delay,
+                        enforced
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class ProposeUpdateConsensusConfig extends ScriptFunctionCall {
         public final @com.novi.serde.Unsigned Long uncle_rate_target;
@@ -1642,18 +1926,42 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             ProposeUpdateConsensusConfig other = (ProposeUpdateConsensusConfig) obj;
-            if (!java.util.Objects.equals(this.uncle_rate_target, other.uncle_rate_target)) { return false; }
-            if (!java.util.Objects.equals(this.base_block_time_target, other.base_block_time_target)) { return false; }
-            if (!java.util.Objects.equals(this.base_reward_per_block, other.base_reward_per_block)) { return false; }
-            if (!java.util.Objects.equals(this.base_reward_per_uncle_percent, other.base_reward_per_uncle_percent)) { return false; }
-            if (!java.util.Objects.equals(this.epoch_block_count, other.epoch_block_count)) { return false; }
-            if (!java.util.Objects.equals(this.base_block_difficulty_window, other.base_block_difficulty_window)) { return false; }
-            if (!java.util.Objects.equals(this.min_block_time_target, other.min_block_time_target)) { return false; }
-            if (!java.util.Objects.equals(this.max_block_time_target, other.max_block_time_target)) { return false; }
-            if (!java.util.Objects.equals(this.base_max_uncles_per_block, other.base_max_uncles_per_block)) { return false; }
-            if (!java.util.Objects.equals(this.base_block_gas_limit, other.base_block_gas_limit)) { return false; }
-            if (!java.util.Objects.equals(this.strategy, other.strategy)) { return false; }
-            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) { return false; }
+            if (!java.util.Objects.equals(this.uncle_rate_target, other.uncle_rate_target)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_block_time_target, other.base_block_time_target)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_reward_per_block, other.base_reward_per_block)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_reward_per_uncle_percent, other.base_reward_per_uncle_percent)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.epoch_block_count, other.epoch_block_count)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_block_difficulty_window, other.base_block_difficulty_window)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.min_block_time_target, other.min_block_time_target)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.max_block_time_target, other.max_block_time_target)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_max_uncles_per_block, other.base_max_uncles_per_block)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.base_block_gas_limit, other.base_block_gas_limit)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.strategy, other.strategy)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) {
+                return false;
+            }
             return true;
         }
 
@@ -1690,25 +1998,25 @@ public abstract class ScriptFunctionCall {
 
             public ProposeUpdateConsensusConfig build() {
                 return new ProposeUpdateConsensusConfig(
-                    uncle_rate_target,
-                    base_block_time_target,
-                    base_reward_per_block,
-                    base_reward_per_uncle_percent,
-                    epoch_block_count,
-                    base_block_difficulty_window,
-                    min_block_time_target,
-                    max_block_time_target,
-                    base_max_uncles_per_block,
-                    base_block_gas_limit,
-                    strategy,
-                    exec_delay
+                        uncle_rate_target,
+                        base_block_time_target,
+                        base_reward_per_block,
+                        base_reward_per_uncle_percent,
+                        epoch_block_count,
+                        base_block_difficulty_window,
+                        min_block_time_target,
+                        max_block_time_target,
+                        base_max_uncles_per_block,
+                        base_block_gas_limit,
+                        strategy,
+                        exec_delay
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class ProposeUpdateRewardConfig extends ScriptFunctionCall {
         public final @com.novi.serde.Unsigned Long reward_delay;
@@ -1726,8 +2034,12 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             ProposeUpdateRewardConfig other = (ProposeUpdateRewardConfig) obj;
-            if (!java.util.Objects.equals(this.reward_delay, other.reward_delay)) { return false; }
-            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) { return false; }
+            if (!java.util.Objects.equals(this.reward_delay, other.reward_delay)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) {
+                return false;
+            }
             return true;
         }
 
@@ -1744,15 +2056,15 @@ public abstract class ScriptFunctionCall {
 
             public ProposeUpdateRewardConfig build() {
                 return new ProposeUpdateRewardConfig(
-                    reward_delay,
-                    exec_delay
+                        reward_delay,
+                        exec_delay
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class ProposeUpdateTxnPublishOption extends ScriptFunctionCall {
         public final Boolean script_allowed;
@@ -1773,9 +2085,15 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             ProposeUpdateTxnPublishOption other = (ProposeUpdateTxnPublishOption) obj;
-            if (!java.util.Objects.equals(this.script_allowed, other.script_allowed)) { return false; }
-            if (!java.util.Objects.equals(this.module_publishing_allowed, other.module_publishing_allowed)) { return false; }
-            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) { return false; }
+            if (!java.util.Objects.equals(this.script_allowed, other.script_allowed)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.module_publishing_allowed, other.module_publishing_allowed)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) {
+                return false;
+            }
             return true;
         }
 
@@ -1794,16 +2112,16 @@ public abstract class ScriptFunctionCall {
 
             public ProposeUpdateTxnPublishOption build() {
                 return new ProposeUpdateTxnPublishOption(
-                    script_allowed,
-                    module_publishing_allowed,
-                    exec_delay
+                        script_allowed,
+                        module_publishing_allowed,
+                        exec_delay
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class ProposeUpdateTxnTimeoutConfig extends ScriptFunctionCall {
         public final @com.novi.serde.Unsigned Long duration_seconds;
@@ -1821,8 +2139,12 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             ProposeUpdateTxnTimeoutConfig other = (ProposeUpdateTxnTimeoutConfig) obj;
-            if (!java.util.Objects.equals(this.duration_seconds, other.duration_seconds)) { return false; }
-            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) { return false; }
+            if (!java.util.Objects.equals(this.duration_seconds, other.duration_seconds)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) {
+                return false;
+            }
             return true;
         }
 
@@ -1839,15 +2161,15 @@ public abstract class ScriptFunctionCall {
 
             public ProposeUpdateTxnTimeoutConfig build() {
                 return new ProposeUpdateTxnTimeoutConfig(
-                    duration_seconds,
-                    exec_delay
+                        duration_seconds,
+                        exec_delay
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class ProposeUpdateVmConfig extends ScriptFunctionCall {
         public final com.novi.serde.Bytes instruction_schedule;
@@ -1901,20 +2223,48 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             ProposeUpdateVmConfig other = (ProposeUpdateVmConfig) obj;
-            if (!java.util.Objects.equals(this.instruction_schedule, other.instruction_schedule)) { return false; }
-            if (!java.util.Objects.equals(this.native_schedule, other.native_schedule)) { return false; }
-            if (!java.util.Objects.equals(this.global_memory_per_byte_cost, other.global_memory_per_byte_cost)) { return false; }
-            if (!java.util.Objects.equals(this.global_memory_per_byte_write_cost, other.global_memory_per_byte_write_cost)) { return false; }
-            if (!java.util.Objects.equals(this.min_transaction_gas_units, other.min_transaction_gas_units)) { return false; }
-            if (!java.util.Objects.equals(this.large_transaction_cutoff, other.large_transaction_cutoff)) { return false; }
-            if (!java.util.Objects.equals(this.instrinsic_gas_per_byte, other.instrinsic_gas_per_byte)) { return false; }
-            if (!java.util.Objects.equals(this.maximum_number_of_gas_units, other.maximum_number_of_gas_units)) { return false; }
-            if (!java.util.Objects.equals(this.min_price_per_gas_unit, other.min_price_per_gas_unit)) { return false; }
-            if (!java.util.Objects.equals(this.max_price_per_gas_unit, other.max_price_per_gas_unit)) { return false; }
-            if (!java.util.Objects.equals(this.max_transaction_size_in_bytes, other.max_transaction_size_in_bytes)) { return false; }
-            if (!java.util.Objects.equals(this.gas_unit_scaling_factor, other.gas_unit_scaling_factor)) { return false; }
-            if (!java.util.Objects.equals(this.default_account_size, other.default_account_size)) { return false; }
-            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) { return false; }
+            if (!java.util.Objects.equals(this.instruction_schedule, other.instruction_schedule)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.native_schedule, other.native_schedule)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.global_memory_per_byte_cost, other.global_memory_per_byte_cost)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.global_memory_per_byte_write_cost, other.global_memory_per_byte_write_cost)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.min_transaction_gas_units, other.min_transaction_gas_units)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.large_transaction_cutoff, other.large_transaction_cutoff)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.instrinsic_gas_per_byte, other.instrinsic_gas_per_byte)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.maximum_number_of_gas_units, other.maximum_number_of_gas_units)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.min_price_per_gas_unit, other.min_price_per_gas_unit)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.max_price_per_gas_unit, other.max_price_per_gas_unit)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.max_transaction_size_in_bytes, other.max_transaction_size_in_bytes)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.gas_unit_scaling_factor, other.gas_unit_scaling_factor)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.default_account_size, other.default_account_size)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) {
+                return false;
+            }
             return true;
         }
 
@@ -1955,27 +2305,27 @@ public abstract class ScriptFunctionCall {
 
             public ProposeUpdateVmConfig build() {
                 return new ProposeUpdateVmConfig(
-                    instruction_schedule,
-                    native_schedule,
-                    global_memory_per_byte_cost,
-                    global_memory_per_byte_write_cost,
-                    min_transaction_gas_units,
-                    large_transaction_cutoff,
-                    instrinsic_gas_per_byte,
-                    maximum_number_of_gas_units,
-                    min_price_per_gas_unit,
-                    max_price_per_gas_unit,
-                    max_transaction_size_in_bytes,
-                    gas_unit_scaling_factor,
-                    default_account_size,
-                    exec_delay
+                        instruction_schedule,
+                        native_schedule,
+                        global_memory_per_byte_cost,
+                        global_memory_per_byte_write_cost,
+                        min_transaction_gas_units,
+                        large_transaction_cutoff,
+                        instrinsic_gas_per_byte,
+                        maximum_number_of_gas_units,
+                        min_price_per_gas_unit,
+                        max_price_per_gas_unit,
+                        max_transaction_size_in_bytes,
+                        gas_unit_scaling_factor,
+                        default_account_size,
+                        exec_delay
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class ProposeWithdraw extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token_t;
@@ -2002,11 +2352,21 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             ProposeWithdraw other = (ProposeWithdraw) obj;
-            if (!java.util.Objects.equals(this.token_t, other.token_t)) { return false; }
-            if (!java.util.Objects.equals(this.receiver, other.receiver)) { return false; }
-            if (!java.util.Objects.equals(this.amount, other.amount)) { return false; }
-            if (!java.util.Objects.equals(this.period, other.period)) { return false; }
-            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) { return false; }
+            if (!java.util.Objects.equals(this.token_t, other.token_t)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.receiver, other.receiver)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.amount, other.amount)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.period, other.period)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.exec_delay, other.exec_delay)) {
+                return false;
+            }
             return true;
         }
 
@@ -2029,11 +2389,11 @@ public abstract class ScriptFunctionCall {
 
             public ProposeWithdraw build() {
                 return new ProposeWithdraw(
-                    token_t,
-                    receiver,
-                    amount,
-                    period,
-                    exec_delay
+                        token_t,
+                        receiver,
+                        amount,
+                        period,
+                        exec_delay
                 );
             }
         }
@@ -2064,10 +2424,18 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             QueueProposalAction other = (QueueProposalAction) obj;
-            if (!java.util.Objects.equals(this.token_t, other.token_t)) { return false; }
-            if (!java.util.Objects.equals(this.action_t, other.action_t)) { return false; }
-            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) { return false; }
-            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) { return false; }
+            if (!java.util.Objects.equals(this.token_t, other.token_t)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.action_t, other.action_t)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) {
+                return false;
+            }
             return true;
         }
 
@@ -2088,17 +2456,17 @@ public abstract class ScriptFunctionCall {
 
             public QueueProposalAction build() {
                 return new QueueProposalAction(
-                    token_t,
-                    action_t,
-                    proposer_address,
-                    proposal_id
+                        token_t,
+                        action_t,
+                        proposer_address,
+                        proposal_id
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class RevokeVote extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token;
@@ -2122,10 +2490,18 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             RevokeVote other = (RevokeVote) obj;
-            if (!java.util.Objects.equals(this.token, other.token)) { return false; }
-            if (!java.util.Objects.equals(this.action, other.action)) { return false; }
-            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) { return false; }
-            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) { return false; }
+            if (!java.util.Objects.equals(this.token, other.token)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.action, other.action)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) {
+                return false;
+            }
             return true;
         }
 
@@ -2146,17 +2522,17 @@ public abstract class ScriptFunctionCall {
 
             public RevokeVote build() {
                 return new RevokeVote(
-                    token,
-                    action,
-                    proposer_address,
-                    proposal_id
+                        token,
+                        action,
+                        proposer_address,
+                        proposal_id
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class RotateAuthenticationKey extends ScriptFunctionCall {
         public final com.novi.serde.Bytes new_key;
@@ -2171,7 +2547,9 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             RotateAuthenticationKey other = (RotateAuthenticationKey) obj;
-            if (!java.util.Objects.equals(this.new_key, other.new_key)) { return false; }
+            if (!java.util.Objects.equals(this.new_key, other.new_key)) {
+                return false;
+            }
             return true;
         }
 
@@ -2186,14 +2564,14 @@ public abstract class ScriptFunctionCall {
 
             public RotateAuthenticationKey build() {
                 return new RotateAuthenticationKey(
-                    new_key
+                        new_key
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class SubmitModuleUpgradePlan extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token;
@@ -2214,9 +2592,15 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             SubmitModuleUpgradePlan other = (SubmitModuleUpgradePlan) obj;
-            if (!java.util.Objects.equals(this.token, other.token)) { return false; }
-            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) { return false; }
-            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) { return false; }
+            if (!java.util.Objects.equals(this.token, other.token)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) {
+                return false;
+            }
             return true;
         }
 
@@ -2235,9 +2619,9 @@ public abstract class ScriptFunctionCall {
 
             public SubmitModuleUpgradePlan build() {
                 return new SubmitModuleUpgradePlan(
-                    token,
-                    proposer_address,
-                    proposal_id
+                        token,
+                        proposer_address,
+                        proposal_id
                 );
             }
         }
@@ -2290,8 +2674,12 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             TakeOffer other = (TakeOffer) obj;
-            if (!java.util.Objects.equals(this.offered, other.offered)) { return false; }
-            if (!java.util.Objects.equals(this.offer_address, other.offer_address)) { return false; }
+            if (!java.util.Objects.equals(this.offered, other.offered)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.offer_address, other.offer_address)) {
+                return false;
+            }
             return true;
         }
 
@@ -2308,15 +2696,15 @@ public abstract class ScriptFunctionCall {
 
             public TakeOffer build() {
                 return new TakeOffer(
-                    offered,
-                    offer_address
+                        offered,
+                        offer_address
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class UnstakeVote extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token;
@@ -2340,10 +2728,18 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             UnstakeVote other = (UnstakeVote) obj;
-            if (!java.util.Objects.equals(this.token, other.token)) { return false; }
-            if (!java.util.Objects.equals(this.action, other.action)) { return false; }
-            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) { return false; }
-            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) { return false; }
+            if (!java.util.Objects.equals(this.token, other.token)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.action, other.action)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposer_address, other.proposer_address)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.proposal_id, other.proposal_id)) {
+                return false;
+            }
             return true;
         }
 
@@ -2364,17 +2760,17 @@ public abstract class ScriptFunctionCall {
 
             public UnstakeVote build() {
                 return new UnstakeVote(
-                    token,
-                    action,
-                    proposer_address,
-                    proposal_id
+                        token,
+                        action,
+                        proposer_address,
+                        proposal_id
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class UpdateModuleUpgradeStrategy extends ScriptFunctionCall {
         public final @com.novi.serde.Unsigned Byte strategy;
@@ -2389,7 +2785,9 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             UpdateModuleUpgradeStrategy other = (UpdateModuleUpgradeStrategy) obj;
-            if (!java.util.Objects.equals(this.strategy, other.strategy)) { return false; }
+            if (!java.util.Objects.equals(this.strategy, other.strategy)) {
+                return false;
+            }
             return true;
         }
 
@@ -2404,7 +2802,7 @@ public abstract class ScriptFunctionCall {
 
             public UpdateModuleUpgradeStrategy build() {
                 return new UpdateModuleUpgradeStrategy(
-                    strategy
+                        strategy
                 );
             }
         }
@@ -2426,7 +2824,9 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             UpgradeFromV2ToV3 other = (UpgradeFromV2ToV3) obj;
-            if (!java.util.Objects.equals(this.total_stc_amount, other.total_stc_amount)) { return false; }
+            if (!java.util.Objects.equals(this.total_stc_amount, other.total_stc_amount)) {
+                return false;
+            }
             return true;
         }
 
@@ -2441,14 +2841,14 @@ public abstract class ScriptFunctionCall {
 
             public UpgradeFromV2ToV3 build() {
                 return new UpgradeFromV2ToV3(
-                    total_stc_amount
+                        total_stc_amount
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class WithdrawAndSplitLtWithdrawCap extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token_t;
@@ -2472,10 +2872,18 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             WithdrawAndSplitLtWithdrawCap other = (WithdrawAndSplitLtWithdrawCap) obj;
-            if (!java.util.Objects.equals(this.token_t, other.token_t)) { return false; }
-            if (!java.util.Objects.equals(this.for_address, other.for_address)) { return false; }
-            if (!java.util.Objects.equals(this.amount, other.amount)) { return false; }
-            if (!java.util.Objects.equals(this.lock_period, other.lock_period)) { return false; }
+            if (!java.util.Objects.equals(this.token_t, other.token_t)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.for_address, other.for_address)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.amount, other.amount)) {
+                return false;
+            }
+            if (!java.util.Objects.equals(this.lock_period, other.lock_period)) {
+                return false;
+            }
             return true;
         }
 
@@ -2496,17 +2904,17 @@ public abstract class ScriptFunctionCall {
 
             public WithdrawAndSplitLtWithdrawCap build() {
                 return new WithdrawAndSplitLtWithdrawCap(
-                    token_t,
-                    for_address,
-                    amount,
-                    lock_period
+                        token_t,
+                        for_address,
+                        amount,
+                        lock_period
                 );
             }
         }
     }
 
     /**
-
+     *
      */
     public static final class WithdrawTokenWithLinearWithdrawCapability extends ScriptFunctionCall {
         public final org.starcoin.types.TypeTag token_t;
@@ -2521,7 +2929,9 @@ public abstract class ScriptFunctionCall {
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             WithdrawTokenWithLinearWithdrawCapability other = (WithdrawTokenWithLinearWithdrawCapability) obj;
-            if (!java.util.Objects.equals(this.token_t, other.token_t)) { return false; }
+            if (!java.util.Objects.equals(this.token_t, other.token_t)) {
+                return false;
+            }
             return true;
         }
 
@@ -2536,7 +2946,7 @@ public abstract class ScriptFunctionCall {
 
             public WithdrawTokenWithLinearWithdrawCapability build() {
                 return new WithdrawTokenWithLinearWithdrawCapability(
-                    token_t
+                        token_t
                 );
             }
         }

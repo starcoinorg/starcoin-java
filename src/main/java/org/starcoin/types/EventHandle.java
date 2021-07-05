@@ -12,6 +12,27 @@ public final class EventHandle {
         this.key = key;
     }
 
+    public static EventHandle deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        deserializer.increase_container_depth();
+        Builder builder = new Builder();
+        builder.count = deserializer.deserialize_u64();
+        builder.key = EventKey.deserialize(deserializer);
+        deserializer.decrease_container_depth();
+        return builder.build();
+    }
+
+    public static EventHandle bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        EventHandle value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         serializer.increase_container_depth();
         serializer.serialize_u64(count);
@@ -25,34 +46,17 @@ public final class EventHandle {
         return serializer.get_bytes();
     }
 
-    public static EventHandle deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
-        deserializer.increase_container_depth();
-        Builder builder = new Builder();
-        builder.count = deserializer.deserialize_u64();
-        builder.key = EventKey.deserialize(deserializer);
-        deserializer.decrease_container_depth();
-        return builder.build();
-    }
-
-    public static EventHandle bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        EventHandle value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         EventHandle other = (EventHandle) obj;
-        if (!java.util.Objects.equals(this.count, other.count)) { return false; }
-        if (!java.util.Objects.equals(this.key, other.key)) { return false; }
+        if (!java.util.Objects.equals(this.count, other.count)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.key, other.key)) {
+            return false;
+        }
         return true;
     }
 
@@ -69,8 +73,8 @@ public final class EventHandle {
 
         public EventHandle build() {
             return new EventHandle(
-                count,
-                key
+                    count,
+                    key
             );
         }
     }

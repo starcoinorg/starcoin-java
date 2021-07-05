@@ -12,6 +12,27 @@ public final class AccessPath {
         this.field1 = field1;
     }
 
+    public static AccessPath deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        deserializer.increase_container_depth();
+        Builder builder = new Builder();
+        builder.field0 = AccountAddress.deserialize(deserializer);
+        builder.field1 = DataPath.deserialize(deserializer);
+        deserializer.decrease_container_depth();
+        return builder.build();
+    }
+
+    public static AccessPath bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        AccessPath value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         serializer.increase_container_depth();
         field0.serialize(serializer);
@@ -25,34 +46,17 @@ public final class AccessPath {
         return serializer.get_bytes();
     }
 
-    public static AccessPath deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
-        deserializer.increase_container_depth();
-        Builder builder = new Builder();
-        builder.field0 = AccountAddress.deserialize(deserializer);
-        builder.field1 = DataPath.deserialize(deserializer);
-        deserializer.decrease_container_depth();
-        return builder.build();
-    }
-
-    public static AccessPath bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        AccessPath value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         AccessPath other = (AccessPath) obj;
-        if (!java.util.Objects.equals(this.field0, other.field0)) { return false; }
-        if (!java.util.Objects.equals(this.field1, other.field1)) { return false; }
+        if (!java.util.Objects.equals(this.field0, other.field0)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.field1, other.field1)) {
+            return false;
+        }
         return true;
     }
 
@@ -69,8 +73,8 @@ public final class AccessPath {
 
         public AccessPath build() {
             return new AccessPath(
-                field0,
-                field1
+                    field0,
+                    field1
             );
         }
     }

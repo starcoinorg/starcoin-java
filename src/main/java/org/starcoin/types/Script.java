@@ -15,6 +15,28 @@ public final class Script {
         this.args = args;
     }
 
+    public static Script deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        deserializer.increase_container_depth();
+        Builder builder = new Builder();
+        builder.code = deserializer.deserialize_bytes();
+        builder.ty_args = TraitHelpers.deserialize_vector_TypeTag(deserializer);
+        builder.args = TraitHelpers.deserialize_vector_bytes(deserializer);
+        deserializer.decrease_container_depth();
+        return builder.build();
+    }
+
+    public static Script bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        Script value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         serializer.increase_container_depth();
         serializer.serialize_bytes(code);
@@ -29,36 +51,20 @@ public final class Script {
         return serializer.get_bytes();
     }
 
-    public static Script deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
-        deserializer.increase_container_depth();
-        Builder builder = new Builder();
-        builder.code = deserializer.deserialize_bytes();
-        builder.ty_args = TraitHelpers.deserialize_vector_TypeTag(deserializer);
-        builder.args = TraitHelpers.deserialize_vector_bytes(deserializer);
-        deserializer.decrease_container_depth();
-        return builder.build();
-    }
-
-    public static Script bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        Script value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         Script other = (Script) obj;
-        if (!java.util.Objects.equals(this.code, other.code)) { return false; }
-        if (!java.util.Objects.equals(this.ty_args, other.ty_args)) { return false; }
-        if (!java.util.Objects.equals(this.args, other.args)) { return false; }
+        if (!java.util.Objects.equals(this.code, other.code)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.ty_args, other.ty_args)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.args, other.args)) {
+            return false;
+        }
         return true;
     }
 
@@ -77,9 +83,9 @@ public final class Script {
 
         public Script build() {
             return new Script(
-                code,
-                ty_args,
-                args
+                    code,
+                    ty_args,
+                    args
             );
         }
     }

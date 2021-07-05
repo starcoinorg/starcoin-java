@@ -18,6 +18,29 @@ public final class ContractEventV0 {
         this.event_data = event_data;
     }
 
+    public static ContractEventV0 deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        deserializer.increase_container_depth();
+        Builder builder = new Builder();
+        builder.key = EventKey.deserialize(deserializer);
+        builder.sequence_number = deserializer.deserialize_u64();
+        builder.type_tag = TypeTag.deserialize(deserializer);
+        builder.event_data = deserializer.deserialize_bytes();
+        deserializer.decrease_container_depth();
+        return builder.build();
+    }
+
+    public static ContractEventV0 bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        ContractEventV0 value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         serializer.increase_container_depth();
         key.serialize(serializer);
@@ -33,38 +56,23 @@ public final class ContractEventV0 {
         return serializer.get_bytes();
     }
 
-    public static ContractEventV0 deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
-        deserializer.increase_container_depth();
-        Builder builder = new Builder();
-        builder.key = EventKey.deserialize(deserializer);
-        builder.sequence_number = deserializer.deserialize_u64();
-        builder.type_tag = TypeTag.deserialize(deserializer);
-        builder.event_data = deserializer.deserialize_bytes();
-        deserializer.decrease_container_depth();
-        return builder.build();
-    }
-
-    public static ContractEventV0 bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        ContractEventV0 value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         ContractEventV0 other = (ContractEventV0) obj;
-        if (!java.util.Objects.equals(this.key, other.key)) { return false; }
-        if (!java.util.Objects.equals(this.sequence_number, other.sequence_number)) { return false; }
-        if (!java.util.Objects.equals(this.type_tag, other.type_tag)) { return false; }
-        if (!java.util.Objects.equals(this.event_data, other.event_data)) { return false; }
+        if (!java.util.Objects.equals(this.key, other.key)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.sequence_number, other.sequence_number)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.type_tag, other.type_tag)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.event_data, other.event_data)) {
+            return false;
+        }
         return true;
     }
 
@@ -85,10 +93,10 @@ public final class ContractEventV0 {
 
         public ContractEventV0 build() {
             return new ContractEventV0(
-                key,
-                sequence_number,
-                type_tag,
-                event_data
+                    key,
+                    sequence_number,
+                    type_tag,
+                    event_data
             );
         }
     }

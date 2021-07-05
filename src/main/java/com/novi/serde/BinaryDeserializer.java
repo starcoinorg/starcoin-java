@@ -3,14 +3,15 @@
 
 package com.novi.serde;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.charset.CharacterCodingException;
-import java.math.BigInteger;
 
 public abstract class BinaryDeserializer implements Deserializer {
+    static final String INPUT_NOT_LARGE_ENOUGH = "Input is not large enough";
     protected ByteBuffer input;
     private long containerDepthBudget;
 
@@ -135,9 +136,7 @@ public abstract class BinaryDeserializer implements Deserializer {
         return input.position();
     }
 
-    static final String INPUT_NOT_LARGE_ENOUGH = "Input is not large enough";
-
-    protected byte getByte()  throws DeserializationError {
+    protected byte getByte() throws DeserializationError {
         try {
             return input.get();
         } catch (java.nio.BufferUnderflowException e) {
@@ -145,7 +144,7 @@ public abstract class BinaryDeserializer implements Deserializer {
         }
     }
 
-    protected short getShort()  throws DeserializationError {
+    protected short getShort() throws DeserializationError {
         try {
             return input.getShort();
         } catch (java.nio.BufferUnderflowException e) {
@@ -153,7 +152,7 @@ public abstract class BinaryDeserializer implements Deserializer {
         }
     }
 
-    protected int getInt()  throws DeserializationError {
+    protected int getInt() throws DeserializationError {
         try {
             return input.getInt();
         } catch (java.nio.BufferUnderflowException e) {
@@ -161,7 +160,7 @@ public abstract class BinaryDeserializer implements Deserializer {
         }
     }
 
-    protected long getLong()  throws DeserializationError {
+    protected long getLong() throws DeserializationError {
         try {
             return input.getLong();
         } catch (java.nio.BufferUnderflowException e) {
@@ -169,7 +168,7 @@ public abstract class BinaryDeserializer implements Deserializer {
         }
     }
 
-    protected float getFloat()  throws DeserializationError {
+    protected float getFloat() throws DeserializationError {
         try {
             return input.getFloat();
         } catch (java.nio.BufferUnderflowException e) {
@@ -177,7 +176,7 @@ public abstract class BinaryDeserializer implements Deserializer {
         }
     }
 
-    protected double getDouble()  throws DeserializationError {
+    protected double getDouble() throws DeserializationError {
         try {
             return input.getDouble();
         } catch (java.nio.BufferUnderflowException e) {
@@ -185,7 +184,7 @@ public abstract class BinaryDeserializer implements Deserializer {
         }
     }
 
-    protected void read(byte[] content)  throws DeserializationError {
+    protected void read(byte[] content) throws DeserializationError {
         try {
             input.get(content);
         } catch (java.nio.BufferUnderflowException e) {

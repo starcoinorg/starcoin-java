@@ -14,7 +14,7 @@ public class PendingTransaction {
 
     private long timestamp;
 
-    public PendingTransaction(){
+    public PendingTransaction() {
         timestamp = System.currentTimeMillis();
     }
 

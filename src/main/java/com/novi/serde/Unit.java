@@ -4,7 +4,8 @@
 package com.novi.serde;
 
 public final class Unit {
-    public Unit() {}
+    public Unit() {
+    }
 
     public boolean equals(Object obj) {
         if (this == obj) return true;

@@ -3,10 +3,9 @@
 
 package com.novi.bcs;
 
-import java.util.Arrays;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
-import java.lang.Runnable;
+import java.util.Arrays;
 
 public class BcsTest {
 
@@ -26,12 +25,12 @@ public class BcsTest {
         try {
             serializer.serialize_u128(BigInteger.ONE.negate());
             assert false;
-        } catch (java.lang.IllegalArgumentException e) { /* all good */  }
+        } catch (java.lang.IllegalArgumentException e) { /* all good */ }
 
         try {
             serializer.serialize_u128(BigInteger.ONE.shiftLeft(128).add(BigInteger.ONE));
             assert false;
-        } catch (java.lang.IllegalArgumentException e) { /* all good */  }
+        } catch (java.lang.IllegalArgumentException e) { /* all good */ }
     }
 
     static void test_serialize_i128() throws Exception {
@@ -54,12 +53,12 @@ public class BcsTest {
         try {
             serializer.serialize_i128(BigInteger.ONE.shiftLeft(127));
             assert false;
-        } catch (java.lang.IllegalArgumentException e) { /* all good */  }
+        } catch (java.lang.IllegalArgumentException e) { /* all good */ }
 
         try {
             serializer.serialize_i128(BigInteger.ONE.shiftLeft(127).add(BigInteger.ONE).negate());
             assert false;
-        } catch (java.lang.IllegalArgumentException e) { /* all good */  }
+        } catch (java.lang.IllegalArgumentException e) { /* all good */ }
     }
 
     static void test_serializer_slice_ordering() throws Exception {

@@ -3,37 +3,44 @@ package org.starcoin.types;
 
 public abstract class TransactionArgument {
 
-    abstract public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError;
-
     public static TransactionArgument deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
         int index = deserializer.deserialize_variant_index();
         switch (index) {
-            case 0: return U8.load(deserializer);
-            case 1: return U64.load(deserializer);
-            case 2: return U128.load(deserializer);
-            case 3: return Address.load(deserializer);
-            case 4: return U8Vector.load(deserializer);
-            case 5: return Bool.load(deserializer);
-            default: throw new com.novi.serde.DeserializationError("Unknown variant index for TransactionArgument: " + index);
+            case 0:
+                return U8.load(deserializer);
+            case 1:
+                return U64.load(deserializer);
+            case 2:
+                return U128.load(deserializer);
+            case 3:
+                return Address.load(deserializer);
+            case 4:
+                return U8Vector.load(deserializer);
+            case 5:
+                return Bool.load(deserializer);
+            default:
+                throw new com.novi.serde.DeserializationError("Unknown variant index for TransactionArgument: " + index);
         }
     }
+
+    public static TransactionArgument bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        TransactionArgument value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
+    abstract public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError;
 
     public byte[] bcsSerialize() throws com.novi.serde.SerializationError {
         com.novi.serde.Serializer serializer = new com.novi.bcs.BcsSerializer();
         serialize(serializer);
         return serializer.get_bytes();
-    }
-
-    public static TransactionArgument bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        TransactionArgument value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
     }
 
     public static final class U8 extends TransactionArgument {
@@ -44,13 +51,6 @@ public abstract class TransactionArgument {
             this.value = value;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(0);
-            serializer.serialize_u8(value);
-            serializer.decrease_container_depth();
-        }
-
         static U8 load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -59,12 +59,21 @@ public abstract class TransactionArgument {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(0);
+            serializer.serialize_u8(value);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             U8 other = (U8) obj;
-            if (!java.util.Objects.equals(this.value, other.value)) { return false; }
+            if (!java.util.Objects.equals(this.value, other.value)) {
+                return false;
+            }
             return true;
         }
 
@@ -79,7 +88,7 @@ public abstract class TransactionArgument {
 
             public U8 build() {
                 return new U8(
-                    value
+                        value
                 );
             }
         }
@@ -93,13 +102,6 @@ public abstract class TransactionArgument {
             this.value = value;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(1);
-            serializer.serialize_u64(value);
-            serializer.decrease_container_depth();
-        }
-
         static U64 load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -108,12 +110,21 @@ public abstract class TransactionArgument {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(1);
+            serializer.serialize_u64(value);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             U64 other = (U64) obj;
-            if (!java.util.Objects.equals(this.value, other.value)) { return false; }
+            if (!java.util.Objects.equals(this.value, other.value)) {
+                return false;
+            }
             return true;
         }
 
@@ -128,7 +139,7 @@ public abstract class TransactionArgument {
 
             public U64 build() {
                 return new U64(
-                    value
+                        value
                 );
             }
         }
@@ -142,13 +153,6 @@ public abstract class TransactionArgument {
             this.value = value;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(2);
-            serializer.serialize_u128(value);
-            serializer.decrease_container_depth();
-        }
-
         static U128 load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -157,12 +161,21 @@ public abstract class TransactionArgument {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(2);
+            serializer.serialize_u128(value);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             U128 other = (U128) obj;
-            if (!java.util.Objects.equals(this.value, other.value)) { return false; }
+            if (!java.util.Objects.equals(this.value, other.value)) {
+                return false;
+            }
             return true;
         }
 
@@ -177,7 +190,7 @@ public abstract class TransactionArgument {
 
             public U128 build() {
                 return new U128(
-                    value
+                        value
                 );
             }
         }
@@ -191,13 +204,6 @@ public abstract class TransactionArgument {
             this.value = value;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(3);
-            value.serialize(serializer);
-            serializer.decrease_container_depth();
-        }
-
         static Address load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -206,12 +212,21 @@ public abstract class TransactionArgument {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(3);
+            value.serialize(serializer);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             Address other = (Address) obj;
-            if (!java.util.Objects.equals(this.value, other.value)) { return false; }
+            if (!java.util.Objects.equals(this.value, other.value)) {
+                return false;
+            }
             return true;
         }
 
@@ -226,7 +241,7 @@ public abstract class TransactionArgument {
 
             public Address build() {
                 return new Address(
-                    value
+                        value
                 );
             }
         }
@@ -240,13 +255,6 @@ public abstract class TransactionArgument {
             this.value = value;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(4);
-            serializer.serialize_bytes(value);
-            serializer.decrease_container_depth();
-        }
-
         static U8Vector load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -255,12 +263,21 @@ public abstract class TransactionArgument {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(4);
+            serializer.serialize_bytes(value);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             U8Vector other = (U8Vector) obj;
-            if (!java.util.Objects.equals(this.value, other.value)) { return false; }
+            if (!java.util.Objects.equals(this.value, other.value)) {
+                return false;
+            }
             return true;
         }
 
@@ -275,7 +292,7 @@ public abstract class TransactionArgument {
 
             public U8Vector build() {
                 return new U8Vector(
-                    value
+                        value
                 );
             }
         }
@@ -289,13 +306,6 @@ public abstract class TransactionArgument {
             this.value = value;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(5);
-            serializer.serialize_bool(value);
-            serializer.decrease_container_depth();
-        }
-
         static Bool load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -304,12 +314,21 @@ public abstract class TransactionArgument {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(5);
+            serializer.serialize_bool(value);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             Bool other = (Bool) obj;
-            if (!java.util.Objects.equals(this.value, other.value)) { return false; }
+            if (!java.util.Objects.equals(this.value, other.value)) {
+                return false;
+            }
             return true;
         }
 
@@ -324,7 +343,7 @@ public abstract class TransactionArgument {
 
             public Bool build() {
                 return new Bool(
-                    value
+                        value
                 );
             }
         }

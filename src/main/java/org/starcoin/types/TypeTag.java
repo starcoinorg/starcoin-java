@@ -3,22 +3,43 @@ package org.starcoin.types;
 
 public abstract class TypeTag {
 
-    abstract public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError;
-
     public static TypeTag deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
         int index = deserializer.deserialize_variant_index();
         switch (index) {
-            case 0: return Bool.load(deserializer);
-            case 1: return U8.load(deserializer);
-            case 2: return U64.load(deserializer);
-            case 3: return U128.load(deserializer);
-            case 4: return Address.load(deserializer);
-            case 5: return Signer.load(deserializer);
-            case 6: return Vector.load(deserializer);
-            case 7: return Struct.load(deserializer);
-            default: throw new com.novi.serde.DeserializationError("Unknown variant index for TypeTag: " + index);
+            case 0:
+                return Bool.load(deserializer);
+            case 1:
+                return U8.load(deserializer);
+            case 2:
+                return U64.load(deserializer);
+            case 3:
+                return U128.load(deserializer);
+            case 4:
+                return Address.load(deserializer);
+            case 5:
+                return Signer.load(deserializer);
+            case 6:
+                return Vector.load(deserializer);
+            case 7:
+                return Struct.load(deserializer);
+            default:
+                throw new com.novi.serde.DeserializationError("Unknown variant index for TypeTag: " + index);
         }
     }
+
+    public static TypeTag bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        TypeTag value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
+    abstract public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError;
 
     public byte[] bcsSerialize() throws com.novi.serde.SerializationError {
         com.novi.serde.Serializer serializer = new com.novi.bcs.BcsSerializer();
@@ -26,26 +47,8 @@ public abstract class TypeTag {
         return serializer.get_bytes();
     }
 
-    public static TypeTag bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        TypeTag value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public static final class Bool extends TypeTag {
         public Bool() {
-        }
-
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(0);
-            serializer.decrease_container_depth();
         }
 
         static Bool load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
@@ -53,6 +56,12 @@ public abstract class TypeTag {
             Builder builder = new Builder();
             deserializer.decrease_container_depth();
             return builder.build();
+        }
+
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(0);
+            serializer.decrease_container_depth();
         }
 
         public boolean equals(Object obj) {
@@ -80,17 +89,17 @@ public abstract class TypeTag {
         public U8() {
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(1);
-            serializer.decrease_container_depth();
-        }
-
         static U8 load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
             deserializer.decrease_container_depth();
             return builder.build();
+        }
+
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(1);
+            serializer.decrease_container_depth();
         }
 
         public boolean equals(Object obj) {
@@ -118,17 +127,17 @@ public abstract class TypeTag {
         public U64() {
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(2);
-            serializer.decrease_container_depth();
-        }
-
         static U64 load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
             deserializer.decrease_container_depth();
             return builder.build();
+        }
+
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(2);
+            serializer.decrease_container_depth();
         }
 
         public boolean equals(Object obj) {
@@ -156,17 +165,17 @@ public abstract class TypeTag {
         public U128() {
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(3);
-            serializer.decrease_container_depth();
-        }
-
         static U128 load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
             deserializer.decrease_container_depth();
             return builder.build();
+        }
+
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(3);
+            serializer.decrease_container_depth();
         }
 
         public boolean equals(Object obj) {
@@ -194,17 +203,17 @@ public abstract class TypeTag {
         public Address() {
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(4);
-            serializer.decrease_container_depth();
-        }
-
         static Address load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
             deserializer.decrease_container_depth();
             return builder.build();
+        }
+
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(4);
+            serializer.decrease_container_depth();
         }
 
         public boolean equals(Object obj) {
@@ -232,17 +241,17 @@ public abstract class TypeTag {
         public Signer() {
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(5);
-            serializer.decrease_container_depth();
-        }
-
         static Signer load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
             deserializer.decrease_container_depth();
             return builder.build();
+        }
+
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(5);
+            serializer.decrease_container_depth();
         }
 
         public boolean equals(Object obj) {
@@ -274,13 +283,6 @@ public abstract class TypeTag {
             this.value = value;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(6);
-            value.serialize(serializer);
-            serializer.decrease_container_depth();
-        }
-
         static Vector load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -289,12 +291,21 @@ public abstract class TypeTag {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(6);
+            value.serialize(serializer);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             Vector other = (Vector) obj;
-            if (!java.util.Objects.equals(this.value, other.value)) { return false; }
+            if (!java.util.Objects.equals(this.value, other.value)) {
+                return false;
+            }
             return true;
         }
 
@@ -309,7 +320,7 @@ public abstract class TypeTag {
 
             public Vector build() {
                 return new Vector(
-                    value
+                        value
                 );
             }
         }
@@ -323,13 +334,6 @@ public abstract class TypeTag {
             this.value = value;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(7);
-            value.serialize(serializer);
-            serializer.decrease_container_depth();
-        }
-
         static Struct load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -338,12 +342,21 @@ public abstract class TypeTag {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(7);
+            value.serialize(serializer);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             Struct other = (Struct) obj;
-            if (!java.util.Objects.equals(this.value, other.value)) { return false; }
+            if (!java.util.Objects.equals(this.value, other.value)) {
+                return false;
+            }
             return true;
         }
 
@@ -358,7 +371,7 @@ public abstract class TypeTag {
 
             public Struct build() {
                 return new Struct(
-                    value
+                        value
                 );
             }
         }

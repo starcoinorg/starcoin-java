@@ -3,32 +3,34 @@ package org.starcoin.types;
 
 public abstract class ContractEvent {
 
-    abstract public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError;
-
     public static ContractEvent deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
         int index = deserializer.deserialize_variant_index();
         switch (index) {
-            case 0: return V0.load(deserializer);
-            default: throw new com.novi.serde.DeserializationError("Unknown variant index for ContractEvent: " + index);
+            case 0:
+                return V0.load(deserializer);
+            default:
+                throw new com.novi.serde.DeserializationError("Unknown variant index for ContractEvent: " + index);
         }
     }
+
+    public static ContractEvent bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        ContractEvent value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
+    abstract public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError;
 
     public byte[] bcsSerialize() throws com.novi.serde.SerializationError {
         com.novi.serde.Serializer serializer = new com.novi.bcs.BcsSerializer();
         serialize(serializer);
         return serializer.get_bytes();
-    }
-
-    public static ContractEvent bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        ContractEvent value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
     }
 
     public static final class V0 extends ContractEvent {
@@ -39,13 +41,6 @@ public abstract class ContractEvent {
             this.value = value;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(0);
-            value.serialize(serializer);
-            serializer.decrease_container_depth();
-        }
-
         static V0 load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -54,12 +49,21 @@ public abstract class ContractEvent {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(0);
+            value.serialize(serializer);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             V0 other = (V0) obj;
-            if (!java.util.Objects.equals(this.value, other.value)) { return false; }
+            if (!java.util.Objects.equals(this.value, other.value)) {
+                return false;
+            }
             return true;
         }
 
@@ -74,7 +78,7 @@ public abstract class ContractEvent {
 
             public V0 build() {
                 return new V0(
-                    value
+                        value
                 );
             }
         }

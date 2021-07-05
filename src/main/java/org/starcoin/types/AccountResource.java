@@ -27,6 +27,32 @@ public final class AccountResource {
         this.sequence_number = sequence_number;
     }
 
+    public static AccountResource deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        deserializer.increase_container_depth();
+        Builder builder = new Builder();
+        builder.authentication_key = TraitHelpers.deserialize_vector_u8(deserializer);
+        builder.withdrawal_capability = TraitHelpers.deserialize_option_WithdrawCapabilityResource(deserializer);
+        builder.key_rotation_capability = TraitHelpers.deserialize_option_KeyRotationCapabilityResource(deserializer);
+        builder.withdraw_events = EventHandle.deserialize(deserializer);
+        builder.deposit_events = EventHandle.deserialize(deserializer);
+        builder.accept_token_events = EventHandle.deserialize(deserializer);
+        builder.sequence_number = deserializer.deserialize_u64();
+        deserializer.decrease_container_depth();
+        return builder.build();
+    }
+
+    public static AccountResource bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        AccountResource value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         serializer.increase_container_depth();
         TraitHelpers.serialize_vector_u8(authentication_key, serializer);
@@ -45,44 +71,32 @@ public final class AccountResource {
         return serializer.get_bytes();
     }
 
-    public static AccountResource deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
-        deserializer.increase_container_depth();
-        Builder builder = new Builder();
-        builder.authentication_key = TraitHelpers.deserialize_vector_u8(deserializer);
-        builder.withdrawal_capability = TraitHelpers.deserialize_option_WithdrawCapabilityResource(deserializer);
-        builder.key_rotation_capability = TraitHelpers.deserialize_option_KeyRotationCapabilityResource(deserializer);
-        builder.withdraw_events = EventHandle.deserialize(deserializer);
-        builder.deposit_events = EventHandle.deserialize(deserializer);
-        builder.accept_token_events = EventHandle.deserialize(deserializer);
-        builder.sequence_number = deserializer.deserialize_u64();
-        deserializer.decrease_container_depth();
-        return builder.build();
-    }
-
-    public static AccountResource bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        AccountResource value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         AccountResource other = (AccountResource) obj;
-        if (!java.util.Objects.equals(this.authentication_key, other.authentication_key)) { return false; }
-        if (!java.util.Objects.equals(this.withdrawal_capability, other.withdrawal_capability)) { return false; }
-        if (!java.util.Objects.equals(this.key_rotation_capability, other.key_rotation_capability)) { return false; }
-        if (!java.util.Objects.equals(this.withdraw_events, other.withdraw_events)) { return false; }
-        if (!java.util.Objects.equals(this.deposit_events, other.deposit_events)) { return false; }
-        if (!java.util.Objects.equals(this.accept_token_events, other.accept_token_events)) { return false; }
-        if (!java.util.Objects.equals(this.sequence_number, other.sequence_number)) { return false; }
+        if (!java.util.Objects.equals(this.authentication_key, other.authentication_key)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.withdrawal_capability, other.withdrawal_capability)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.key_rotation_capability, other.key_rotation_capability)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.withdraw_events, other.withdraw_events)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.deposit_events, other.deposit_events)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.accept_token_events, other.accept_token_events)) {
+            return false;
+        }
+        if (!java.util.Objects.equals(this.sequence_number, other.sequence_number)) {
+            return false;
+        }
         return true;
     }
 
@@ -109,13 +123,13 @@ public final class AccountResource {
 
         public AccountResource build() {
             return new AccountResource(
-                authentication_key,
-                withdrawal_capability,
-                key_rotation_capability,
-                withdraw_events,
-                deposit_events,
-                accept_token_events,
-                sequence_number
+                    authentication_key,
+                    withdrawal_capability,
+                    key_rotation_capability,
+                    withdraw_events,
+                    deposit_events,
+                    accept_token_events,
+                    sequence_number
             );
         }
     }

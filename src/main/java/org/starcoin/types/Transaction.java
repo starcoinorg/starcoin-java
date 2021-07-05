@@ -3,33 +3,36 @@ package org.starcoin.types;
 
 public abstract class Transaction {
 
-    abstract public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError;
-
     public static Transaction deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
         int index = deserializer.deserialize_variant_index();
         switch (index) {
-            case 0: return UserTransaction.load(deserializer);
-            case 1: return BlockMetadata.load(deserializer);
-            default: throw new com.novi.serde.DeserializationError("Unknown variant index for Transaction: " + index);
+            case 0:
+                return UserTransaction.load(deserializer);
+            case 1:
+                return BlockMetadata.load(deserializer);
+            default:
+                throw new com.novi.serde.DeserializationError("Unknown variant index for Transaction: " + index);
         }
     }
+
+    public static Transaction bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
+        if (input == null) {
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+        }
+        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
+        Transaction value = deserialize(deserializer);
+        if (deserializer.get_buffer_offset() < input.length) {
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+        }
+        return value;
+    }
+
+    abstract public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError;
 
     public byte[] bcsSerialize() throws com.novi.serde.SerializationError {
         com.novi.serde.Serializer serializer = new com.novi.bcs.BcsSerializer();
         serialize(serializer);
         return serializer.get_bytes();
-    }
-
-    public static Transaction bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
-        if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
-        }
-        com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
-        Transaction value = deserialize(deserializer);
-        if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
-        }
-        return value;
     }
 
     public static final class UserTransaction extends Transaction {
@@ -40,13 +43,6 @@ public abstract class Transaction {
             this.value = value;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(0);
-            value.serialize(serializer);
-            serializer.decrease_container_depth();
-        }
-
         static UserTransaction load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -55,12 +51,21 @@ public abstract class Transaction {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(0);
+            value.serialize(serializer);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             UserTransaction other = (UserTransaction) obj;
-            if (!java.util.Objects.equals(this.value, other.value)) { return false; }
+            if (!java.util.Objects.equals(this.value, other.value)) {
+                return false;
+            }
             return true;
         }
 
@@ -75,7 +80,7 @@ public abstract class Transaction {
 
             public UserTransaction build() {
                 return new UserTransaction(
-                    value
+                        value
                 );
             }
         }
@@ -89,13 +94,6 @@ public abstract class Transaction {
             this.value = value;
         }
 
-        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
-            serializer.increase_container_depth();
-            serializer.serialize_variant_index(1);
-            value.serialize(serializer);
-            serializer.decrease_container_depth();
-        }
-
         static BlockMetadata load(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
             deserializer.increase_container_depth();
             Builder builder = new Builder();
@@ -104,12 +102,21 @@ public abstract class Transaction {
             return builder.build();
         }
 
+        public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+            serializer.increase_container_depth();
+            serializer.serialize_variant_index(1);
+            value.serialize(serializer);
+            serializer.decrease_container_depth();
+        }
+
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;
             BlockMetadata other = (BlockMetadata) obj;
-            if (!java.util.Objects.equals(this.value, other.value)) { return false; }
+            if (!java.util.Objects.equals(this.value, other.value)) {
+                return false;
+            }
             return true;
         }
 
@@ -124,7 +131,7 @@ public abstract class Transaction {
 
             public BlockMetadata build() {
                 return new BlockMetadata(
-                    value
+                        value
                 );
             }
         }

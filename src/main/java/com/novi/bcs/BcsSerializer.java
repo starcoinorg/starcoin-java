@@ -3,9 +3,9 @@
 
 package com.novi.bcs;
 
+import com.novi.serde.BinarySerializer;
 import com.novi.serde.SerializationError;
 import com.novi.serde.Slice;
-import com.novi.serde.BinarySerializer;
 
 public class BcsSerializer extends BinarySerializer {
     public static final long MAX_LENGTH = Integer.MAX_VALUE;

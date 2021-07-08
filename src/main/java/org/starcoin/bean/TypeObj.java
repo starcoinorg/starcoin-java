@@ -29,7 +29,6 @@ public class TypeObj extends ModuleObj {
     return new TypeTag.Struct(new StructTag(
         AccountAddressUtils.create(getModuleAddress()), new Identifier(getModuleName()),
         new Identifier(getName()), Lists.newArrayList()));
-
   }
 
 }

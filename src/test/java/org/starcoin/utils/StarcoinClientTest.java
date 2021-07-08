@@ -2,8 +2,12 @@ package org.starcoin.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.novi.serde.Bytes;
 import java.math.BigInteger;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.junit.Test;
 import org.starcoin.bean.ResourceObj;
@@ -37,6 +41,42 @@ public class StarcoinClientTest {
     return false;
   }
 
+
+  @Test
+  public void test() {
+
+    Long l = 92386324538286L;
+
+    System.out.println("u64:" + l + ", after:" + Hex
+        .encode(BcsSerializeHelper.serializeU64ToBytes(l)));
+    String str = "hello";
+    System.out.println("string:" + str + ", after:" + Hex
+        .encode(BcsSerializeHelper.serializeVectorU8ToBytes(str)));
+
+    BigInteger bigInteger = new BigInteger("500000000000000");
+    System.out.println("u128:" + bigInteger + ", after:" + Hex
+        .encode(BcsSerializeHelper.serializeU128ToBytes(bigInteger)));
+
+    List<String> list = Lists
+        .newArrayList("a",
+            "b", "c");
+
+    List<Bytes> bytesList = list.stream().map(s -> {
+
+      System.out
+          .println("string:" + s + ",after:" + Hex.encode(BcsSerializeHelper.serializeVectorU8ToBytes(s)));
+      return BcsSerializeHelper.serializeVectorU8ToBytes(s);
+    }).collect(Collectors.toList());
+
+    System.out.println(bytesList);
+    System.out.println("VectorU8(VectorU8):" + Joiner.on(",").join(list) + ",after:" + Hex
+        .encode(BcsSerializeHelper.serializeListToBytes(list)));
+
+    String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
+
+    System.out.println("address:" + address + ",after:" + Hex
+        .encode(BcsSerializeHelper.serializeAddressToBytes(AccountAddressUtils.create(address))));
+  }
 
   @SneakyThrows
   @Test

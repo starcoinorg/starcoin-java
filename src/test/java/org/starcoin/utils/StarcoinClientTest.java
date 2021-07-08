@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.novi.bcs.BcsSerializer;
 import com.novi.serde.Bytes;
 import java.math.BigInteger;
 import java.util.List;
@@ -42,6 +43,7 @@ public class StarcoinClientTest {
   }
 
 
+  @SneakyThrows
   @Test
   public void test() {
 
@@ -62,13 +64,21 @@ public class StarcoinClientTest {
             "b", "c");
 
     List<Bytes> bytesList = list.stream().map(s -> {
-
       System.out
           .println("string:" + s + ",after:" + Hex.encode(BcsSerializeHelper.serializeVectorU8ToBytes(s)));
       return BcsSerializeHelper.serializeVectorU8ToBytes(s);
     }).collect(Collectors.toList());
 
-    System.out.println(bytesList);
+
+    BcsSerializer s = new BcsSerializer();
+    s.serialize_len(bytesList.size());
+    System.out.println(Hex.encode(s.get_bytes()));
+    for (Bytes item : bytesList) {
+      s.serialize_bytes(item);
+      System.out.println(Hex.encode(s.get_bytes()));
+    }
+    System.out.println(Hex.encode(s.get_bytes()));
+
     System.out.println("VectorU8(VectorU8):" + Joiner.on(",").join(list) + ",after:" + Hex
         .encode(BcsSerializeHelper.serializeListToBytes(list)));
 

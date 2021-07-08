@@ -1,97 +1,106 @@
 package org.starcoin.utils;
 
-import static org.junit.Assert.*;
-
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.google.common.io.BaseEncoding;
-import com.novi.serde.Bytes;
-import com.sun.scenario.effect.impl.state.AccessHelper;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Test;
-import org.starcoin.bean.RawTransaction;
-import org.starcoin.stdlib.Helpers;
+import org.starcoin.bean.ResourceObj;
+import org.starcoin.bean.ScriptFunctionObj;
+import org.starcoin.bean.TypeObj;
 import org.starcoin.types.AccountAddress;
-import org.starcoin.types.AccountResource;
-import org.starcoin.types.ChainId;
 import org.starcoin.types.Ed25519PrivateKey;
-import org.starcoin.types.Identifier;
-import org.starcoin.types.RawUserTransaction;
-import org.starcoin.types.SignedUserTransaction;
-import org.starcoin.types.StructTag;
-import org.starcoin.types.TransactionAuthenticator;
-import org.starcoin.types.TransactionPayload;
-import org.starcoin.types.TypeTag;
 
 public class StarcoinClientTest {
 
-  StarcoinClient starcoinClient = new StarcoinClient("https://barnard-seed.starcoin.org");
+  private StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.BARNARD);
+  private String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
+  private String privateKeyString = "0x7899f7cac425b5ce7239eb313db06ac2a93c731ea4512b857f975c0447176b25";
+  private Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);
+  private AccountAddress sender = AccountAddressUtils.create(address);
 
 
-  @SneakyThrows
-  public AccountResource getAccountSequence(AccountAddress sender) {
-    String path = AccountAddressUtils.hex(sender)
-        + "/1/0x00000000000000000000000000000001::Account::Account";
-    String rst = starcoinClient.call("state.get", Lists.newArrayList(path));
-    JSONObject jsonObject = JSON.parseObject(rst);
-    List<Byte> result = jsonObject.getJSONArray("result").toJavaList(Byte.class);
-    Byte[] bytes = result.toArray(new Byte[0]);
-    AccountResource accountResource = AccountResource.bcsDeserialize(ArrayUtils.toPrimitive(bytes));
-    return accountResource;
+  @Test
+  public void testSeqnubmer() {
+    System.out.println(starcoinClient.getAccountSequence(sender).sequence_number);
   }
+
+
+  public boolean checkTxt(String txn) {
+    String rst = starcoinClient.getTransactionInfo(txn);
+    JSONObject jsonObject = JSON.parseObject(rst);
+    JSONObject result = jsonObject.getJSONObject("result");
+    if (result != null) {
+      return true;
+    }
+    return false;
+  }
+
 
   @SneakyThrows
   @Test
-  public void test() {
-    String privateKeyString = "0x587737ebefb4961d377a3ab2f9ceb37b1fa96eb862dfaf954a4a1a99535dfec0";
-    Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);
-    String fromAddress = "0xd7f20befd34b9f1ab8aeae98b82a5a51";
-    String toAddress = "0xf8af03dd08de49d81e4efd9e24c039cc";
+  public void testDeployContract() {
 
-    AccountAddress sender = AccountAddressUtils.create(fromAddress);
-    TransactionPayload payload = buildTransferPayload(AccountAddressUtils.create(toAddress),
-        new BigInteger("100000"));
-    RawUserTransaction rawUserTransaction = buildRawUserTransaction(sender, payload);
-    SignedUserTransaction signedUserTransaction = SignatureUtils
-        .signTxn(privateKey, rawUserTransaction);
-    List<String> params = Lists.newArrayList(Hex.encode(signedUserTransaction.bcsSerialize()));
-    String rst = starcoinClient.call("txpool.submit_hex_transaction", params);
+    String contractPath = this
+        .getClass()
+        .getClassLoader()
+        .getResource("contract/MyCounter.mv")
+        .getFile();
+
+    ScriptFunctionObj scriptFunctionObj = ScriptFunctionObj
+        .builder()
+        .moduleAddress("0xf8af03dd08de49d81e4efd9e24c039cc")
+        .moduleName("xxxx")
+        .functionName("init_script")
+        .tyArgs(Lists.newArrayList())
+        .args(Lists.newArrayList())
+        .build();
+
+    String rst = starcoinClient.deployContractPackage(sender, privateKey, contractPath,
+        scriptFunctionObj);
+    JSONObject jsonObject = JSON.parseObject(rst);
+    String txn = jsonObject.getString("result");
+    checkTxt(txn);
+  }
+
+  @Test
+  public void testGetResource() {
+    ResourceObj resourceObj = ResourceObj
+        .builder()
+        .moduleAddress("0xf8af03dd08de49d81e4efd9e24c039cc")
+        .moduleName("MyCounter")
+        .resourceName("Counter")
+        .build();
+    String rst = starcoinClient.getResource(sender, resourceObj);
     System.out.println(rst);
   }
 
-  public static StructTag STC() {
-    return new StructTag(
-        AccountAddressUtils.create("0x00000000000000000000000000000001"), new Identifier("STC"),
-        new Identifier("STC"), Lists.newArrayList());
+  @Test
+  public void testCallContractFunctionV2() {
+    BigInteger amount = new BigInteger("10000000");
+    ScriptFunctionObj scriptFunctionObj = ScriptFunctionObj
+        .builder()
+        .moduleAddress("0xf8af03dd08de49d81e4efd9e24c039cc")
+        .functionName("mint_script")
+        .moduleName("ALM")
+        .args(Lists.newArrayList(BcsSerializeHelper.serializeU128ToBytes(amount)))
+        .build();
+    String rst = starcoinClient.callScriptFunction(sender, privateKey, scriptFunctionObj);
+    System.out.println(rst);
   }
 
-
-  private TransactionPayload buildTransferPayload(AccountAddress toAddress, BigInteger amount) {
-    TypeTag typeTag = new TypeTag.Struct(STC());
-    TransactionPayload payload = Helpers
-        .encode_peer_to_peer_v2_script_function(typeTag, toAddress, amount);
-    return payload;
-  }
 
   @SneakyThrows
-  public RawUserTransaction buildRawUserTransaction(AccountAddress sender,
-      TransactionPayload payload) {
-    AccountResource accountResource = getAccountSequence(sender);
-
-    long seqNumber = accountResource.sequence_number;
-    ChainId chainId = new ChainId((byte) 251);
-    RawUserTransaction rawUserTransaction = new RawUserTransaction(sender, seqNumber, payload,
-        10000000L, 1L, "0x1::STC::STC",
-        System.currentTimeMillis() / 1000 + TimeUnit.HOURS.toSeconds(1), chainId);
-    return rawUserTransaction;
-
+  @Test
+  public void testTransfer() {
+    String toAddress = "0xd7f20befd34b9f1ab8aeae98b82a5a51";
+    TypeObj typeObj = TypeObj.STC();
+    String rst = starcoinClient.transfer(sender, privateKey, AccountAddressUtils.create(toAddress),
+        typeObj, new BigInteger("1000"));
+    System.out.println(rst);
   }
+
+
 }
 

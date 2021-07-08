@@ -21,11 +21,7 @@ public class SignatureUtils {
       RawUserTransaction rawUserTransaction) {
     byte[] bytes = com.google.common.primitives.Bytes
         .concat(HashUtils.hashPrefix("RawUserTransaction"), rawUserTransaction.bcsSerialize());
-
-    System.out.println(Hex.encode(bytes));
     byte[] signRst = ed25519Sign(privateKey, bytes);
-    System.out.println(Hex.encode(signRst));
-
     Ed25519PublicKey publicKey = getPublicKey(privateKey);
     Ed25519Signature signature = new Ed25519Signature(new Bytes(signRst));
     TransactionAuthenticator transactionAuthenticator = new TransactionAuthenticator.Ed25519(

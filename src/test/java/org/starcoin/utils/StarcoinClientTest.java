@@ -65,10 +65,10 @@ public class StarcoinClientTest {
 
     List<Bytes> bytesList = list.stream().map(s -> {
       System.out
-          .println("string:" + s + ",after:" + Hex.encode(BcsSerializeHelper.serializeVectorU8ToBytes(s)));
+          .println("string:" + s + ",after:" + Hex
+              .encode(BcsSerializeHelper.serializeVectorU8ToBytes(s)));
       return BcsSerializeHelper.serializeVectorU8ToBytes(s);
     }).collect(Collectors.toList());
-
 
     BcsSerializer s = new BcsSerializer();
     s.serialize_len(bytesList.size());

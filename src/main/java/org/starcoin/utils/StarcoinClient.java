@@ -77,7 +77,6 @@ public class StarcoinClient {
     Response response = okHttpClient
         .newCall(request)
         .execute();
-    System.out.println();
     return response
         .body()
         .string();

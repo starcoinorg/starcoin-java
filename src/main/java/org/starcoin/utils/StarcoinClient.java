@@ -19,7 +19,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.NotImplementedException;
 import org.starcoin.bean.ResourceObj;
@@ -30,7 +29,6 @@ import org.starcoin.types.AccountAddress;
 import org.starcoin.types.AccountResource;
 import org.starcoin.types.ChainId;
 import org.starcoin.types.Ed25519PrivateKey;
-
 import org.starcoin.types.Ed25519PublicKey;
 import org.starcoin.types.Ed25519Signature;
 import org.starcoin.types.Module;
@@ -44,28 +42,6 @@ import org.starcoin.types.TransactionAuthenticator.Ed25519;
 import org.starcoin.types.TransactionAuthenticator.MultiEd25519;
 import org.starcoin.types.TransactionPayload;
 import org.starcoin.types.TransactionPayload.ScriptFunction;
-
-
-import org.starcoin.types.Module;
-import org.starcoin.types.RawUserTransaction;
-import org.starcoin.types.SignedUserTransaction;
-import org.starcoin.types.TransactionPayload;
-import org.starcoin.types.TransactionPayload.ScriptFunction;
-
-import java.io.File;
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
-import lombok.SneakyThrows;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 
 public class StarcoinClient {
@@ -100,6 +76,7 @@ public class StarcoinClient {
     Request request = new Request.Builder().post(body).url(this.baseUrl).build();
     Response response = okHttpClient.newCall(request).execute();
 
+    return response.body().string();
   }
 
 
@@ -158,7 +135,6 @@ public class StarcoinClient {
       TransactionPayload payload) {
 
     AccountResource accountResource = getAccountResource(sender);
-
 
     long seqNumber = accountResource.sequence_number;
     ChainId chainId = new ChainId((byte) chaindId);

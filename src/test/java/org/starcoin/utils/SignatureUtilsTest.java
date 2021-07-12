@@ -16,24 +16,47 @@ import org.starcoin.types.SignedMessage;
 public class SignatureUtilsTest {
 
 
-  @SneakyThrows
   @Test
-  public void testSignPersonalMessage() {
+  public void testVerify() {
+    StarcoinClient starcoinClient = new StarcoinClient("https://barnard-seed.starcoin.org", 254);
 
-    String privateKeyString = "0x587737ebefb4961d377a3ab2f9ceb37b1fa96eb862dfaf954a4a1a99535dfec0";
-    String publicKeyString = "0x32ed52d319694aebc5b52e00836e2f7c7d2c7c7791270ede450d21dbc90cbfa1";
-    String address = "0xd7f20befd34b9f1ab8aeae98b82a5a51";
+    String privateKeyString = "0xda82fa47266c40c84d76e20b0a278d1b27ae4a14c9c318e54457722d739371b0";
+    String publicKeyString = "0xfe18b0900baa684231da3519ff5387c4b18f76ae5209b474b8dd06cb5f7ff464";
+    String address = "0xfa0d5060eb2622e26b4dc307a481db0c";
 
     Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);
     assertEquals(privateKeyString, Hex.encode(privateKey.value));
     Ed25519PublicKey publicKey = SignatureUtils.getPublicKey(privateKey);
     assertEquals(publicKeyString, Hex.encode(publicKey.value));
 
-    String message = "helloworld";
-    String rst = SignatureUtils
+    String message = "Example `personal_sign` message 中文";
+    String rst = starcoinClient
         .signPersonalMessage(AccountAddressUtils.create(address), privateKey, message);
 
-    String rustRst = "0xd7f20befd34b9f1ab8aeae98b82a5a510a68656c6c6f776f726c64002032ed52d319694aebc5b52e00836e2f7c7d2c7c7791270ede450d21dbc90cbfa140f8ccf9ce7f6d45a5e16848301259722919567852113edd46542691fa06ed0eb283235190efc5b2925032b8af02c5bd89a34a923506e9a7a105c631dc0b0c580e";
+    String rustRst = "0xfa0d5060eb2622e26b4dc307a481db0c264578616d706c652060706572736f6e616c5f7369676e60206d65737361676520e4b8ade696870020fe18b0900baa684231da3519ff5387c4b18f76ae5209b474b8dd06cb5f7ff46440ff4f9bb5df5386b12629650873267f3b26619829c8b76d6e4a66a8fb11275b133f4ebe48cfb6c1d7dda1b9a89912a3ed0807945cb26ed3206da297e08111c20bfe";
+    assertEquals(rst, rustRst);
+
+  }
+
+  @SneakyThrows
+  @Test
+  public void testSignPersonalMessage() {
+    StarcoinClient starcoinClient = new StarcoinClient("https://barnard-seed.starcoin.org", 254);
+
+    String privateKeyString = "0xda82fa47266c40c84d76e20b0a278d1b27ae4a14c9c318e54457722d739371b0";
+    String publicKeyString = "0xfe18b0900baa684231da3519ff5387c4b18f76ae5209b474b8dd06cb5f7ff464";
+    String address = "0xfa0d5060eb2622e26b4dc307a481db0c";
+
+    Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);
+    assertEquals(privateKeyString, Hex.encode(privateKey.value));
+    Ed25519PublicKey publicKey = SignatureUtils.getPublicKey(privateKey);
+    assertEquals(publicKeyString, Hex.encode(publicKey.value));
+
+    String message = "Example `personal_sign` message 中文";
+    String rst = starcoinClient
+        .signPersonalMessage(AccountAddressUtils.create(address), privateKey, message);
+
+    String rustRst = "0xfa0d5060eb2622e26b4dc307a481db0c264578616d706c652060706572736f6e616c5f7369676e60206d65737361676520e4b8ade696870020fe18b0900baa684231da3519ff5387c4b18f76ae5209b474b8dd06cb5f7ff46440ff4f9bb5df5386b12629650873267f3b26619829c8b76d6e4a66a8fb11275b133f4ebe48cfb6c1d7dda1b9a89912a3ed0807945cb26ed3206da297e08111c20bfe";
     assertEquals(rst, rustRst);
 
     SignedMessage signedMessage = SignedMessage
@@ -42,8 +65,6 @@ public class SignatureUtilsTest {
 
     byte[] arr = ArrayUtils.toPrimitive(messageByteList.toArray(new Byte[0]));
     assertEquals(new String(arr), message);
-
-    StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.BARNARD);
 
     Optional<SignedMessage> verifyPersonalMessage = starcoinClient.verifyPersonalMessage(rustRst);
 

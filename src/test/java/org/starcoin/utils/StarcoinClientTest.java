@@ -28,7 +28,9 @@ public class StarcoinClientTest {
 
   @Test
   public void testSequenceNumber() {
-    System.out.println(starcoinClient.getAccountResource(sender).sequence_number);
+    starcoinClient.getAccountResource(sender).ifPresent(s->{
+      System.out.println(s.sequence_number);
+    });
   }
 
 

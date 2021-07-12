@@ -1,21 +1,23 @@
 package org.starcoin.utils;
 
 import com.novi.serde.Bytes;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.ArrayUtils;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
-import org.starcoin.types.AccountAddress;
 import org.starcoin.types.Ed25519PrivateKey;
 import org.starcoin.types.Ed25519PublicKey;
 import org.starcoin.types.Ed25519Signature;
+import org.starcoin.types.MultiEd25519PublicKey;
+import org.starcoin.types.MultiEd25519Signature;
 import org.starcoin.types.RawUserTransaction;
-import org.starcoin.types.SignedMessage;
 import org.starcoin.types.SignedUserTransaction;
 import org.starcoin.types.SigningMessage;
 import org.starcoin.types.TransactionAuthenticator;
+import org.starcoin.types.TransactionAuthenticator.Ed25519;
+import org.starcoin.types.TransactionAuthenticator.MultiEd25519;
 
 
 public class SignatureUtils {
@@ -35,24 +37,6 @@ public class SignatureUtils {
     return signedUserTransaction;
   }
 
-  @SneakyThrows
-  public static String signPersonalMessage(AccountAddress address, Ed25519PrivateKey privateKey,
-      String message) {
-    Ed25519PublicKey publicKey = getPublicKey(privateKey);
-
-    List<Byte> arrays = com.google.common.primitives.Bytes
-        .asList(message.getBytes(StandardCharsets.UTF_8));
-    SigningMessage signingMessage = new SigningMessage(arrays);
-    byte[] bytes = com.google.common.primitives.Bytes
-        .concat(HashUtils.hashPrefix("SigningMessage"), signingMessage.bcsSerialize());
-    byte[] signatureBytes = ed25519Sign(privateKey, bytes);
-    Ed25519Signature signature = new Ed25519Signature(Bytes.valueOf(signatureBytes));
-    TransactionAuthenticator authenticator = new TransactionAuthenticator.Ed25519(
-        publicKey, signature);
-    SignedMessage signedMessage = new SignedMessage(address, signingMessage, authenticator);
-    return Hex.encode(signedMessage.bcsSerialize());
-
-  }
 
 
   @SneakyThrows
@@ -104,4 +88,21 @@ public class SignatureUtils {
     return new Ed25519PrivateKey(new Bytes(Hex.decode(privateKeyString)));
   }
 
+  public static boolean verifyPersonalMessage(SigningMessage signingMessage,
+      TransactionAuthenticator authenticator, Scheme scheme) {
+    if (Scheme.Ed25519 == scheme) {
+      TransactionAuthenticator.Ed25519 ed25519 = (Ed25519) authenticator;
+      Ed25519PublicKey publicKey = ed25519.public_key;
+      Ed25519Signature signature = ed25519.signature;
+      List<Byte> messageByteList = signingMessage.message;
+      byte[] messageArray = ArrayUtils.toPrimitive(messageByteList.toArray(new Byte[0]));
+      return SignatureUtils.verifyPersonalMessage(publicKey, messageArray,
+          signature.value.content());
+    }
+
+    TransactionAuthenticator.MultiEd25519 ed25519 = (MultiEd25519) authenticator;
+    MultiEd25519PublicKey publicKey = ed25519.public_key;
+    MultiEd25519Signature signature = ed25519.signature;
+    throw new UnsupportedOperationException("MultiEd25519 not supported");
+  }
 }

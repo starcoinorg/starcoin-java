@@ -7,6 +7,7 @@ import com.google.common.io.Files;
 import com.novi.serde.Bytes;
 import java.io.File;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -32,14 +33,11 @@ import org.starcoin.types.Ed25519PrivateKey;
 import org.starcoin.types.Ed25519PublicKey;
 import org.starcoin.types.Ed25519Signature;
 import org.starcoin.types.Module;
-import org.starcoin.types.MultiEd25519PublicKey;
-import org.starcoin.types.MultiEd25519Signature;
 import org.starcoin.types.RawUserTransaction;
 import org.starcoin.types.SignedMessage;
 import org.starcoin.types.SignedUserTransaction;
+import org.starcoin.types.SigningMessage;
 import org.starcoin.types.TransactionAuthenticator;
-import org.starcoin.types.TransactionAuthenticator.Ed25519;
-import org.starcoin.types.TransactionAuthenticator.MultiEd25519;
 import org.starcoin.types.TransactionPayload;
 import org.starcoin.types.TransactionPayload.ScriptFunction;
 
@@ -116,25 +114,28 @@ public class StarcoinClient {
 
   @SneakyThrows
   //  @TODO 链上改了返回结构以后要修改
-  public AccountResource getAccountResource(AccountAddress sender) {
+  public Optional<AccountResource> getAccountResource(AccountAddress sender) {
 
     String path = AccountAddressUtils.hex(
         sender) + "/1/0x00000000000000000000000000000001::Account::Account";
     String rst = call("state.get", Lists.newArrayList(path));
     JSONObject jsonObject = JSON.parseObject(rst);
+    if (jsonObject.getJSONObject("result") == null) {
+      return Optional.empty();
+    }
     List<Byte> result = jsonObject
         .getJSONArray("result")
         .toJavaList(Byte.class);
     Byte[] bytes = result.toArray(new Byte[0]);
     AccountResource accountResource = AccountResource.bcsDeserialize(ArrayUtils.toPrimitive(bytes));
-    return accountResource;
+    return Optional.ofNullable(accountResource);
   }
 
   @SneakyThrows
   private RawUserTransaction buildRawUserTransaction(AccountAddress sender,
       TransactionPayload payload) {
 
-    AccountResource accountResource = getAccountResource(sender);
+    AccountResource accountResource = getAccountResource(sender).get();
 
     long seqNumber = accountResource.sequence_number;
     ChainId chainId = new ChainId((byte) chaindId);
@@ -205,33 +206,50 @@ public class StarcoinClient {
   public Optional<SignedMessage> verifyPersonalMessage(String rst) {
     SignedMessage signedMessage = SignedMessage.bcsDeserialize(Hex.decode(rst));
     AccountAddress address = signedMessage.account;
-    AccountResource accountResource = getAccountResource(address);
-    String chainAuthKey = Hex.encode(accountResource.authentication_key);
-    AccountAddress chainAccountAddress = AuthenticationKeyUtils.accountAddress(chainAuthKey);
+    Optional<AccountResource> accountResource = getAccountResource(address);
 
-    if (!Arrays.equals(address.bcsSerialize(), chainAccountAddress.bcsSerialize())) {
-      return Optional.empty();
+    String chainAuthKey = AuthenticationKeyUtils.DUMMY_KEY;
+    if (accountResource.isPresent()) {
+      chainAuthKey = Hex.encode(accountResource.get().authentication_key);
     }
-    if (Scheme.Ed25519 == AuthenticationKeyUtils.getScheme(chainAuthKey)) {
-      TransactionAuthenticator.Ed25519 ed25519 = (Ed25519) signedMessage.authenticator;
-      Ed25519PublicKey publicKey = ed25519.public_key;
-      Ed25519Signature signature = ed25519.signature;
-
-      List<Byte> messageByteList = signedMessage.message.message;
-
-      byte[] messageArray = ArrayUtils.toPrimitive(messageByteList.toArray(new Byte[0]));
-
-      if (SignatureUtils.verifyPersonalMessage(publicKey,
-          messageArray,
-          signature.value.content())) {
-        return Optional.of(signedMessage);
+    if (!AuthenticationKeyUtils.DUMMY_KEY.equals(chainAuthKey)) {
+      AccountAddress chainAccountAddress = AuthenticationKeyUtils.accountAddress(chainAuthKey);
+      if (!Arrays.equals(address.bcsSerialize(), chainAccountAddress.bcsSerialize())) {
+        return Optional.empty();
       }
-    } else {
-      TransactionAuthenticator.MultiEd25519 ed25519 = (MultiEd25519) signedMessage.authenticator;
-      MultiEd25519PublicKey publicKey = ed25519.public_key;
-      MultiEd25519Signature signature = ed25519.signature;
-      throw new UnsupportedOperationException("MultiEd25519 not supported");
+    }
+    boolean verifyPersonalMessage = SignatureUtils
+        .verifyPersonalMessage(signedMessage.message, signedMessage.authenticator,
+            Scheme.Ed25519);
+    if (verifyPersonalMessage) {
+      return Optional.of(signedMessage);
     }
     return Optional.empty();
+  }
+
+
+  @SneakyThrows
+  public String signPersonalMessage(AccountAddress address, Ed25519PrivateKey privateKey,
+      String message) {
+    Ed25519PublicKey publicKey = SignatureUtils.getPublicKey(privateKey);
+
+    List<Byte> arrays = com.google.common.primitives.Bytes
+        .asList(message.getBytes(StandardCharsets.UTF_8));
+    SigningMessage signingMessage = new SigningMessage(arrays);
+    byte[] bytes = com.google.common.primitives.Bytes
+        .concat(HashUtils.hashPrefix("SigningMessage"), signingMessage.bcsSerialize());
+    byte[] signatureBytes = SignatureUtils.ed25519Sign(privateKey, bytes);
+    Ed25519Signature signature = new Ed25519Signature(Bytes.valueOf(signatureBytes));
+    TransactionAuthenticator authenticator = new TransactionAuthenticator.Ed25519(
+        publicKey, signature);
+    SignedMessage signedMessage = new SignedMessage(address, signingMessage, authenticator,
+        getChainId());
+    return Hex.encode(signedMessage.bcsSerialize());
+
+  }
+
+  public ChainId getChainId() {
+    return new ChainId(new Byte((byte) this.chaindId));
+
   }
 }

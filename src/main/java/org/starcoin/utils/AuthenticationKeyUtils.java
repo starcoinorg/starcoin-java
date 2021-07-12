@@ -4,7 +4,9 @@ import java.util.Arrays;
 import org.starcoin.types.AccountAddress;
 
 public class AuthenticationKeyUtils {
+  public static int AUTHENTICATION_KEY_LENGTH = 32;
 
+  public static final String DUMMY_KEY = "";
   private static byte[] ED25519_KEY_SCHEME = new byte[]{(byte) Scheme.Ed25519.getIndex()};
   private static byte[] MULTI_ED25519_KEY_SCHEME = new byte[]{
       (byte) Scheme.MultiEd25519.getIndex()};
@@ -27,4 +29,5 @@ public class AuthenticationKeyUtils {
 //TODO
     return Scheme.Ed25519;
   }
+
 }

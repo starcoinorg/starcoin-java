@@ -5,14 +5,17 @@ public final class SignedMessage {
     public final AccountAddress account;
     public final SigningMessage message;
     public final TransactionAuthenticator authenticator;
+    public final ChainId chain_id;
 
-    public SignedMessage(AccountAddress account, SigningMessage message, TransactionAuthenticator authenticator) {
+    public SignedMessage(AccountAddress account, SigningMessage message, TransactionAuthenticator authenticator, ChainId chain_id) {
         java.util.Objects.requireNonNull(account, "account must not be null");
         java.util.Objects.requireNonNull(message, "message must not be null");
         java.util.Objects.requireNonNull(authenticator, "authenticator must not be null");
+        java.util.Objects.requireNonNull(chain_id, "chain_id must not be null");
         this.account = account;
         this.message = message;
         this.authenticator = authenticator;
+        this.chain_id = chain_id;
     }
 
     public void serialize(com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
@@ -20,6 +23,7 @@ public final class SignedMessage {
         account.serialize(serializer);
         message.serialize(serializer);
         authenticator.serialize(serializer);
+        chain_id.serialize(serializer);
         serializer.decrease_container_depth();
     }
 
@@ -35,18 +39,19 @@ public final class SignedMessage {
         builder.account = AccountAddress.deserialize(deserializer);
         builder.message = SigningMessage.deserialize(deserializer);
         builder.authenticator = TransactionAuthenticator.deserialize(deserializer);
+        builder.chain_id = ChainId.deserialize(deserializer);
         deserializer.decrease_container_depth();
         return builder.build();
     }
 
     public static SignedMessage bcsDeserialize(byte[] input) throws com.novi.serde.DeserializationError {
         if (input == null) {
-             throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
+            throw new com.novi.serde.DeserializationError("Cannot deserialize null array");
         }
         com.novi.serde.Deserializer deserializer = new com.novi.bcs.BcsDeserializer(input);
         SignedMessage value = deserialize(deserializer);
         if (deserializer.get_buffer_offset() < input.length) {
-             throw new com.novi.serde.DeserializationError("Some input bytes were not read");
+            throw new com.novi.serde.DeserializationError("Some input bytes were not read");
         }
         return value;
     }
@@ -59,6 +64,7 @@ public final class SignedMessage {
         if (!java.util.Objects.equals(this.account, other.account)) { return false; }
         if (!java.util.Objects.equals(this.message, other.message)) { return false; }
         if (!java.util.Objects.equals(this.authenticator, other.authenticator)) { return false; }
+        if (!java.util.Objects.equals(this.chain_id, other.chain_id)) { return false; }
         return true;
     }
 
@@ -67,6 +73,7 @@ public final class SignedMessage {
         value = 31 * value + (this.account != null ? this.account.hashCode() : 0);
         value = 31 * value + (this.message != null ? this.message.hashCode() : 0);
         value = 31 * value + (this.authenticator != null ? this.authenticator.hashCode() : 0);
+        value = 31 * value + (this.chain_id != null ? this.chain_id.hashCode() : 0);
         return value;
     }
 
@@ -74,12 +81,14 @@ public final class SignedMessage {
         public AccountAddress account;
         public SigningMessage message;
         public TransactionAuthenticator authenticator;
+        public ChainId chain_id;
 
         public SignedMessage build() {
             return new SignedMessage(
                 account,
                 message,
-                authenticator
+                authenticator,
+                chain_id
             );
         }
     }

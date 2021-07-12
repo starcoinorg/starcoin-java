@@ -2,29 +2,20 @@ package org.starcoin.utils;
 
 import com.novi.serde.Bytes;
 import java.nio.charset.StandardCharsets;
-
 import java.util.List;
-
 import lombok.SneakyThrows;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
-
 import org.starcoin.types.AccountAddress;
-
 import org.starcoin.types.Ed25519PrivateKey;
 import org.starcoin.types.Ed25519PublicKey;
 import org.starcoin.types.Ed25519Signature;
 import org.starcoin.types.RawUserTransaction;
-
 import org.starcoin.types.SignedMessage;
 import org.starcoin.types.SignedUserTransaction;
 import org.starcoin.types.SigningMessage;
 import org.starcoin.types.TransactionAuthenticator;
-
-import org.starcoin.types.SignedUserTransaction;
-import org.starcoin.types.TransactionAuthenticator;
-import org.starcoin.types.TransactionAuthenticator.Ed25519;
 
 
 public class SignatureUtils {

@@ -12,6 +12,7 @@ import org.starcoin.types.Ed25519PrivateKey;
 import org.starcoin.types.Ed25519PublicKey;
 import org.starcoin.types.SignedMessage;
 
+
 public class SignatureUtilsTest {
 
 
@@ -22,10 +23,12 @@ public class SignatureUtilsTest {
     String privateKeyString = "0x587737ebefb4961d377a3ab2f9ceb37b1fa96eb862dfaf954a4a1a99535dfec0";
     String publicKeyString = "0x32ed52d319694aebc5b52e00836e2f7c7d2c7c7791270ede450d21dbc90cbfa1";
     String address = "0xd7f20befd34b9f1ab8aeae98b82a5a51";
+
     Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);
     assertEquals(privateKeyString, Hex.encode(privateKey.value));
     Ed25519PublicKey publicKey = SignatureUtils.getPublicKey(privateKey);
     assertEquals(publicKeyString, Hex.encode(publicKey.value));
+
     String message = "helloworld";
     String rst = SignatureUtils
         .signPersonalMessage(AccountAddressUtils.create(address), privateKey, message);
@@ -46,6 +49,7 @@ public class SignatureUtilsTest {
 
     assertTrue(verifyPersonalMessage.isPresent());
   }
+
 
   @Test
   public void testSign() {

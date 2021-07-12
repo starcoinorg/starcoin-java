@@ -2,20 +2,30 @@ package org.starcoin.utils;
 
 import com.novi.serde.Bytes;
 import java.nio.charset.StandardCharsets;
+
 import java.util.List;
+
 import lombok.SneakyThrows;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
+
 import org.starcoin.types.AccountAddress;
+
 import org.starcoin.types.Ed25519PrivateKey;
 import org.starcoin.types.Ed25519PublicKey;
 import org.starcoin.types.Ed25519Signature;
 import org.starcoin.types.RawUserTransaction;
+
 import org.starcoin.types.SignedMessage;
 import org.starcoin.types.SignedUserTransaction;
 import org.starcoin.types.SigningMessage;
 import org.starcoin.types.TransactionAuthenticator;
+
+import org.starcoin.types.SignedUserTransaction;
+import org.starcoin.types.TransactionAuthenticator;
+import org.starcoin.types.TransactionAuthenticator.Ed25519;
+
 
 public class SignatureUtils {
 
@@ -50,6 +60,7 @@ public class SignatureUtils {
         publicKey, signature);
     SignedMessage signedMessage = new SignedMessage(address, signingMessage, authenticator);
     return Hex.encode(signedMessage.bcsSerialize());
+
   }
 
 
@@ -67,12 +78,14 @@ public class SignatureUtils {
 
   @SneakyThrows
   public static byte[] ed25519Sign(Ed25519PrivateKey privateKey, byte[] data) {
+
     Ed25519PrivateKeyParameters key = new Ed25519PrivateKeyParameters(privateKey.value.content(),
         0);
     Ed25519Signer signer = new Ed25519Signer();
     signer.init(true, key);
     signer.update(data, 0, data.length);
     byte[] rst = signer.generateSignature();
+
     return rst;
   }
 
@@ -93,6 +106,7 @@ public class SignatureUtils {
     signer.init(false, pk);
     signer.update(messageArray, 0, messageArray.length);
     return signer.verifySignature(signedBytes);
+
   }
 
   public static Ed25519PrivateKey strToPrivateKey(String privateKeyString) {

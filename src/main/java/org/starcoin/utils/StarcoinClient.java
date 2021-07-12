@@ -1,12 +1,24 @@
 package org.starcoin.utils;
 
-import com.google.common.collect.Lists;
-import com.google.common.io.Files;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 import com.novi.serde.Bytes;
-
+import java.io.File;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import lombok.SneakyThrows;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.NotImplementedException;
 import org.starcoin.bean.ResourceObj;
@@ -17,26 +29,19 @@ import org.starcoin.types.AccountAddress;
 import org.starcoin.types.AccountResource;
 import org.starcoin.types.ChainId;
 import org.starcoin.types.Ed25519PrivateKey;
+import org.starcoin.types.Ed25519PublicKey;
+import org.starcoin.types.Ed25519Signature;
 import org.starcoin.types.Module;
+import org.starcoin.types.MultiEd25519PublicKey;
+import org.starcoin.types.MultiEd25519Signature;
 import org.starcoin.types.RawUserTransaction;
+import org.starcoin.types.SignedMessage;
 import org.starcoin.types.SignedUserTransaction;
+import org.starcoin.types.TransactionAuthenticator;
+import org.starcoin.types.TransactionAuthenticator.Ed25519;
+import org.starcoin.types.TransactionAuthenticator.MultiEd25519;
 import org.starcoin.types.TransactionPayload;
 import org.starcoin.types.TransactionPayload.ScriptFunction;
-
-import java.io.File;
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
-import lombok.SneakyThrows;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 
 public class StarcoinClient {
@@ -110,7 +115,7 @@ public class StarcoinClient {
 
   @SneakyThrows
   //  @TODO 链上改了返回结构以后要修改
-  public AccountResource getAccountSequence(AccountAddress sender) {
+  public AccountResource getAccountResource(AccountAddress sender) {
     String path = AccountAddressUtils.hex(
         sender) + "/1/0x00000000000000000000000000000001::Account::Account";
     String rst = call("state.get", Lists.newArrayList(path));
@@ -126,7 +131,7 @@ public class StarcoinClient {
   @SneakyThrows
   private RawUserTransaction buildRawUserTransaction(AccountAddress sender,
       TransactionPayload payload) {
-    AccountResource accountResource = getAccountSequence(sender);
+    AccountResource accountResource = getAccountResource(sender);
 
     long seqNumber = accountResource.sequence_number;
     ChainId chainId = new ChainId((byte) chaindId);
@@ -191,4 +196,41 @@ public class StarcoinClient {
     return call("contract.get_resource",
         Lists.newArrayList(AccountAddressUtils.hex(sender), resourceObj.toRPCString()));
   }
+
+
+  @SneakyThrows
+  public Optional<SignedMessage> verifyPersonalMessage(String rst) {
+    SignedMessage signedMessage = SignedMessage.bcsDeserialize(Hex.decode(rst));
+    AccountAddress address = signedMessage.account;
+    AccountResource accountResource = getAccountResource(address);
+    String chainAuthKey = Hex.encode(accountResource.authentication_key);
+    AccountAddress chainAccountAddress = AuthenticationKeyUtils.accountAddress(chainAuthKey);
+
+    if (!Arrays.equals(address.bcsSerialize(), chainAccountAddress.bcsSerialize())) {
+      return Optional.empty();
+    }
+    if (Scheme.Ed25519 == AuthenticationKeyUtils.getScheme(chainAuthKey)) {
+      TransactionAuthenticator.Ed25519 ed25519 = (Ed25519) signedMessage.authenticator;
+      Ed25519PublicKey publicKey = ed25519.public_key;
+      Ed25519Signature signature = ed25519.signature;
+
+      List<Byte> messageByteList = signedMessage.message.message;
+
+      byte[] messageArray = ArrayUtils.toPrimitive(messageByteList.toArray(new Byte[0]));
+
+      if (SignatureUtils.verifyPersonalMessage(publicKey,
+          messageArray,
+          signature.value.content())) {
+        return Optional.of(signedMessage);
+      }
+    } else {
+      TransactionAuthenticator.MultiEd25519 ed25519 = (MultiEd25519) signedMessage.authenticator;
+      MultiEd25519PublicKey publicKey = ed25519.public_key;
+      MultiEd25519Signature signature = ed25519.signature;
+      throw new UnsupportedOperationException("MultiEd25519 not supported");
+    }
+    return Optional.empty();
+  }
+
+
 }

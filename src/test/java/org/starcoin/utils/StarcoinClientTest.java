@@ -27,8 +27,8 @@ public class StarcoinClientTest {
 
 
   @Test
-  public void testSeqnubmer() {
-    System.out.println(starcoinClient.getAccountSequence(sender).sequence_number);
+  public void testSequenceNumber() {
+    System.out.println(starcoinClient.getAccountResource(sender).sequence_number);
   }
 
 

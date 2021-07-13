@@ -12,23 +12,22 @@ import org.starcoin.utils.AccountAddressUtils;
 @SuperBuilder
 public class TypeObj extends ModuleObj {
 
-  private String name;
+    private String name;
 
-  @Override
-  public String toRPCString() {
-    return getModuleAddress() + "::" + getModuleName() + "::" + name;
-  }
+    public static TypeObj STC() {
+        return TypeObj.builder().moduleName("STC").moduleAddress("0x00000000000000000000000000000001")
+                .name("STC").build();
+    }
 
+    @Override
+    public String toRPCString() {
+        return getModuleAddress() + "::" + getModuleName() + "::" + name;
+    }
 
-  public static TypeObj STC() {
-    return TypeObj.builder().moduleName("STC").moduleAddress("0x00000000000000000000000000000001")
-        .name("STC").build();
-  }
-
-  public TypeTag toTypeTag() {
-    return new TypeTag.Struct(new StructTag(
-        AccountAddressUtils.create(getModuleAddress()), new Identifier(getModuleName()),
-        new Identifier(getName()), Lists.newArrayList()));
-  }
+    public TypeTag toTypeTag() {
+        return new TypeTag.Struct(new StructTag(
+                AccountAddressUtils.create(getModuleAddress()), new Identifier(getModuleName()),
+                new Identifier(getName()), Lists.newArrayList()));
+    }
 
 }

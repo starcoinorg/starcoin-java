@@ -7,10 +7,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public abstract class ModuleObj {
 
-  private String moduleAddress;
-  private String moduleName;
+    private String moduleAddress;
+    private String moduleName;
 
-  public abstract String toRPCString();
+    public abstract String toRPCString();
 
 
 }

@@ -57,4 +57,15 @@ public class EventFull extends Event {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
+
+    @Override
+    public String toString() {
+        return "EventFull{" +
+                "eventAddress='" + eventAddress + '\'' +
+                ", tagAddress='" + tagAddress + '\'' +
+                ", tagModule='" + tagModule + '\'' +
+                ", tagName='" + tagName + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

@@ -11,6 +11,4 @@ public abstract class ModuleObj {
     private String moduleName;
 
     public abstract String toRPCString();
-
-
 }

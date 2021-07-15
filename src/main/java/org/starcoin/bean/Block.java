@@ -48,4 +48,14 @@ public class Block {
     public void setBody(BlockBody body) {
         this.body = body;
     }
+
+    @Override
+    public String toString() {
+        return "Block{" +
+                "blockMetadata=" + blockMetadata +
+                ", uncles=" + uncles +
+                ", header=" + header +
+                ", body=" + body +
+                '}';
+    }
 }

@@ -103,4 +103,20 @@ public class RawTransaction {
     public void setTransactionHash(String transactionHash) {
         this.transactionHash = transactionHash;
     }
+
+    @Override
+    public String toString() {
+        return "RawTransaction{" +
+                "sequenceNumber='" + sequenceNumber + '\'' +
+                ", chainId=" + chainId +
+                ", sender='" + sender + '\'' +
+                ", payload='" + payload + '\'' +
+                ", gasUnitPrice='" + gasUnitPrice + '\'' +
+                ", gasTokenCode='" + gasTokenCode + '\'' +
+                ", maxGasAmount='" + maxGasAmount + '\'' +
+                ", expirationTimestampSecs='" + expirationTimestampSecs + '\'' +
+                ", authenticator=" + authenticator +
+                ", transactionHash='" + transactionHash + '\'' +
+                '}';
+    }
 }

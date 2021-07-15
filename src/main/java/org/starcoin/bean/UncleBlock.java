@@ -26,4 +26,12 @@ public class UncleBlock {
     public void setUncleBlockNumber(long uncleBlockNumber) {
         this.uncleBlockNumber = uncleBlockNumber;
     }
+
+    @Override
+    public String toString() {
+        return "UncleBlock{" +
+                "header=" + header +
+                ", uncleBlockNumber=" + uncleBlockNumber +
+                '}';
+    }
 }

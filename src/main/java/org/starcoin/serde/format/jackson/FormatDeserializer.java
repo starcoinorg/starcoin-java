@@ -24,10 +24,10 @@ public class FormatDeserializer extends JsonDeserializer<Format> {
         JsonNode node = oc.readTree(p);
 
         if (node instanceof TextNode) {
-            System.out.println("Read text node: " + node);
+            //System.out.println("Read text node: " + node);
             return Format.Primitive.valueOf(node.textValue());
         } else if (node instanceof ObjectNode) {
-            System.out.println(node);
+            //System.out.println(node);
             ObjectNode objectNode = (ObjectNode) node;
             String firstFieldName = objectNode.fieldNames().next();
             if ("TYPENAME".equals(firstFieldName)) {
@@ -47,7 +47,7 @@ public class FormatDeserializer extends JsonDeserializer<Format> {
             } else if ("TUPLE".equals(firstFieldName)) {
                 ArrayNode formatsNode = (ArrayNode) objectNode.get(firstFieldName);
                 List<Format> formats = new ArrayList<>();
-                System.out.println("TUPLE: " + formatsNode);
+                //System.out.println("TUPLE: " + formatsNode);
                 for (JsonNode formatNode : formatsNode) {
                     formats.add(oc.treeToValue(formatNode, Format.class));
                 }
@@ -59,7 +59,6 @@ public class FormatDeserializer extends JsonDeserializer<Format> {
                 return new Format.TupleArray(contentFormat, size);
             }
         }
-
         throw new JsonParseException(p, "Unknown node type.");
     }
 }

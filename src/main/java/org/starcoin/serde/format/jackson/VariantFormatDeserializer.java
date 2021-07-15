@@ -1,5 +1,6 @@
 package org.starcoin.serde.format.jackson;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.ObjectCodec;
@@ -26,7 +27,7 @@ public class VariantFormatDeserializer extends JsonDeserializer<VariantFormat> {
         JsonNode node = oc.readTree(p);
         if (node instanceof TextNode) {
             if ("UNIT".equals(node.asText())) {
-                System.out.println("Read text node: " + node);
+                //System.out.println("Read text node: " + node);
                 return new VariantFormat.Unit();
             }
         } else if (node instanceof ObjectNode) {
@@ -34,13 +35,13 @@ public class VariantFormatDeserializer extends JsonDeserializer<VariantFormat> {
             String firstFieldName = objectNode.fieldNames().next();
             if ("NEWTYPE".equals(firstFieldName)) {
                 JsonNode valueNode = objectNode.get(firstFieldName);
-                System.out.println("NEWTYPE: " + valueNode);
+                //System.out.println("NEWTYPE: " + valueNode);
                 Format format = oc.treeToValue(valueNode, Format.class);
                 return new VariantFormat.NewType(format);
             } else if ("TUPLE".equals(firstFieldName)) {
                 ArrayNode formatsNode = (ArrayNode) objectNode.get(firstFieldName);
                 List<Format> formats = new ArrayList<>();
-                System.out.println("TUPLE: " + formatsNode);
+                //System.out.println("TUPLE: " + formatsNode);
                 for (JsonNode formatNode : formatsNode) {
                     formats.add(oc.treeToValue(formatNode, Format.class));
                 }
@@ -51,8 +52,7 @@ public class VariantFormatDeserializer extends JsonDeserializer<VariantFormat> {
                 return new VariantFormat.Struct(namedFormats);
             }
         }
-        System.out.println(node);
-        return null;
-
+        //System.out.println(node);
+        throw new JsonParseException(p, "Unknown node type.");
     }
 }

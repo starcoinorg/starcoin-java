@@ -24,7 +24,7 @@ public class ContainerFormatDeserializer extends JsonDeserializer<ContainerForma
         JsonNode node = oc.readTree(p);
         if (node instanceof TextNode) {
             if ("UNITSTRUCT".equals(node.asText())) {
-                System.out.println("Read text node: " + node);
+                //System.out.println("Read text node: " + node);
                 return new ContainerFormat.UnitStruct();
             }
         } else if (node instanceof ObjectNode) {
@@ -36,7 +36,7 @@ public class ContainerFormatDeserializer extends JsonDeserializer<ContainerForma
             } else if ("TUPLESTRUCT".equals(firstFieldName)) {
                 ArrayNode formatsNode = (ArrayNode) objectNode.get(firstFieldName);
                 List<Format> formats = new ArrayList<>();
-                System.out.println("TUPLESTRUCT: " + formatsNode);
+                //System.out.println("TUPLESTRUCT: " + formatsNode);
                 for (JsonNode formatNode : formatsNode) {
                     formats.add(oc.treeToValue(formatNode, Format.class));
                 }
@@ -60,7 +60,7 @@ public class ContainerFormatDeserializer extends JsonDeserializer<ContainerForma
             }
 
         }
-        throw new JsonParseException(p, "The node is not instance of ObjectNode.");
+        throw new JsonParseException(p, "Unknown node type.");
     }
 
     @NotNull

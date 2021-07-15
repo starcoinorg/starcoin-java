@@ -58,7 +58,7 @@ public class SerdeUtilsTest {
         String textFilePath2 = "/Users/yangjiefeng/Documents/starcoinorg/starcoin/etc/onchain_events.yml";
         byte[] textFileBytes = new byte[0];
         try {
-            textFileBytes = Files.readAllBytes(Paths.get(textFilePath2));
+            textFileBytes = Files.readAllBytes(Paths.get(textFilePath1));
         } catch (IOException e) {
             e.printStackTrace();
             return;

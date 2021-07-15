@@ -1,6 +1,7 @@
 package org.starcoin.serde.format;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Serde-based serialization format for anonymous "value" types.
@@ -83,6 +84,19 @@ public abstract class Format {
             return "Primitive{" +
                     "type='" + type + '\'' +
                     '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Primitive primitive = (Primitive) o;
+            return type.equals(primitive.type);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(type);
         }
     }
 

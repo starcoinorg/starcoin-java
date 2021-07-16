@@ -5,7 +5,10 @@ import org.starcoin.serde.format.ContainerFormat;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,45 +34,65 @@ public class SerdeJavaGenerator {
         for (int i = 0; i < serdeFormatFiles.size(); i++) {
             List<Map<String, Object>> eMaps = yamlMapList.subList(0, i);
             List<Map<String, ContainerFormat>> ecMaps = containerFormatMapList.subList(0, i);
-            Map<String, Object> cMap = includeExternalObjects(yamlMapList.get(i), containerFormatMapList.get(i),
+            Map<String, Object> concatenatedMap = includeExternalObjects(yamlMapList.get(i), containerFormatMapList.get(i),
                     ecMaps, eMaps);
             String tmpFilePath = serdeFormatFiles.get(i).formatFilePath + tempYamlFileExtension;
-            dumpToFile(Paths.get(tmpFilePath), cMap);
+            dumpToFile(Paths.get(tmpFilePath), concatenatedMap);
+            String packageName = serdeFormatFiles.get(i).getPackageName();
+            String targetSourceDirectoryPath = serdeFormatFiles.get(i).getTargetSourceDirectoryPath();
             if (i == 0) {
-                int ec_0 = waitForProcess(workingDirectory, serdegenPath,
-                        serdeFormatFiles.get(i).getPackageName(), WITH_RUNTIMES_SERDE,
-                        serdeFormatFiles.get(i).getTargetSourceDirectoryPath(), tmpFilePath);
+                int ec_0 = waitForProcess(workingDirectory, serdegenPath, packageName, WITH_RUNTIMES_SERDE, targetSourceDirectoryPath, tmpFilePath);
                 System.out.println(ec_0);
             }
-            int ec = waitForProcess(workingDirectory, serdegenPath,
-                    serdeFormatFiles.get(i).getPackageName(), WITH_RUNTIMES_BCS,
-                    serdeFormatFiles.get(i).getTargetSourceDirectoryPath(), tmpFilePath);
+            int ec = waitForProcess(workingDirectory, serdegenPath, packageName, WITH_RUNTIMES_BCS, targetSourceDirectoryPath, tmpFilePath);
             System.out.println(ec);
+
+            List<String> namesToRemove = new ArrayList<>(concatenatedMap.keySet());
+            namesToRemove.retainAll(ecMaps.stream().flatMap(m -> m.keySet().stream()).collect(Collectors.toSet()));
+            System.out.println(namesToRemove);
+            namesToRemove.forEach(n -> {
+                Path pathToRemove = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);
+                //System.out.println(pathToRemove);
+                try {
+                    Files.deleteIfExists(pathToRemove);
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            });
+
+            Map<String, ContainerFormat> containerFormatMap = containerFormatMapList.get(i);
+            List<String> retainedNames = new ArrayList<>(containerFormatMap.keySet());
+            retainedNames.removeAll(namesToRemove);
+            System.out.println(retainedNames);
+            retainedNames.forEach(n -> {
+                List<Integer> importPackageIds = new ArrayList<>();
+                for (String rn : containerFormatMap.get(n).referencedContainerTypeNames()) {
+                    for (int j = 0; j < eMaps.size(); j++) {
+                        if (eMaps.get(j).containsKey(rn)) {
+                            if (!importPackageIds.contains(j)) {
+                                importPackageIds.add(j);
+                            }
+                            break;
+                        }
+                    }
+                }
+                System.out.println(n + ": " + importPackageIds);
+                if (!importPackageIds.isEmpty()) {
+                    Path pathToModify = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);
+                    //todo
+                    String importStr = importPackageIds.stream().map(idx -> serdeFormatFiles.get(idx).getPackageName() + ".*;")
+                            .reduce((s1, s2) -> s1 + System.lineSeparator() + s2).get();
+                    System.out.println(importStr);
+
+                }
+            });
         }
     }
 
-    public static class SerdeFormatFile {
-        private String formatFilePath;
-        private String packageName;
-        private String targetSourceDirectoryPath;
-
-        public SerdeFormatFile(String formatFilePath, String packageName, String targetSourceDirectoryPath) {
-            this.formatFilePath = formatFilePath;
-            this.packageName = packageName;
-            this.targetSourceDirectoryPath = targetSourceDirectoryPath;
-        }
-
-        public String getFormatFilePath() {
-            return formatFilePath;
-        }
-
-        public String getPackageName() {
-            return packageName;
-        }
-
-        public String getTargetSourceDirectoryPath() {
-            return targetSourceDirectoryPath;
-        }
+    private static Path getJavaFilePathByTypeName(String workingDirectory, String packageName, String targetSourceDirectoryPath, String n) {
+        return Paths.get(workingDirectory, targetSourceDirectoryPath,
+                packageName.replace(".", File.separator), n + ".java");
     }
 
     public static int waitForProcess(String workingDirectory, String serdegenPath,
@@ -99,5 +122,29 @@ public class SerdeJavaGenerator {
         }
     }
 
+
+    public static class SerdeFormatFile {
+        private String formatFilePath;
+        private String packageName;
+        private String targetSourceDirectoryPath;
+
+        public SerdeFormatFile(String formatFilePath, String packageName, String targetSourceDirectoryPath) {
+            this.formatFilePath = formatFilePath;
+            this.packageName = packageName;
+            this.targetSourceDirectoryPath = targetSourceDirectoryPath;
+        }
+
+        public String getFormatFilePath() {
+            return formatFilePath;
+        }
+
+        public String getPackageName() {
+            return packageName;
+        }
+
+        public String getTargetSourceDirectoryPath() {
+            return targetSourceDirectoryPath;
+        }
+    }
 
 }

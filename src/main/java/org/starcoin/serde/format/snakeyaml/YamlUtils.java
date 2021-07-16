@@ -35,7 +35,7 @@ public class YamlUtils {
         try {
             textFileBytes = Files.readAllBytes(filePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             throw new RuntimeException(e);
         }
         String doc = new String(textFileBytes);

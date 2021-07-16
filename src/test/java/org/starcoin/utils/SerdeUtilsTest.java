@@ -11,14 +11,11 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.starcoin.serde.format.jackson.utils.MappingUtils.getObjectMapper;
 import static org.starcoin.serde.format.jackson.utils.MappingUtils.toContainerFormatMap;
-import static org.starcoin.serde.format.snakeyaml.YamlUtils.dumpToFile;
 import static org.starcoin.serde.format.snakeyaml.YamlUtils.loadYamlMap;
-import static org.starcoin.serde.format.utils.ReferenceUtils.includeExternalObjects;
-import static org.starcoin.serde.format.utils.SerdeJavaGenerator.*;
+import static org.starcoin.serde.format.utils.SerdeJavaGenerator.processSerdeFormatFiles;
 
 public class SerdeUtilsTest {
 

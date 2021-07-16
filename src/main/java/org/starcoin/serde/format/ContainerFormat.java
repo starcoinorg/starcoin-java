@@ -1,25 +1,31 @@
 package org.starcoin.serde.format;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Serde-based serialization format for named "container" types.
  * In Rust, those are enums and structs.
  */
-public abstract class ContainerFormat {
+public abstract class ContainerFormat implements IReferenceContainerType {
 
     /**
      * An empty struct, e.g. `struct A`.
      */
     public static class UnitStruct extends ContainerFormat {
-        //
-
 
         @Override
         public String toString() {
             return "UnitStruct{}";
         }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return Collections.EMPTY_LIST;
+        }
+
     }
 
     /**
@@ -41,6 +47,11 @@ public abstract class ContainerFormat {
             return "NewTypeStruct{" +
                     "format=" + format +
                     '}';
+        }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return format.referencedContainerTypeNames();
         }
     }
 
@@ -64,6 +75,12 @@ public abstract class ContainerFormat {
                     "formats=" + formats +
                     '}';
         }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return formats.stream().flatMap(f -> f.referencedContainerTypeNames().stream())
+                    .collect(Collectors.toList());
+        }
     }
 
     /**
@@ -85,6 +102,12 @@ public abstract class ContainerFormat {
             return "Struct{" +
                     "namedFormats=" + namedFormats +
                     '}';
+        }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return namedFormats.stream().flatMap(f -> f.referencedContainerTypeNames().stream())
+                    .collect(Collectors.toList());
         }
     }
 
@@ -108,6 +131,12 @@ public abstract class ContainerFormat {
             return "Enum{" +
                     "indexedNamedVariantFormats=" + indexedNamedVariantFormats +
                     '}';
+        }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return indexedNamedVariantFormats.values().stream().flatMap(f -> f.referencedContainerTypeNames().stream())
+                    .collect(Collectors.toList());
         }
     }
 }

@@ -1,8 +1,13 @@
 package org.starcoin.serde.format;
 
 
-public class NamedVariantFormat extends Named<VariantFormat> {
-    //
+import java.util.List;
 
+public class NamedVariantFormat extends Named<VariantFormat> implements IReferenceContainerType {
+
+    @Override
+    public List<String> referencedContainerTypeNames() {
+        return getValue().referencedContainerTypeNames();
+    }
 
 }

@@ -1,22 +1,28 @@
 package org.starcoin.serde.format;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Description of a variant in an enum.
  */
-public abstract class VariantFormat {
+public abstract class VariantFormat implements IReferenceContainerType {
     /**
      * A variant without parameters, e.g. `A` in `enum X { A }`
       */
     public static class Unit extends VariantFormat {
-        //
-
 
         @Override
         public String toString() {
             return "Unit{}";
         }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return Collections.EMPTY_LIST;
+        }
+
     }
 
     /**
@@ -38,6 +44,11 @@ public abstract class VariantFormat {
             return "NewType{" +
                     "format=" + format +
                     '}';
+        }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return format.referencedContainerTypeNames();
         }
     }
 
@@ -61,6 +72,12 @@ public abstract class VariantFormat {
                     "formats=" + formats +
                     '}';
         }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return formats.stream().flatMap(f -> f.referencedContainerTypeNames().stream())
+                    .collect(Collectors.toList());
+        }
     }
 
     /**
@@ -82,6 +99,12 @@ public abstract class VariantFormat {
             return "Struct{" +
                     "namedFormats=" + namedFormats +
                     '}';
+        }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return namedFormats.stream().flatMap(f -> f.referencedContainerTypeNames().stream())
+                    .collect(Collectors.toList());
         }
     }
 }

@@ -1,12 +1,17 @@
 package org.starcoin.serde.format;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Serde-based serialization format for anonymous "value" types.
  */
-public abstract class Format {
+public abstract class Format implements IReferenceContainerType {
+
 
     /**
      * The formats of primitive types.
@@ -98,6 +103,11 @@ public abstract class Format {
         public int hashCode() {
             return Objects.hash(type);
         }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return Collections.EMPTY_LIST;
+        }
     }
 
     /**
@@ -119,6 +129,11 @@ public abstract class Format {
             return "TypeName{" +
                     "name='" + name + '\'' +
                     '}';
+        }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return Arrays.asList(name);
         }
     }
 
@@ -142,6 +157,11 @@ public abstract class Format {
                     "format=" + format +
                     '}';
         }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return format.referencedContainerTypeNames();
+        }
     }
 
     /**
@@ -163,6 +183,11 @@ public abstract class Format {
             return "Seq{" +
                     "format=" + format +
                     '}';
+        }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return format.referencedContainerTypeNames();
         }
     }
 
@@ -193,6 +218,12 @@ public abstract class Format {
                     ", value=" + value +
                     '}';
         }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return Stream.concat(key.referencedContainerTypeNames().stream(),
+                    value.referencedContainerTypeNames().stream()).collect(Collectors.toList());
+        }
     }
 
     /**
@@ -214,6 +245,12 @@ public abstract class Format {
             return "Tuple{" +
                     "formats=" + formats +
                     '}';
+        }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return formats.stream().flatMap(f -> f.referencedContainerTypeNames().stream())
+                    .collect(Collectors.toList());
         }
     }
 
@@ -244,6 +281,11 @@ public abstract class Format {
                     "content=" + content +
                     ", size=" + size +
                     '}';
+        }
+
+        @Override
+        public List<String> referencedContainerTypeNames() {
+            return content.referencedContainerTypeNames();
         }
     }
 }

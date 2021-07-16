@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SerdeUtilsTest {
 
@@ -70,6 +71,10 @@ public class SerdeUtilsTest {
         Map<String, ContainerFormat> containerFormatMap = objectMapper.convertValue(map3,
                 new TypeReference<Map<String, ContainerFormat>>() {});
         System.out.println(containerFormatMap);
+        containerFormatMap.entrySet().stream().forEach(c -> {
+            System.out.println(String.format("===== %1$s =====", c.getKey()));
+            System.out.println(c.getValue().referencedContainerTypeNames());
+        });
     }
 
 

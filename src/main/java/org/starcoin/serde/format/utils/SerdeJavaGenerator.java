@@ -23,6 +23,7 @@ public class SerdeJavaGenerator {
     public static final String WITH_RUNTIMES_SERDE = "--with-runtimes=Serde";
     public static final String WITH_RUNTIMES_BCS = "--with-runtimes=Bcs";
 
+    private static final String JAVA_SOURCE_CLASS_LINE_START = "public final class ";
 
     public static void processSerdeFormatFiles(String workingDirectory, String serdegenPath,
                                                List<SerdeFormatFile> serdeFormatFiles,
@@ -46,6 +47,12 @@ public class SerdeJavaGenerator {
             }
             int ec = waitForProcess(workingDirectory, serdegenPath, packageName, WITH_RUNTIMES_BCS, targetSourceDirectoryPath, tmpFilePath);
             System.out.println(ec);
+            try {
+                Files.deleteIfExists(Paths.get(tmpFilePath));
+            } catch (IOException e) {
+                //e.printStackTrace();
+                throw new RuntimeException("Delete temporary file failed.", e);
+            }
 
             List<String> namesToRemove = new ArrayList<>(concatenatedMap.keySet());
             namesToRemove.retainAll(ecMaps.stream().flatMap(m -> m.keySet().stream()).collect(Collectors.toSet()));
@@ -80,11 +87,18 @@ public class SerdeJavaGenerator {
                 System.out.println(n + ": " + importPackageIds);
                 if (!importPackageIds.isEmpty()) {
                     Path pathToModify = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);
-                    //todo
-                    String importStr = importPackageIds.stream().map(idx -> serdeFormatFiles.get(idx).getPackageName() + ".*;")
+                    String importStr = importPackageIds.stream().map(idx ->
+                            "import " + serdeFormatFiles.get(idx).getPackageName() + ".*;")
                             .reduce((s1, s2) -> s1 + System.lineSeparator() + s2).get();
                     System.out.println(importStr);
-
+                    String sourceCode = TextFileUtils.readTextFile(pathToModify);
+                    int classLineIdx = sourceCode.indexOf(JAVA_SOURCE_CLASS_LINE_START);
+                    if (classLineIdx != -1) {
+                        String newSourceCode = sourceCode.substring(0, classLineIdx)
+                                + importStr + System.lineSeparator() + System.lineSeparator()
+                                + sourceCode.substring(classLineIdx);
+                        TextFileUtils.writeTextFile(pathToModify, newSourceCode);
+                    }
                 }
             });
         }

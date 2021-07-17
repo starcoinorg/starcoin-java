@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 
+import static org.starcoin.serde.format.utils.TextFileUtils.readTextFile;
+
 public class YamlUtils {
     private YamlUtils() {}
 
@@ -30,16 +32,5 @@ public class YamlUtils {
         return yamlMap;
     }
 
-    private static String readTextFile(Path filePath) {
-        byte[] textFileBytes;
-        try {
-            textFileBytes = Files.readAllBytes(filePath);
-        } catch (IOException e) {
-            //e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        String doc = new String(textFileBytes);
-        return doc;
-    }
 
 }

@@ -1,6 +1,7 @@
 package org.starcoin.serde.format.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.NotNull;
 import org.starcoin.serde.format.ContainerFormat;
 
 import java.io.File;
@@ -37,10 +38,10 @@ public class SerdeJavaGenerator {
             List<Map<String, ContainerFormat>> ecMaps = containerFormatMapList.subList(0, i);
             Map<String, Object> concatenatedMap = includeExternalObjects(yamlMapList.get(i), containerFormatMapList.get(i),
                     ecMaps, eMaps);
-            String tmpFilePath = serdeFormatFiles.get(i).formatFilePath + tempYamlFileExtension;
-            dumpToFile(Paths.get(tmpFilePath), concatenatedMap);
             String packageName = serdeFormatFiles.get(i).getPackageName();
             String targetSourceDirectoryPath = serdeFormatFiles.get(i).getTargetSourceDirectoryPath();
+            String tmpFilePath = serdeFormatFiles.get(i).formatFilePath + tempYamlFileExtension;
+            dumpToFile(Paths.get(tmpFilePath), concatenatedMap);
             if (i == 0) {
                 int ec_0 = waitForProcess(workingDirectory, serdegenPath, packageName, WITH_RUNTIMES_SERDE, targetSourceDirectoryPath, tmpFilePath);
                 System.out.println(ec_0);
@@ -54,54 +55,73 @@ public class SerdeJavaGenerator {
                 throw new RuntimeException("Delete temporary file failed.", e);
             }
 
-            List<String> namesToRemove = new ArrayList<>(concatenatedMap.keySet());
-            namesToRemove.retainAll(ecMaps.stream().flatMap(m -> m.keySet().stream()).collect(Collectors.toSet()));
-            System.out.println(namesToRemove);
-            namesToRemove.forEach(n -> {
-                Path pathToRemove = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);
-                //System.out.println(pathToRemove);
-                try {
-                    Files.deleteIfExists(pathToRemove);
-                } catch (IOException e) {
-                    //e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-            });
+            List<String> namesToRemove = removeDuplicatedFiles(workingDirectory, packageName,
+                    targetSourceDirectoryPath, concatenatedMap, ecMaps);
 
             Map<String, ContainerFormat> containerFormatMap = containerFormatMapList.get(i);
-            List<String> retainedNames = new ArrayList<>(containerFormatMap.keySet());
-            retainedNames.removeAll(namesToRemove);
-            System.out.println(retainedNames);
-            retainedNames.forEach(n -> {
-                List<Integer> importPackageIds = new ArrayList<>();
-                for (String rn : containerFormatMap.get(n).referencedContainerTypeNames()) {
-                    for (int j = 0; j < eMaps.size(); j++) {
-                        if (eMaps.get(j).containsKey(rn)) {
-                            if (!importPackageIds.contains(j)) {
-                                importPackageIds.add(j);
-                            }
-                            break;
-                        }
-                    }
-                }
-                System.out.println(n + ": " + importPackageIds);
-                if (!importPackageIds.isEmpty()) {
-                    Path pathToModify = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);
-                    String importStr = importPackageIds.stream().map(idx ->
-                            "import " + serdeFormatFiles.get(idx).getPackageName() + ".*;")
-                            .reduce((s1, s2) -> s1 + System.lineSeparator() + s2).get();
-                    System.out.println(importStr);
-                    String sourceCode = TextFileUtils.readTextFile(pathToModify);
-                    int classLineIdx = sourceCode.indexOf(JAVA_SOURCE_CLASS_LINE_START);
-                    if (classLineIdx != -1) {
-                        String newSourceCode = sourceCode.substring(0, classLineIdx)
-                                + importStr + System.lineSeparator() + System.lineSeparator()
-                                + sourceCode.substring(classLineIdx);
-                        TextFileUtils.writeTextFile(pathToModify, newSourceCode);
-                    }
-                }
-            });
+            modifyGeneratedFiles(workingDirectory, serdeFormatFiles, eMaps, namesToRemove, containerFormatMap, i);
         }
+    }
+
+    private static void modifyGeneratedFiles(String workingDirectory, List<SerdeFormatFile> serdeFormatFiles,
+                                             List<Map<String, Object>> eMaps,
+                                             List<String> namesToRemove,
+                                             Map<String, ContainerFormat> containerFormatMap, int i) {
+        String packageName = serdeFormatFiles.get(i).getPackageName();
+        String targetSourceDirectoryPath = serdeFormatFiles.get(i).getTargetSourceDirectoryPath();
+        List<String> retainedNames = new ArrayList<>(containerFormatMap.keySet());
+        retainedNames.removeAll(namesToRemove);
+        System.out.println(retainedNames);
+        retainedNames.forEach(n -> {
+            List<Integer> importPackageIds = new ArrayList<>();
+            for (String rn : containerFormatMap.get(n).referencedContainerTypeNames()) {
+                for (int j = 0; j < eMaps.size(); j++) {
+                    if (eMaps.get(j).containsKey(rn)) {
+                        if (!importPackageIds.contains(j)) {
+                            importPackageIds.add(j);
+                        }
+                        break;
+                    }
+                }
+            }
+            System.out.println(n + ": " + importPackageIds);
+            if (!importPackageIds.isEmpty()) {
+                Path pathToModify = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);
+                String importStr = importPackageIds.stream().map(idx ->
+                        "import " + serdeFormatFiles.get(idx).getPackageName() + ".*;")
+                        .reduce((s1, s2) -> s1 + System.lineSeparator() + s2).get();
+                System.out.println(importStr);
+                String sourceCode = TextFileUtils.readTextFile(pathToModify);
+                int classLineIdx = sourceCode.indexOf(JAVA_SOURCE_CLASS_LINE_START);
+                if (classLineIdx != -1) {
+                    String newSourceCode = sourceCode.substring(0, classLineIdx)
+                            + importStr + System.lineSeparator() + System.lineSeparator()
+                            + sourceCode.substring(classLineIdx);
+                    TextFileUtils.writeTextFile(pathToModify, newSourceCode);
+                }
+            }
+        });
+    }
+
+
+    private static List<String> removeDuplicatedFiles(String workingDirectory, String packageName,
+                                                      String targetSourceDirectoryPath,
+                                                      Map<String, Object> concatenatedMap,
+                                                      List<Map<String, ContainerFormat>> ecMaps) {
+        List<String> namesToRemove = new ArrayList<>(concatenatedMap.keySet());
+        namesToRemove.retainAll(ecMaps.stream().flatMap(m -> m.keySet().stream()).collect(Collectors.toSet()));
+        System.out.println(namesToRemove);
+        namesToRemove.forEach(n -> {
+            Path pathToRemove = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);
+            //System.out.println(pathToRemove);
+            try {
+                Files.deleteIfExists(pathToRemove);
+            } catch (IOException e) {
+                //e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        });
+        return namesToRemove;
     }
 
     private static Path getJavaFilePathByTypeName(String workingDirectory, String packageName, String targetSourceDirectoryPath, String n) {

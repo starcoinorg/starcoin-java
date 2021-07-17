@@ -118,7 +118,9 @@ public class SerdeJavaGenerator {
         String targetSourceDirectoryPath = serdeFormatFiles.get(currentFileIndex).getTargetSourceDirectoryPath();
         List<String> retainedNames = new ArrayList<>(containerFormatMap.keySet());
         retainedNames.removeAll(removedNames);
-        retainedNames.retainAll(onlyRetainedNames);
+        if (onlyRetainedNames != null) {
+            retainedNames.retainAll(onlyRetainedNames);
+        }
         System.out.println(retainedNames);
         retainedNames.forEach(n -> {
             List<Integer> importPackageIds = new ArrayList<>();

@@ -1,7 +1,6 @@
 package org.starcoin.serde.format.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.annotations.NotNull;
 import org.starcoin.serde.format.ContainerFormat;
 
 import java.io.File;
@@ -9,9 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.starcoin.serde.format.jackson.utils.MappingUtils.toContainerFormatMap;
@@ -28,16 +25,49 @@ public class SerdeJavaGenerator {
 
     public static void processSerdeFormatFiles(String workingDirectory, String serdegenPath,
                                                List<SerdeFormatFile> serdeFormatFiles,
-                                               ObjectMapper objectMapper, String tempYamlFileExtension) {
+                                               ObjectMapper objectMapper, String tempYamlFileExtension,
+                                               Integer onlyRetainDependenciesOfLast) {
         List<Map<String, Object>> yamlMapList = serdeFormatFiles.stream()
                 .map(f -> loadYamlMap(Paths.get(f.getFormatFilePath()))).collect(Collectors.toList());
         List<Map<String, ContainerFormat>> containerFormatMapList = yamlMapList.stream()
                 .map(m -> toContainerFormatMap(objectMapper, m)).collect(Collectors.toList());
+        List<String> onlyRetainedNames = null;
+        if (onlyRetainDependenciesOfLast != null) {
+            if (onlyRetainDependenciesOfLast < 1) {
+                onlyRetainDependenciesOfLast = 1;
+            }
+            onlyRetainedNames = new ArrayList<>();
+        }
+        List<Map<String, Object>> concatenatedMapList = new ArrayList<>();
+
         for (int i = 0; i < serdeFormatFiles.size(); i++) {
             List<Map<String, Object>> eMaps = yamlMapList.subList(0, i);
             List<Map<String, ContainerFormat>> ecMaps = containerFormatMapList.subList(0, i);
             Map<String, Object> concatenatedMap = includeExternalObjects(yamlMapList.get(i), containerFormatMapList.get(i),
                     ecMaps, eMaps);
+            concatenatedMapList.add(concatenatedMap);
+            if (onlyRetainDependenciesOfLast != null && i >= serdeFormatFiles.size() - onlyRetainDependenciesOfLast) {
+                onlyRetainedNames.addAll(concatenatedMap.keySet());
+            }
+        }
+        System.out.println("onlyRetainedNames: " + onlyRetainedNames);
+        if (onlyRetainDependenciesOfLast != null) {
+            for (int i = 0; i < concatenatedMapList.size(); i++) {
+                Map<String, Object> concatenatedMap = new HashMap<>();
+                for (String n : concatenatedMapList.get(i).keySet()) {
+                    if (onlyRetainedNames.contains(n)) {
+                        concatenatedMap.put(n, concatenatedMapList.get(i).get(n));
+                    }
+                }
+                concatenatedMapList.set(i, concatenatedMap);
+                System.out.println(concatenatedMap);
+            }
+        }
+
+        for (int i = 0; i < serdeFormatFiles.size(); i++) {
+            List<Set<String>> externalNamesList = concatenatedMapList.subList(0, i)
+                    .stream().map(m -> m.keySet()).collect(Collectors.toList());
+            Map<String, Object> concatenatedMap = concatenatedMapList.get(i);
             String packageName = serdeFormatFiles.get(i).getPackageName();
             String targetSourceDirectoryPath = serdeFormatFiles.get(i).getTargetSourceDirectoryPath();
             String tmpFilePath = serdeFormatFiles.get(i).formatFilePath + tempYamlFileExtension;
@@ -55,28 +85,46 @@ public class SerdeJavaGenerator {
                 throw new RuntimeException("Delete temporary file failed.", e);
             }
 
-            List<String> namesToRemove = removeDuplicatedFiles(workingDirectory, packageName,
-                    targetSourceDirectoryPath, concatenatedMap, ecMaps);
+            List<String> removedNames = removeDuplicatedFiles(workingDirectory, packageName,
+                    targetSourceDirectoryPath, concatenatedMap, externalNamesList);
 
             Map<String, ContainerFormat> containerFormatMap = containerFormatMapList.get(i);
-            modifyGeneratedFiles(workingDirectory, serdeFormatFiles, eMaps, namesToRemove, containerFormatMap, i);
+            modifyGeneratedFiles(workingDirectory, serdeFormatFiles, externalNamesList, containerFormatMap, i,
+                    removedNames, onlyRetainedNames);
         }
+
+//        for (int i = 0; i < serdeFormatFiles.size() - onlyRetainDependenciesOfLast; i++) {
+//            String packageName = serdeFormatFiles.get(i).getPackageName();
+//            String targetSourceDirectoryPath = serdeFormatFiles.get(i).getTargetSourceDirectoryPath();
+//            for (String typeName : yamlMapList.get(i).keySet()) {
+//                if (onlyRetainedNames.contains(typeName)) {
+//                    continue;
+//                }
+//                Path fp = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, typeName);
+//                try {
+//                    Files.deleteIfExists(fp);
+//                } catch (IOException e) {
+//                    throw new RuntimeException("Delete file failed.", e);
+//                }
+//            }
+//        }
     }
 
     private static void modifyGeneratedFiles(String workingDirectory, List<SerdeFormatFile> serdeFormatFiles,
-                                             List<Map<String, Object>> eMaps,
-                                             List<String> namesToRemove,
-                                             Map<String, ContainerFormat> containerFormatMap, int i) {
-        String packageName = serdeFormatFiles.get(i).getPackageName();
-        String targetSourceDirectoryPath = serdeFormatFiles.get(i).getTargetSourceDirectoryPath();
+                                             List<Set<String>> externalNamesList,
+                                             Map<String, ContainerFormat> containerFormatMap, int currentFileIndex, List<String> removedNames,
+                                             List<String> onlyRetainedNames) {
+        String packageName = serdeFormatFiles.get(currentFileIndex).getPackageName();
+        String targetSourceDirectoryPath = serdeFormatFiles.get(currentFileIndex).getTargetSourceDirectoryPath();
         List<String> retainedNames = new ArrayList<>(containerFormatMap.keySet());
-        retainedNames.removeAll(namesToRemove);
+        retainedNames.removeAll(removedNames);
+        retainedNames.retainAll(onlyRetainedNames);
         System.out.println(retainedNames);
         retainedNames.forEach(n -> {
             List<Integer> importPackageIds = new ArrayList<>();
             for (String rn : containerFormatMap.get(n).referencedContainerTypeNames()) {
-                for (int j = 0; j < eMaps.size(); j++) {
-                    if (eMaps.get(j).containsKey(rn)) {
+                for (int j = 0; j < externalNamesList.size(); j++) {
+                    if (externalNamesList.get(j).contains(rn)) {
                         if (!importPackageIds.contains(j)) {
                             importPackageIds.add(j);
                         }
@@ -107,9 +155,9 @@ public class SerdeJavaGenerator {
     private static List<String> removeDuplicatedFiles(String workingDirectory, String packageName,
                                                       String targetSourceDirectoryPath,
                                                       Map<String, Object> concatenatedMap,
-                                                      List<Map<String, ContainerFormat>> ecMaps) {
+                                                      List<Set<String>> externalNamesList) {
         List<String> namesToRemove = new ArrayList<>(concatenatedMap.keySet());
-        namesToRemove.retainAll(ecMaps.stream().flatMap(m -> m.keySet().stream()).collect(Collectors.toSet()));
+        namesToRemove.retainAll(externalNamesList.stream().flatMap(m -> m.stream()).collect(Collectors.toSet()));
         System.out.println(namesToRemove);
         namesToRemove.forEach(n -> {
             Path pathToRemove = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);

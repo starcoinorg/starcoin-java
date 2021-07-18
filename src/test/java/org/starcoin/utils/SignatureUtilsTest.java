@@ -1,11 +1,11 @@
 package org.starcoin.utils;
 
-import static org.junit.Assert.*;
-
 import lombok.SneakyThrows;
 import org.junit.Test;
 import org.starcoin.types.Ed25519PrivateKey;
 import org.starcoin.types.Ed25519PublicKey;
+
+import static org.junit.Assert.assertEquals;
 
 public class SignatureUtilsTest {
 

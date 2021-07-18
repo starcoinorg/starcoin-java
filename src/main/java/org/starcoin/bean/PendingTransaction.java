@@ -49,4 +49,14 @@ public class PendingTransaction {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
+
+    @Override
+    public String toString() {
+        return "PendingTransaction{" +
+                "authenticator=" + authenticator +
+                ", transactionHash='" + transactionHash + '\'' +
+                ", rawTransaction=" + rawTransaction +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

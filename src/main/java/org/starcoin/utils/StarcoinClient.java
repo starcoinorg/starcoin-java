@@ -34,10 +34,12 @@ public class StarcoinClient {
     private final String baseUrl;
     private final int chaindId;
     private OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
+
     public StarcoinClient(String url, int chainId) {
         this.baseUrl = url;
         this.chaindId = chainId;
     }
+
     public StarcoinClient(ChainInfo chainInfo) {
 
         this.baseUrl = chainInfo.getUrl();
@@ -61,15 +63,13 @@ public class StarcoinClient {
     public String transfer(AccountAddress sender, Ed25519PrivateKey privateKey, AccountAddress to,
                            TypeObj typeObj, BigInteger amount) {
         TransactionPayload payload = buildTransferPayload(to, typeObj, amount);
-        String rst = submitTransaction(sender, privateKey, payload);
-        return rst;
+        return submitTransaction(sender, privateKey, payload);
     }
 
     private TransactionPayload buildTransferPayload(AccountAddress toAddress, TypeObj typeObj,
                                                     BigInteger amount) {
-        TransactionPayload payload = Helpers.encode_peer_to_peer_v2_script_function(typeObj.toTypeTag(),
+        return Helpers.encode_peer_to_peer_v2_script_function(typeObj.toTypeTag(),
                 toAddress, amount);
-        return payload;
     }
 
 
@@ -79,16 +79,14 @@ public class StarcoinClient {
         SignedUserTransaction signedUserTransaction = SignatureUtils.signTxn(privateKey,
                 rawUserTransaction);
         List<String> params = Lists.newArrayList(Hex.encode(signedUserTransaction.bcsSerialize()));
-        String rst = call("txpool.submit_hex_transaction", params);
-        return rst;
+        return call("txpool.submit_hex_transaction", params);
     }
 
     public String callScriptFunction(AccountAddress sender, Ed25519PrivateKey privateKey,
                                      ScriptFunctionObj scriptFunctionObj) {
         ScriptFunction scriptFunction = new ScriptFunction(scriptFunctionObj.toScriptFunction());
         RawUserTransaction rawUserTransaction = buildRawUserTransaction(sender, scriptFunction);
-        String rst = submitHexTransaction(privateKey, rawUserTransaction);
-        return rst;
+        return submitHexTransaction(privateKey, rawUserTransaction);
     }
 
 
@@ -103,8 +101,7 @@ public class StarcoinClient {
                 .getJSONArray("result")
                 .toJavaList(Byte.class);
         Byte[] bytes = result.toArray(new Byte[0]);
-        AccountResource accountResource = AccountResource.bcsDeserialize(ArrayUtils.toPrimitive(bytes));
-        return accountResource;
+        return AccountResource.bcsDeserialize(ArrayUtils.toPrimitive(bytes));
     }
 
     @SneakyThrows
@@ -114,11 +111,10 @@ public class StarcoinClient {
 
         long seqNumber = accountResource.sequence_number;
         ChainId chainId = new ChainId((byte) chaindId);
-        RawUserTransaction rawUserTransaction = new RawUserTransaction(sender, seqNumber, payload,
+        return new RawUserTransaction(sender, seqNumber, payload,
                 10000000L, 1L, "0x1::STC::STC",
                 System.currentTimeMillis() / 1000 + TimeUnit.HOURS.toSeconds(
                         1), chainId);
-        return rawUserTransaction;
 
     }
 
@@ -137,8 +133,7 @@ public class StarcoinClient {
         SignedUserTransaction signedUserTransaction = SignatureUtils.signTxn(privateKey,
                 rawUserTransaction);
         List<String> params = Lists.newArrayList(Hex.encode(signedUserTransaction.bcsSerialize()));
-        String rst = call("contract.dry_run_raw", params);
-        return rst;
+        return call("contract.dry_run_raw", params);
     }
 
     public String submitTransaction(AccountAddress sender, Ed25519PrivateKey privateKey,

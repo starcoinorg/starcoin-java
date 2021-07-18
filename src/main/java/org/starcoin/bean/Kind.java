@@ -30,4 +30,11 @@ public class Kind {
         this.typeName = typeName;
     }
 
+    @Override
+    public String toString() {
+        return "Kind{" +
+                "type=" + type +
+                ", typeName='" + typeName + '\'' +
+                '}';
+    }
 }

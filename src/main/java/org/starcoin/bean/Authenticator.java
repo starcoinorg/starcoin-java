@@ -13,4 +13,11 @@ public class Authenticator {
     public void setEd25519(Ed25519 ed25519) {
         this.ed25519 = ed25519;
     }
+
+    @Override
+    public String toString() {
+        return "Authenticator{" +
+                "ed25519=" + ed25519 +
+                '}';
+    }
 }

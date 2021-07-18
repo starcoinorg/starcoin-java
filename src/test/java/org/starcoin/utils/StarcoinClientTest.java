@@ -6,11 +6,6 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.novi.bcs.BcsSerializer;
 import com.novi.serde.Bytes;
-
-import java.math.BigInteger;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import lombok.SneakyThrows;
 import org.junit.Test;
 import org.starcoin.bean.ResourceObj;
@@ -18,6 +13,11 @@ import org.starcoin.bean.ScriptFunctionObj;
 import org.starcoin.bean.TypeObj;
 import org.starcoin.types.AccountAddress;
 import org.starcoin.types.Ed25519PrivateKey;
+
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class StarcoinClientTest {
 
@@ -38,10 +38,7 @@ public class StarcoinClientTest {
         String rst = starcoinClient.getTransactionInfo(txn);
         JSONObject jsonObject = JSON.parseObject(rst);
         JSONObject result = jsonObject.getJSONObject("result");
-        if (result != null) {
-            return true;
-        }
-        return false;
+        return result != null;
     }
 
 
@@ -94,10 +91,10 @@ public class StarcoinClientTest {
     @Test
     public void testDeployContract() {
 
-        String contractPath = this
+        String contractPath = Objects.requireNonNull(this
                 .getClass()
                 .getClassLoader()
-                .getResource("contract/MyCounter.mv")
+                .getResource("contract/MyCounter.mv"))
                 .getFile();
 
         ScriptFunctionObj scriptFunctionObj = ScriptFunctionObj

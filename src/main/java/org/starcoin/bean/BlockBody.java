@@ -15,4 +15,11 @@ public class BlockBody {
     public void setRawTransactions(List<RawTransaction> rawTransactions) {
         this.rawTransactions = rawTransactions;
     }
+
+    @Override
+    public String toString() {
+        return "BlockBody{" +
+                "rawTransactions=" + rawTransactions +
+                '}';
+    }
 }

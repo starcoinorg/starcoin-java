@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.starcoin.serde.format.ContainerFormat;
 import org.starcoin.serde.format.utils.ReferenceUtils;
-import org.starcoin.serde.format.utils.SerdeJavaGenerator;
+import org.starcoin.serde.format.utils.SerdeGenJavaUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.nio.file.Paths;
@@ -15,7 +15,7 @@ import java.util.Map;
 import static org.starcoin.serde.format.jackson.utils.MappingUtils.getObjectMapper;
 import static org.starcoin.serde.format.jackson.utils.MappingUtils.toContainerFormatMap;
 import static org.starcoin.serde.format.snakeyaml.YamlUtils.loadYamlMap;
-import static org.starcoin.serde.format.utils.SerdeJavaGenerator.processSerdeFormatFiles;
+import static org.starcoin.serde.format.utils.SerdeGenJavaUtils.processSerdeFormatFiles;
 
 public class SerdeUtilsTest {
 
@@ -76,8 +76,7 @@ public class SerdeUtilsTest {
         System.out.println(concatenatedMap);
 
         // ----------
-        String serdegenPath = "serdegen";
-        String tempYamlFileExtension = ".temp";
+        //String tempYamlFileExtension = ".temp";
         String workingDirectory = "/Users/yangjiefeng/Documents/starcoinorg/starswap-api";
         String targetSrcDir = "./src/main/java";
 
@@ -90,13 +89,14 @@ public class SerdeUtilsTest {
         //exitCode = waitForProcess(workingDirectory, serdegenPath, packageName, WITH_RUNTIMES_BCS, targetSrcDir, yamlFilePath);
         //System.out.println(exitCode);
 
-        List<SerdeJavaGenerator.SerdeFormatFile> serdeFormatFiles = Arrays.asList(
-                new SerdeJavaGenerator.SerdeFormatFile(textFilePath1, "org.starcoin.types", targetSrcDir),
-                new SerdeJavaGenerator.SerdeFormatFile(textFilePath2, "org.starcoin.types.event", targetSrcDir),
-                new SerdeJavaGenerator.SerdeFormatFile(textFilePath3, "org.starcoin.starswap.types", targetSrcDir)
+        List<SerdeGenJavaUtils.SerdeFormatFile> serdeFormatFiles = Arrays.asList(
+                new SerdeGenJavaUtils.SerdeFormatFile(textFilePath1, "org.starcoin.types", targetSrcDir),
+                new SerdeGenJavaUtils.SerdeFormatFile(textFilePath2, "org.starcoin.types.event", targetSrcDir),
+                new SerdeGenJavaUtils.SerdeFormatFile(textFilePath3, "org.starcoin.starswap.types", targetSrcDir)
         );
-
-        processSerdeFormatFiles(workingDirectory, serdegenPath, serdeFormatFiles, objectMapper, tempYamlFileExtension,
+        String serdegenPath = "serdegen";
+        processSerdeFormatFiles(workingDirectory, serdegenPath, serdeFormatFiles, objectMapper,
+                SerdeGenJavaUtils.DEFAULT_TEMP_YAML_FILE_EXTENSION,
                 1);
     }
 

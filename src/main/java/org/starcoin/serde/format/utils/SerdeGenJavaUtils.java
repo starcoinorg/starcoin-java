@@ -16,17 +16,32 @@ import static org.starcoin.serde.format.snakeyaml.YamlUtils.dumpToFile;
 import static org.starcoin.serde.format.snakeyaml.YamlUtils.loadYamlMap;
 import static org.starcoin.serde.format.utils.ReferenceUtils.includeExternalObjects;
 
-public class SerdeJavaGenerator {
+public class SerdeGenJavaUtils {
 
     public static final String WITH_RUNTIMES_SERDE = "--with-runtimes=Serde";
+
     public static final String WITH_RUNTIMES_BCS = "--with-runtimes=Bcs";
 
+     public static final String DEFAULT_TEMP_YAML_FILE_EXTENSION = ".temp";
+
+    public static final String DEFAULT_SERDEGEN_PATH = "serdegen";
+
     private static final String JAVA_SOURCE_CLASS_LINE_START = "public final class ";
+
 
     public static void processSerdeFormatFiles(String workingDirectory, String serdegenPath,
                                                List<SerdeFormatFile> serdeFormatFiles,
                                                ObjectMapper objectMapper, String tempYamlFileExtension,
                                                Integer onlyRetainDependenciesOfLast) {
+        if (workingDirectory == null || workingDirectory.isEmpty()) {
+            throw new IllegalArgumentException("workingDirectory is null or empty.");
+        }
+        if (serdegenPath == null || serdegenPath.isEmpty()) {
+            throw new IllegalArgumentException("serdegenPath is null or empty.");
+        }
+        if (tempYamlFileExtension == null || tempYamlFileExtension.isEmpty()) {
+            tempYamlFileExtension = DEFAULT_TEMP_YAML_FILE_EXTENSION;
+        }
         List<Map<String, Object>> yamlMapList = serdeFormatFiles.stream()
                 .map(f -> loadYamlMap(Paths.get(f.getFormatFilePath()))).collect(Collectors.toList());
         List<Map<String, ContainerFormat>> containerFormatMapList = yamlMapList.stream()
@@ -38,8 +53,8 @@ public class SerdeJavaGenerator {
             }
             onlyRetainedNames = new ArrayList<>();
         }
-        List<Map<String, Object>> concatenatedMapList = new ArrayList<>();
 
+        List<Map<String, Object>> concatenatedMapList = new ArrayList<>();
         for (int i = 0; i < serdeFormatFiles.size(); i++) {
             List<Map<String, Object>> eMaps = yamlMapList.subList(0, i);
             List<Map<String, ContainerFormat>> ecMaps = containerFormatMapList.subList(0, i);
@@ -50,7 +65,7 @@ public class SerdeJavaGenerator {
                 onlyRetainedNames.addAll(concatenatedMap.keySet());
             }
         }
-        System.out.println("onlyRetainedNames: " + onlyRetainedNames);
+        //System.out.println("onlyRetainedNames: " + onlyRetainedNames);
         if (onlyRetainDependenciesOfLast != null) {
             for (int i = 0; i < concatenatedMapList.size(); i++) {
                 Map<String, Object> concatenatedMap = new HashMap<>();
@@ -60,7 +75,7 @@ public class SerdeJavaGenerator {
                     }
                 }
                 concatenatedMapList.set(i, concatenatedMap);
-                System.out.println(concatenatedMap);
+                //System.out.println(concatenatedMap);
             }
         }
 
@@ -73,11 +88,11 @@ public class SerdeJavaGenerator {
             String tmpFilePath = serdeFormatFiles.get(i).formatFilePath + tempYamlFileExtension;
             dumpToFile(Paths.get(tmpFilePath), concatenatedMap);
             if (i == 0) {
-                int ec_0 = waitForProcess(workingDirectory, serdegenPath, packageName, WITH_RUNTIMES_SERDE, targetSourceDirectoryPath, tmpFilePath);
-                System.out.println(ec_0);
+                int ec_0 = waitForSerdegenProcess(workingDirectory, serdegenPath, packageName, WITH_RUNTIMES_SERDE, targetSourceDirectoryPath, tmpFilePath);
+                if (ec_0 != 0) throw new RuntimeException("Run serdegen command failed.");//System.out.println(ec_0);
             }
-            int ec = waitForProcess(workingDirectory, serdegenPath, packageName, WITH_RUNTIMES_BCS, targetSourceDirectoryPath, tmpFilePath);
-            System.out.println(ec);
+            int ec = waitForSerdegenProcess(workingDirectory, serdegenPath, packageName, WITH_RUNTIMES_BCS, targetSourceDirectoryPath, tmpFilePath);
+            if (ec != 0) throw new RuntimeException("Run serdegen command failed.");//System.out.println(ec);
             try {
                 Files.deleteIfExists(Paths.get(tmpFilePath));
             } catch (IOException e) {
@@ -108,6 +123,7 @@ public class SerdeJavaGenerator {
 //                }
 //            }
 //        }
+
     }
 
     private static void modifyGeneratedFiles(String workingDirectory, List<SerdeFormatFile> serdeFormatFiles,
@@ -121,7 +137,7 @@ public class SerdeJavaGenerator {
         if (onlyRetainedNames != null) {
             retainedNames.retainAll(onlyRetainedNames);
         }
-        System.out.println(retainedNames);
+        //System.out.println(retainedNames);
         retainedNames.forEach(n -> {
             List<Integer> importPackageIds = new ArrayList<>();
             for (String rn : containerFormatMap.get(n).referencedContainerTypeNames()) {
@@ -134,13 +150,13 @@ public class SerdeJavaGenerator {
                     }
                 }
             }
-            System.out.println(n + ": " + importPackageIds);
+            //System.out.println(n + ": " + importPackageIds);
             if (!importPackageIds.isEmpty()) {
                 Path pathToModify = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);
                 String importStr = importPackageIds.stream().map(idx ->
                         "import " + serdeFormatFiles.get(idx).getPackageName() + ".*;")
                         .reduce((s1, s2) -> s1 + System.lineSeparator() + s2).get();
-                System.out.println(importStr);
+                //System.out.println(importStr);
                 String sourceCode = TextFileUtils.readTextFile(pathToModify);
                 int classLineIdx = sourceCode.indexOf(JAVA_SOURCE_CLASS_LINE_START);
                 if (classLineIdx != -1) {
@@ -160,7 +176,7 @@ public class SerdeJavaGenerator {
                                                       List<Set<String>> externalNamesList) {
         List<String> namesToRemove = new ArrayList<>(concatenatedMap.keySet());
         namesToRemove.retainAll(externalNamesList.stream().flatMap(m -> m.stream()).collect(Collectors.toSet()));
-        System.out.println(namesToRemove);
+        //System.out.println(namesToRemove);
         namesToRemove.forEach(n -> {
             Path pathToRemove = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);
             //System.out.println(pathToRemove);
@@ -179,9 +195,9 @@ public class SerdeJavaGenerator {
                 packageName.replace(".", File.separator), n + ".java");
     }
 
-    public static int waitForProcess(String workingDirectory, String serdegenPath,
-                                     String packageName, String withRuntimesOrEmpty,
-                                     String targetSrcDir, String yamlFilePath) {
+    public static int waitForSerdegenProcess(String workingDirectory, String serdegenPath,
+                                             String packageName, String withRuntimesOrEmpty,
+                                             String targetSrcDir, String yamlFilePath) {
         String shellPath = "/bin/sh";
         String cmdFormat = "%1$s --language java --module-name %2$s %3$s --target-source-dir %4$s %5$s";
         String cmd = String.format(cmdFormat, serdegenPath, packageName, withRuntimesOrEmpty,

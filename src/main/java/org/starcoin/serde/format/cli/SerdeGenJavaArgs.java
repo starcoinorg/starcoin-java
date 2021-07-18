@@ -12,7 +12,7 @@ public class SerdeGenJavaArgs {
     @Parameter(names = "--help", description = "Prints the usage", help = true)
     private boolean help;
 
-    @Parameter(description = "{PATH_TO_SERDE_FORMAT_FILE}:{JAVA_PACKAGE_NAME}...(List separated by whitespace)", required = true)
+    @Parameter(description = "{PATH_TO_SERDE_FORMAT_FILE}:{JAVA_PACKAGE_NAME}...(List items separated by whitespaces)", required = true)
     private List<String> parameters = new ArrayList<>();
 
 //    @Parameter(names = { "-log", "-verbose" }, description = "Level of verbosity")
@@ -32,7 +32,7 @@ public class SerdeGenJavaArgs {
     @Parameter(names = "--tempYamlFileExtension", description = "Temporary generated YAML file extension")
     private String tempYamlFileExtension = DEFAULT_TEMP_YAML_FILE_EXTENSION;
 
-    @Parameter(names = "--onlyRetainDependenciesOfLast", description = "Only retain dependencies of last N file(s)")
+    @Parameter(names = "--onlyRetainDependenciesOfLast", description = "Only retains dependencies of last N file(s)")
     private Integer onlyRetainDependenciesOfLast;
 
     public List<String> getParameters() {

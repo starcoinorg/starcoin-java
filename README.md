@@ -13,13 +13,13 @@ SerdeGenJava 工具的用法：
 
 ```
 Usage: <main class> [options] 
-      {PATH_TO_SERDE_FORMAT_FILE}:{JAVA_PACKAGE_NAME}...(List separated by 
-      whitespace) 
+      {PATH_TO_SERDE_FORMAT_FILE}:{JAVA_PACKAGE_NAME}...(List items separated by 
+      whitespaces) 
   Options:
     --help
       Prints the usage
     --onlyRetainDependenciesOfLast
-      Only retain dependencies of last N file(s)
+      Only retains dependencies of last N file(s)
     --serdegenPath, -p
       Serdegen command path
       Default: serdegen

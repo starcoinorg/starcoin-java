@@ -40,3 +40,15 @@ mvn exec:java -Dexec.mainClass="org.starcoin.serde.format.cli.SerdeGenJava" -X -
 
 ```
 
+### SerdeGenJava 工具的设计思路
+
+我们可以给 SerdeGenJava 传入一个数据格式文件的列表，列表中排列在后面的文件，其数据格式可以引用（依赖）前面的文件的数据格式。SerdeGenJava 工具处理文件列表的方法如下：
+
+1. 将数据格式文件（YAML）反序列化为强类型（或者说静态类型）的 Java 对象，取得数据格式（或者说它描述的数据结构）之间的依赖关系。PS：这些 YAML 文件其实是一些 Rust 定义的数据结构序列化的结果，Rust 语言和 Java 语言的特性并不是一一对应的，比如 Rust 的 enum 和 Java 的 enum 就基本是两回事，怎么将这些 YAML/JSON 文档反序列化为强类型的 Java 对象，这个工具提供了一些可能后面可以借鉴的思路。
+
+2. 将每个 YAML 文件中的数据格式，以及它依赖的其他文件的数据格式，合并到一个临时文件中。然后调用 Rust 版的 serdegen 工具，使用这个临时文件生成 Java 代码。
+
+3. 删除重复生成的 Java 文件。也就是说，上一步可能会生成一些几乎完全一样的 Java 类型的代码，只是它们位于不同的 package（目录）中。
+
+4. 按照数据结构的依赖关系，修改生成的源代码。给那些依赖其他 package 中的数据结构的 Java 代码增加必要的 import 语句（引入所依赖的包）。
+

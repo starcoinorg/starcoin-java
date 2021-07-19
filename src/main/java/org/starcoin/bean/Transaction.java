@@ -133,4 +133,22 @@ public class Transaction {
     public void setUserTransaction(UserTransaction userTransaction) {
         this.userTransaction = userTransaction;
     }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "blockHash='" + blockHash + '\'' +
+                ", blockNumber='" + blockNumber + '\'' +
+                ", transactionHash='" + transactionHash + '\'' +
+                ", transactionIndex=" + transactionIndex +
+                ", stateRootHash='" + stateRootHash + '\'' +
+                ", eventRootHash='" + eventRootHash + '\'' +
+                ", gasUsed='" + gasUsed + '\'' +
+                ", status='" + status + '\'' +
+                ", timestamp=" + timestamp +
+                ", userTransaction=" + userTransaction +
+                ", blockMetadata=" + blockMetadata +
+                ", events=" + events +
+                '}';
+    }
 }

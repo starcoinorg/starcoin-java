@@ -86,4 +86,18 @@ public class BlockMetadata {
     public void setParentGasUsed(String parentGasUsed) {
         this.parentGasUsed = parentGasUsed;
     }
+
+    @Override
+    public String toString() {
+        return "BlockMetadata{" +
+                "parentHash='" + parentHash + '\'' +
+                ", timestamp=" + timestamp +
+                ", author='" + author + '\'' +
+                ", authorAuthKey='" + authorAuthKey + '\'' +
+                ", uncles='" + uncles + '\'' +
+                ", number='" + number + '\'' +
+                ", chainId='" + chainId + '\'' +
+                ", parentGasUsed='" + parentGasUsed + '\'' +
+                '}';
+    }
 }

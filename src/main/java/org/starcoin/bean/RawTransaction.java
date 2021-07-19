@@ -19,6 +19,10 @@ public class RawTransaction {
     String maxGasAmount;
     @JSONField(name = "expiration_timestamp_secs")
     String expirationTimestampSecs;
+    @JSONField(name = "authenticator")
+    Authenticator authenticator;
+    @JSONField(name = "transaction_hash")
+    String transactionHash;
 
     public String getSequenceNumber() {
         return sequenceNumber;
@@ -84,4 +88,35 @@ public class RawTransaction {
         this.expirationTimestampSecs = expirationTimestampSecs;
     }
 
+    public Authenticator getAuthenticator() {
+        return authenticator;
+    }
+
+    public void setAuthenticator(Authenticator authenticator) {
+        this.authenticator = authenticator;
+    }
+
+    public String getTransactionHash() {
+        return transactionHash;
+    }
+
+    public void setTransactionHash(String transactionHash) {
+        this.transactionHash = transactionHash;
+    }
+
+    @Override
+    public String toString() {
+        return "RawTransaction{" +
+                "sequenceNumber='" + sequenceNumber + '\'' +
+                ", chainId=" + chainId +
+                ", sender='" + sender + '\'' +
+                ", payload='" + payload + '\'' +
+                ", gasUnitPrice='" + gasUnitPrice + '\'' +
+                ", gasTokenCode='" + gasTokenCode + '\'' +
+                ", maxGasAmount='" + maxGasAmount + '\'' +
+                ", expirationTimestampSecs='" + expirationTimestampSecs + '\'' +
+                ", authenticator=" + authenticator +
+                ", transactionHash='" + transactionHash + '\'' +
+                '}';
+    }
 }

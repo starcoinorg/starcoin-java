@@ -152,4 +152,25 @@ public class BlockHeader {
     public void setTxnAccumulatorRoot(String txnAccumulatorRoot) {
         this.txnAccumulatorRoot = txnAccumulatorRoot;
     }
+
+    @Override
+    public String toString() {
+        return "BlockHeader{" +
+                "author='" + author + '\'' +
+                ", authorAuthKey='" + authorAuthKey + '\'' +
+                ", blockAccumulatorRoot='" + blockAccumulatorRoot + '\'' +
+                ", blockHash='" + blockHash + '\'' +
+                ", bodyHash='" + bodyHash + '\'' +
+                ", chainId=" + chainId +
+                ", difficulty=" + difficulty +
+                ", extra='" + extra + '\'' +
+                ", gasUsed=" + gasUsed +
+                ", nonce=" + nonce +
+                ", height=" + height +
+                ", parentHash='" + parentHash + '\'' +
+                ", stateRoot='" + stateRoot + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", txnAccumulatorRoot='" + txnAccumulatorRoot + '\'' +
+                '}';
+    }
 }

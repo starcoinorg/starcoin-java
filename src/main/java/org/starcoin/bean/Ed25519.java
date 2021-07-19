@@ -23,4 +23,12 @@ public class Ed25519 {
     public void setSignature(String signature) {
         this.signature = signature;
     }
+
+    @Override
+    public String toString() {
+        return "Ed25519{" +
+                "publicKey='" + publicKey + '\'' +
+                ", signature='" + signature + '\'' +
+                '}';
+    }
 }

@@ -35,4 +35,13 @@ public class UserTransaction {
     public void setAuthenticator(Authenticator authenticator) {
         this.authenticator = authenticator;
     }
+
+    @Override
+    public String toString() {
+        return "UserTransaction{" +
+                "transactionHash='" + transactionHash + '\'' +
+                ", rawTransaction=" + rawTransaction +
+                ", authenticator=" + authenticator +
+                '}';
+    }
 }

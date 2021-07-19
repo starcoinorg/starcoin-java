@@ -9,12 +9,24 @@ import java.util.List;
 
 @JSONType(naming = PropertyNamingStrategy.SnakeCase)
 public class Block {
-    @JSONField(name = "block_metadata")
+    @JSONField(name = "metadata")
     BlockMetadata blockMetadata;
     @JSONField(name = "uncles")
     List<BlockHeader> uncles;
+    @JSONField(name = "header")
     private BlockHeader header;
+    @JSONField(serialize = false)
     private BlockBody body;
+    @JSONField(serialize = false)
+    private List<Transaction> transactionList;
+
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
+    }
 
     public List<BlockHeader> getUncles() {
         return uncles;

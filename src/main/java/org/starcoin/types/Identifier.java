@@ -58,6 +58,13 @@ public final class Identifier {
         return value;
     }
 
+    @Override
+    public String toString() {
+        return "Identifier{" +
+                "value='" + value + '\'' +
+                '}';
+    }
+
     public static final class Builder {
         public String value;
 

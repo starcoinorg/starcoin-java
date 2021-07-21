@@ -67,6 +67,14 @@ public final class ModuleId {
         return value;
     }
 
+    @Override
+    public String toString() {
+        return "ModuleId{" +
+                "address=" + address +
+                ", name=" + name +
+                '}';
+    }
+
     public static final class Builder {
         public AccountAddress address;
         public Identifier name;

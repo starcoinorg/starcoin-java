@@ -1,6 +1,7 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.starcoin.types.TransactionPayload;
 
 public class RawTransaction {
     @JSONField(name = "sequence_number")
@@ -11,6 +12,8 @@ public class RawTransaction {
     String sender;
     @JSONField(name = "payload")
     String payload;
+    @JSONField(serialize = false)
+    TransactionPayload transactionPayload;
     @JSONField(name = "gas_unit_price")
     String gasUnitPrice;
     @JSONField(name = "gas_token_code")
@@ -102,6 +105,14 @@ public class RawTransaction {
 
     public void setTransactionHash(String transactionHash) {
         this.transactionHash = transactionHash;
+    }
+
+    public TransactionPayload getTransactionPayload() {
+        return transactionPayload;
+    }
+
+    public void setTransactionPayload(TransactionPayload transactionPayload) {
+        this.transactionPayload = transactionPayload;
     }
 
     @Override

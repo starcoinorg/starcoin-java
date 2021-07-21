@@ -5,10 +5,12 @@ import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.starcoin.bean.Event;
+import org.starcoin.bean.GetTransactionOption;
 import org.starcoin.bean.PendingTransaction;
 import org.starcoin.bean.Transaction;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,7 +30,12 @@ public class TransactionRPCClient {
 
     public Transaction getTransactionByHash(String hash) throws JSONRPC2SessionException {
         JsonRPCClient<Transaction> client = new JsonRPCClient<>();
-        return client.getObject(session, "chain.get_transaction", Collections.singletonList(hash), 0, Transaction.class);
+        List<Object> parameter = new ArrayList<>();
+        parameter.add(hash);
+        GetTransactionOption option = new GetTransactionOption();
+        option.setDecode(true);
+        parameter.add(option);
+        return client.getObject(session, "chain.get_transaction", parameter, 0, Transaction.class);
     }
 
     public Transaction getTransactionInfoByHash(String hash) throws JSONRPC2SessionException {

@@ -38,6 +38,17 @@ public class Transaction {
 
     List<Event> events;
 
+    @JSONField(serialize = false)
+    TransactionType transactionType;
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
+
     public String getStateRootHash() {
         return stateRootHash;
     }
@@ -149,6 +160,7 @@ public class Transaction {
                 ", userTransaction=" + userTransaction +
                 ", blockMetadata=" + blockMetadata +
                 ", events=" + events +
+                ", transactionType=" + transactionType +
                 '}';
     }
 }

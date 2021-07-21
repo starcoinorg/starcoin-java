@@ -6,6 +6,7 @@ import com.alibaba.fastjson.annotation.JSONType;
 
 @JSONType(naming = PropertyNamingStrategy.SnakeCase)
 public class BlockHeader {
+    long timestamp;
     private String author;
     @JSONField(name = "author_auth_key")
     private String authorAuthKey;
@@ -17,6 +18,8 @@ public class BlockHeader {
     private String bodyHash;
     @JSONField(name = "chain_id")
     private int chainId;
+    @JSONField(name = "difficulty")
+    private String difficultyHexStr;
     @JSONField(name = "difficulty_number")
     private long difficulty;
     private String extra;
@@ -29,7 +32,6 @@ public class BlockHeader {
     private String parentHash;
     @JSONField(name = "state_root")
     private String stateRoot;
-    private String timestamp;
     @JSONField(name = "txn_accumulator_root")
     private String txnAccumulatorRoot;
 
@@ -137,11 +139,11 @@ public class BlockHeader {
         this.stateRoot = stateRoot;
     }
 
-    public String getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -153,15 +155,25 @@ public class BlockHeader {
         this.txnAccumulatorRoot = txnAccumulatorRoot;
     }
 
+    public String getDifficultyHexStr() {
+        return difficultyHexStr;
+    }
+
+    public void setDifficultyHexStr(String difficultyHexStr) {
+        this.difficultyHexStr = difficultyHexStr;
+    }
+
     @Override
     public String toString() {
         return "BlockHeader{" +
-                "author='" + author + '\'' +
+                "timestamp=" + timestamp +
+                ", author='" + author + '\'' +
                 ", authorAuthKey='" + authorAuthKey + '\'' +
                 ", blockAccumulatorRoot='" + blockAccumulatorRoot + '\'' +
                 ", blockHash='" + blockHash + '\'' +
                 ", bodyHash='" + bodyHash + '\'' +
                 ", chainId=" + chainId +
+                ", difficultyHexStr='" + difficultyHexStr + '\'' +
                 ", difficulty=" + difficulty +
                 ", extra='" + extra + '\'' +
                 ", gasUsed=" + gasUsed +
@@ -169,7 +181,6 @@ public class BlockHeader {
                 ", height=" + height +
                 ", parentHash='" + parentHash + '\'' +
                 ", stateRoot='" + stateRoot + '\'' +
-                ", timestamp='" + timestamp + '\'' +
                 ", txnAccumulatorRoot='" + txnAccumulatorRoot + '\'' +
                 '}';
     }

@@ -8,11 +8,40 @@
     <artifactId>sdk</artifactId>
     <version>1.0</version>
 
+    <name>Starcoin Java SDK</name>
+    <description>Starcoin Java SDK</description>
+    <url>https://starcoin.org/</url>
+
+    <scm>
+        <connection>https://github.com/starcoinorg/starcoin-java</connection>
+        <url>https://github.com/starcoinorg/starcoin-java</url>
+    </scm>
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <licenses>
+        <license>
+            <name>Apache 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Fang Yuan</name>
+            <id>fanngyuan</id>
+            <email>fanngyuan@gmail.com</email>
+            <timezone>8</timezone>
+            <organization>Westar lib</organization>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
+    </developers>
 
     <distributionManagement>
         <repository>
@@ -20,6 +49,10 @@
             <name>GitHub starcoin-java Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/starcoinorg/starcoin-java</url>
         </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <dependencies>
@@ -77,16 +110,6 @@
         </dependency>
     </dependencies>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <plugins>
@@ -97,7 +120,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>

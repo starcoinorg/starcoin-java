@@ -1,6 +1,7 @@
 # Mac OS X
 *.DS_Store
 deployer.sh
+update_key.sh
 
 # Generated files
 build/

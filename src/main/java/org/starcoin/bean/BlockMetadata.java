@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 public class BlockMetadata {
 
+    @JSONField(name = "parent_hash")
     String parentHash;
 
     long timestamp;
@@ -21,7 +22,7 @@ public class BlockMetadata {
     String chainId;
 
     @JSONField(name = "parent_gas_used")
-    String parentGasUsed;
+    long parentGasUsed;
 
     public String getParentHash() {
         return parentHash;
@@ -79,11 +80,11 @@ public class BlockMetadata {
         this.chainId = chainId;
     }
 
-    public String getParentGasUsed() {
+    public long getParentGasUsed() {
         return parentGasUsed;
     }
 
-    public void setParentGasUsed(String parentGasUsed) {
+    public void setParentGasUsed(long parentGasUsed) {
         this.parentGasUsed = parentGasUsed;
     }
 
@@ -97,7 +98,7 @@ public class BlockMetadata {
                 ", uncles='" + uncles + '\'' +
                 ", number='" + number + '\'' +
                 ", chainId='" + chainId + '\'' +
-                ", parentGasUsed='" + parentGasUsed + '\'' +
+                ", parentGasUsed=" + parentGasUsed +
                 '}';
     }
 }

@@ -1,6 +1,7 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.starcoin.types.AccountAddress;
 
 public class Event {
     @JSONField(name = "block_hash")
@@ -18,7 +19,7 @@ public class Event {
     String data;
 
     @JSONField(name = "type_tag")
-    String typeTag;
+    TypeTag typeTag;
 
     @JSONField(name = "event_key")
     String eventKey;
@@ -66,11 +67,10 @@ public class Event {
         this.data = data;
     }
 
-    public String getTypeTag() {
+    public TypeTag getTypeTag() {
         return typeTag;
     }
-
-    public void setTypeTag(String typeTag) {
+    public void setTypeTag(TypeTag typeTag) {
         this.typeTag = typeTag;
     }
 
@@ -90,6 +90,15 @@ public class Event {
         this.eventSeqNumber = eventSeqNumber;
     }
 
+    public String eventCreateAddress() {
+        int length = this.eventKey.length();
+        if ( length >= AccountAddress.LENGTH) {
+            return this.eventKey.substring(length - AccountAddress.LENGTH);
+        }else{
+            return null;
+        }
+    }
+
     @Override
     public String toString() {
         return "Event{" +
@@ -98,7 +107,7 @@ public class Event {
                 ", transactionHash='" + transactionHash + '\'' +
                 ", transactionIndex=" + transactionIndex +
                 ", data='" + data + '\'' +
-                ", typeTag='" + typeTag + '\'' +
+                ", typeTag=" + typeTag +
                 ", eventKey='" + eventKey + '\'' +
                 ", eventSeqNumber='" + eventSeqNumber + '\'' +
                 '}';

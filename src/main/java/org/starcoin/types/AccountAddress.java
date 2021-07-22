@@ -4,7 +4,7 @@ package org.starcoin.types;
 import org.starcoin.utils.Hex;
 
 public final class AccountAddress {
-    static final int LENGTH = 16;
+    public static final int LENGTH = 16;
     public final java.util.@com.novi.serde.ArrayLen(length = 16) List<@com.novi.serde.Unsigned Byte> value;
 
     public AccountAddress(java.util.@com.novi.serde.ArrayLen(length = 16) List<@com.novi.serde.Unsigned Byte> value) {

@@ -36,6 +36,7 @@ public class Transaction {
     @JSONField(name = "block_metadata")
     BlockMetadata blockMetadata;
 
+    @JSONField(serialize = false)
     List<Event> events;
 
     @JSONField(serialize = false)

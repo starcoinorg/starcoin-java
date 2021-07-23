@@ -1,22 +1,25 @@
 package org.starcoin.bean;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.List;
 
 public class BlockBody {
-    List<RawTransaction> rawTransactions;
+    @JSONField(name = "Full")
+    List<UserTransaction> userTransactions;
 
-    public List<RawTransaction> getRawTransactions() {
-        return rawTransactions;
+    public List<UserTransaction> getUserTransactions() {
+        return userTransactions;
     }
 
-    public void setRawTransactions(List<RawTransaction> rawTransactions) {
-        this.rawTransactions = rawTransactions;
+    public void setUserTransactions(List<UserTransaction> userTransactions) {
+        this.userTransactions = userTransactions;
     }
 
     @Override
     public String toString() {
         return "BlockBody{" +
-                "rawTransactions=" + rawTransactions +
+                "userTransactions=" + userTransactions +
                 '}';
     }
 }

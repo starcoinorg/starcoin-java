@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class StarcoinClientTest {
+public class StarcoinClientSample {
 
     private StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.BARNARD);
     private String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
@@ -28,7 +28,6 @@ public class StarcoinClientTest {
     private AccountAddress sender = AccountAddressUtils.create(address);
 
 
-    @Test
     public void testSeqnubmer() {
         System.out.println(starcoinClient.getAccountSequence(sender).sequence_number);
     }
@@ -43,7 +42,6 @@ public class StarcoinClientTest {
 
 
     @SneakyThrows
-    @Test
     public void test() {
 
         Long l = 92386324538286L;
@@ -88,7 +86,6 @@ public class StarcoinClientTest {
     }
 
     @SneakyThrows
-    @Test
     public void testDeployContract() {
 
         String contractPath = Objects.requireNonNull(this
@@ -113,7 +110,6 @@ public class StarcoinClientTest {
         checkTxt(txn);
     }
 
-    @Test
     public void testGetResource() {
         ResourceObj resourceObj = ResourceObj
                 .builder()
@@ -125,7 +121,6 @@ public class StarcoinClientTest {
         System.out.println(rst);
     }
 
-    @Test
     public void testCallContractFunctionV2() {
         BigInteger amount = new BigInteger("10000000");
         ScriptFunctionObj scriptFunctionObj = ScriptFunctionObj
@@ -141,7 +136,6 @@ public class StarcoinClientTest {
 
 
     @SneakyThrows
-    @Test
     public void testTransfer() {
         String toAddress = "0xd7f20befd34b9f1ab8aeae98b82a5a51";
         TypeObj typeObj = TypeObj.STC();

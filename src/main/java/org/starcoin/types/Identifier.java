@@ -60,9 +60,7 @@ public final class Identifier {
 
     @Override
     public String toString() {
-        return "Identifier{" +
-                "value='" + value + '\'' +
-                '}';
+        return  value;
     }
 
     public static final class Builder {

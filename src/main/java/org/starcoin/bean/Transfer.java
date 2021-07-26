@@ -14,6 +14,8 @@ public class Transfer {
     String receiver;
     @JSONField(name = "amount")
     String amount;
+    @JSONField(name = "type_tag")
+    String typeTag;
 
     public long getTimestamp() {
         return timestamp;
@@ -61,5 +63,26 @@ public class Transfer {
 
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public String getTypeTag() {
+        return typeTag;
+    }
+
+    public void setTypeTag(String typeTag) {
+        this.typeTag = typeTag;
+    }
+
+    @Override
+    public String toString() {
+        return "Transfer{" +
+                "timestamp=" + timestamp +
+                ", identifier='" + identifier + '\'' +
+                ", txnHash='" + txnHash + '\'' +
+                ", sender='" + sender + '\'' +
+                ", receiver='" + receiver + '\'' +
+                ", amount='" + amount + '\'' +
+                ", typeTag='" + typeTag + '\'' +
+                '}';
     }
 }

@@ -15,7 +15,6 @@ public class Block {
     List<BlockHeader> uncles;
     @JSONField(name = "header")
     private BlockHeader header;
-    @JSONField(serialize = false)
     private BlockBody body;
     @JSONField(serialize = false)
     private List<Transaction> transactionList;

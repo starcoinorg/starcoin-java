@@ -12,7 +12,8 @@ import java.util.stream.Stream;
 import static org.starcoin.serde.format.jackson.utils.MappingUtils.toContainerFormatMap;
 
 public class ReferenceUtils {
-    private ReferenceUtils() {}
+    private ReferenceUtils() {
+    }
 
 
     public static Map<String, Object> includeExternalObjects(Map<String, Object> originMap,
@@ -28,13 +29,11 @@ public class ReferenceUtils {
                                                              Map<String, ContainerFormat> containerFormatMap,
                                                              List<Map<String, ContainerFormat>> externalContainerFormatMap,
                                                              List<Map<String, Object>> externalMaps) {
-        //System.out.println(containerFormatMap);
         List<String> referencedNames = ReferenceUtils.getReferencedExternalContainerTypeNames(containerFormatMap, externalContainerFormatMap);
-        List<Object> referencedValues = ReferenceUtils.findValuesByNames(referencedNames, externalMaps.toArray(new Map[0]));
-        //System.out.println(referencedValues);
+        List referencedValues = ReferenceUtils.findValuesByNames(referencedNames, externalMaps.toArray(new Map[0]));
         Map<String, Object> concatenatedMap = Stream.concat(originMap.entrySet().stream(),
                 IntStream.range(0, referencedNames.size())
-                .mapToObj(n -> new AbstractMap.SimpleEntry<String, Object>(referencedNames.get(n), referencedValues.get(n)))
+                        .mapToObj(n -> new AbstractMap.SimpleEntry<String, Object>(referencedNames.get(n), referencedValues.get(n)))
         ).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
         return concatenatedMap;
     }
@@ -79,14 +78,14 @@ public class ReferenceUtils {
     }
 
     public static List<String> getReferenceNamesRecursively(String name,
-                                                             Function<String, Iterable<String>> getReferencedNames) {
+                                                            Function<String, Iterable<String>> getReferencedNames) {
         List<String> names = new ArrayList<>();
         addReferencedNamesRecursively(names, name, getReferencedNames);
         return names;
     }
 
     public static void addReferencedNamesRecursively(Collection<String> referencedNames, String name,
-                                                      Function<String, Iterable<String>> getReferencedNames) {
+                                                     Function<String, Iterable<String>> getReferencedNames) {
         for (String n : getReferencedNames.apply(name)) {
             if (!referencedNames.contains(n)) {
                 referencedNames.add(n);

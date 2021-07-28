@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public abstract class VariantFormat implements IReferenceContainerType {
     /**
      * A variant without parameters, e.g. `A` in `enum X { A }`
-      */
+     */
     public static class Unit extends VariantFormat {
 
         @Override
@@ -19,7 +19,7 @@ public abstract class VariantFormat implements IReferenceContainerType {
         }
 
         @Override
-        public List<String> referencedContainerTypeNames() {
+        public List referencedContainerTypeNames() {
             return Collections.EMPTY_LIST;
         }
 
@@ -27,7 +27,7 @@ public abstract class VariantFormat implements IReferenceContainerType {
 
     /**
      * A variant with a single unnamed parameter, e.g. `A` in `enum X { A(u16) }`
-      */
+     */
     public static class NewType extends VariantFormat {
         private Format format;
 

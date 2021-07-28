@@ -5,7 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import java.util.List;
 
 public class Struct {
-    @JSONField(name ="type_params")
+    @JSONField(name = "type_params")
     List<String> typeParams;
     String address;
     String module;
@@ -14,7 +14,7 @@ public class Struct {
     public static Struct fromRPC(String typeString) {
         if (typeString != null) {
             String[] split = typeString.split("::");
-            if(split.length == 3) {
+            if (split.length == 3) {
                 Struct struct = new Struct();
                 struct.setAddress(split[0]);
                 struct.setModule(split[1]);
@@ -22,7 +22,7 @@ public class Struct {
                 return struct;
             }
         }
-        return  null;
+        return null;
     }
 
     public List<String> getTypeParams() {

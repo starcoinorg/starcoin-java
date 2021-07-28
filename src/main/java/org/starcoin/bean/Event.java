@@ -93,9 +93,9 @@ public class Event {
 
     public String eventCreateAddress() {
         int length = this.eventKey.length();
-        if ( length >= AccountAddress.LENGTH * 2) {
+        if (length >= AccountAddress.LENGTH * 2) {
             return "0x" + this.eventKey.substring(length - AccountAddress.LENGTH * 2);
-        }else{
+        } else {
             return null;
         }
     }

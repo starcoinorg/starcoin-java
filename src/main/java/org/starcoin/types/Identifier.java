@@ -46,21 +46,18 @@ public final class Identifier {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         Identifier other = (Identifier) obj;
-        if (!java.util.Objects.equals(this.value, other.value)) {
-            return false;
-        }
-        return true;
+        return java.util.Objects.equals(this.value, other.value);
     }
 
     public int hashCode() {
         int value = 7;
-        value = 31 * value + (this.value != null ? this.value.hashCode() : 0);
+        value = 31 * value + this.value.hashCode();
         return value;
     }
 
     @Override
     public String toString() {
-        return  value;
+        return value;
     }
 
     public static final class Builder {

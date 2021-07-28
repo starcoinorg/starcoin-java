@@ -36,9 +36,9 @@ public final class AccountAddress {
         if (values.length != LENGTH) {
             throw new java.lang.IllegalArgumentException("Invalid length for AccountAddress");
         }
-        java.util.List<Byte> address = new java.util.ArrayList<Byte>(LENGTH);
+        java.util.List<Byte> address = new java.util.ArrayList<>(LENGTH);
         for (int i = 0; i < LENGTH; i++) {
-            address.add(Byte.valueOf(values[i]));
+            address.add(values[i]);
         }
         return new AccountAddress(address);
     }
@@ -60,15 +60,12 @@ public final class AccountAddress {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         AccountAddress other = (AccountAddress) obj;
-        if (!java.util.Objects.equals(this.value, other.value)) {
-            return false;
-        }
-        return true;
+        return java.util.Objects.equals(this.value, other.value);
     }
 
     public int hashCode() {
         int value = 7;
-        value = 31 * value + (this.value != null ? this.value.hashCode() : 0);
+        value = 31 * value + this.value.hashCode();
         return value;
     }
 
@@ -76,14 +73,14 @@ public final class AccountAddress {
         byte[] bytes = new byte[LENGTH];
         int i = 0;
         for (Byte item : value) {
-            bytes[i++] = item.byteValue();
+            bytes[i++] = item;
         }
         return bytes;
     }
 
     @Override
     public String toString() {
-        return  Hex.encode(value);
+        return Hex.encode(value);
     }
 
     public static final class Builder {

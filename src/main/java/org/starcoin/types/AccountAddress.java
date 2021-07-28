@@ -83,9 +83,7 @@ public final class AccountAddress {
 
     @Override
     public String toString() {
-        return "AccountAddress{" +
-                "value=" + Hex.encode(value) +
-                '}';
+        return  Hex.encode(value);
     }
 
     public static final class Builder {

@@ -19,7 +19,7 @@ public class Event {
     String data;
 
     @JSONField(name = "type_tag")
-    TypeTag typeTag;
+    String typeTag;
 
     @JSONField(name = "event_key")
     String eventKey;
@@ -67,10 +67,11 @@ public class Event {
         this.data = data;
     }
 
-    public TypeTag getTypeTag() {
+    public String getTypeTag() {
         return typeTag;
     }
-    public void setTypeTag(TypeTag typeTag) {
+
+    public void setTypeTag(String typeTag) {
         this.typeTag = typeTag;
     }
 
@@ -107,7 +108,7 @@ public class Event {
                 ", transactionHash='" + transactionHash + '\'' +
                 ", transactionIndex=" + transactionIndex +
                 ", data='" + data + '\'' +
-                ", typeTag=" + typeTag +
+                ", typeTag='" + typeTag + '\'' +
                 ", eventKey='" + eventKey + '\'' +
                 ", eventSeqNumber='" + eventSeqNumber + '\'' +
                 '}';

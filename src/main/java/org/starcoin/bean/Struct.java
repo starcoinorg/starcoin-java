@@ -11,6 +11,20 @@ public class Struct {
     String module;
     String name;
 
+    public static Struct fromRPC(String typeString) {
+        if (typeString != null) {
+            String[] split = typeString.split("::");
+            if(split.length == 3) {
+                Struct struct = new Struct();
+                struct.setAddress(split[0]);
+                struct.setModule(split[1]);
+                struct.setName(split[2]);
+                return struct;
+            }
+        }
+        return  null;
+    }
+
     public List<String> getTypeParams() {
         return typeParams;
     }

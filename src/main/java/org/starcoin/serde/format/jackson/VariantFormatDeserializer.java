@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import org.starcoin.serde.format.ContainerFormat;
 import org.starcoin.serde.format.Format;
 import org.starcoin.serde.format.NamedFormat;
 import org.starcoin.serde.format.VariantFormat;
@@ -22,7 +21,7 @@ import java.util.List;
 public class VariantFormatDeserializer extends JsonDeserializer<VariantFormat> {
 
     @Override
-    public VariantFormat deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public VariantFormat deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         ObjectCodec oc = p.getCodec();
         JsonNode node = oc.readTree(p);
         if (node instanceof TextNode) {

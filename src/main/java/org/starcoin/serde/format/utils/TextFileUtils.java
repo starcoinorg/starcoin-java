@@ -2,7 +2,6 @@ package org.starcoin.serde.format.utils;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.Collections;
 
@@ -16,8 +15,7 @@ public class TextFileUtils {
             //e.printStackTrace();
             throw new RuntimeException(e);
         }
-        String doc = new String(textFileBytes);
-        return doc;
+        return new String(textFileBytes);
     }
 
     public static void writeTextFile(Path filePath, String content) {

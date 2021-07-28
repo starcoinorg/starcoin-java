@@ -105,7 +105,7 @@ public abstract class Format implements IReferenceContainerType {
         }
 
         @Override
-        public List<String> referencedContainerTypeNames() {
+        public List referencedContainerTypeNames() {
             return Collections.EMPTY_LIST;
         }
     }
@@ -116,12 +116,12 @@ public abstract class Format implements IReferenceContainerType {
     public static class TypeName extends Format {
         private String name;
 
-        public String getName() {
-            return name;
-        }
-
         public TypeName(String name) {
             this.name = name;
+        }
+
+        public String getName() {
+            return name;
         }
 
         @Override
@@ -133,7 +133,7 @@ public abstract class Format implements IReferenceContainerType {
 
         @Override
         public List<String> referencedContainerTypeNames() {
-            return Arrays.asList(name);
+            return Collections.singletonList(name);
         }
     }
 
@@ -170,12 +170,12 @@ public abstract class Format implements IReferenceContainerType {
     public static class Seq extends Format {
         private Format format;
 
-        public Format getFormat() {
-            return format;
-        }
-
         public Seq(Format format) {
             this.format = format;
+        }
+
+        public Format getFormat() {
+            return format;
         }
 
         @Override

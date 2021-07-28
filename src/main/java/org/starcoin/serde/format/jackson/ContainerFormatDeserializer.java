@@ -12,14 +12,28 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import org.jetbrains.annotations.NotNull;
-import org.starcoin.serde.format.*;
+import org.starcoin.serde.format.ContainerFormat;
+import org.starcoin.serde.format.Format;
+import org.starcoin.serde.format.NamedFormat;
+import org.starcoin.serde.format.NamedVariantFormat;
 
 import java.io.IOException;
 import java.util.*;
 
 public class ContainerFormatDeserializer extends JsonDeserializer<ContainerFormat> {
+    @NotNull
+    static List<NamedFormat> arrayNodeToNamedFormatList(ObjectCodec oc, ArrayNode namedFormatsNode) throws JsonProcessingException {
+        List<NamedFormat> namedFormats = new ArrayList<>();
+        for (JsonNode childNode : namedFormatsNode) {
+            ObjectNode namedFormatNode = (ObjectNode) childNode;
+            NamedFormat namedFormat = oc.treeToValue(namedFormatNode, NamedFormat.class);
+            namedFormats.add(namedFormat);
+        }
+        return namedFormats;
+    }
+
     @Override
-    public ContainerFormat deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public ContainerFormat deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         ObjectCodec oc = p.getCodec();
         JsonNode node = oc.readTree(p);
         if (node instanceof TextNode) {
@@ -55,22 +69,10 @@ public class ContainerFormatDeserializer extends JsonDeserializer<ContainerForma
                     NamedVariantFormat namedVariantFormat = oc.treeToValue(entry.getValue(), NamedVariantFormat.class);
                     indexedNamedVariantFormats.put(index, namedVariantFormat);
                 }
-                ContainerFormat.Enum enumFormat = new ContainerFormat.Enum(indexedNamedVariantFormats);
-                return enumFormat;
+                return new ContainerFormat.Enum(indexedNamedVariantFormats);
             }
 
         }
         throw new JsonParseException(p, "Unknown node type.");
-    }
-
-    @NotNull
-    static List<NamedFormat> arrayNodeToNamedFormatList(ObjectCodec oc, ArrayNode namedFormatsNode) throws JsonProcessingException {
-        List<NamedFormat> namedFormats = new ArrayList<>();
-        for (JsonNode childNode : namedFormatsNode) {
-            ObjectNode namedFormatNode = (ObjectNode) childNode;
-            NamedFormat namedFormat = oc.treeToValue(namedFormatNode, NamedFormat.class);
-            namedFormats.add(namedFormat);
-        }
-        return namedFormats;
     }
 }

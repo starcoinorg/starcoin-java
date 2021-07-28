@@ -9,19 +9,20 @@ import org.starcoin.serde.format.jackson.*;
 import java.util.Map;
 
 public class MappingUtils {
-    private MappingUtils() {}
+    private MappingUtils() {
+    }
 
     /**
      * Convert 'dynamic' map(probably loaded directly from YAML/JSON) to ContainerFormat map.
+     *
      * @param objectMapper ObjectMapper
-     * @param map Origin map.
+     * @param map          Origin map.
      * @return ContainerFormat map.
      */
     public static Map<String, ContainerFormat> toContainerFormatMap(ObjectMapper objectMapper, Map<String, Object> map) {
-        Map<String, ContainerFormat> containerFormatMap = objectMapper.convertValue(map,
+        return objectMapper.convertValue(map,
                 new TypeReference<Map<String, ContainerFormat>>() {
                 });
-        return containerFormatMap;
     }
 
     public static ObjectMapper getObjectMapper() {

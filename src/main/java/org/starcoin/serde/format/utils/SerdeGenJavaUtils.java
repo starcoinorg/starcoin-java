@@ -22,7 +22,7 @@ public class SerdeGenJavaUtils {
 
     public static final String WITH_RUNTIMES_BCS = "--with-runtimes=Bcs";
 
-     public static final String DEFAULT_TEMP_YAML_FILE_EXTENSION = ".temp";
+    public static final String DEFAULT_TEMP_YAML_FILE_EXTENSION = ".temp";
 
     public static final String DEFAULT_SERDEGEN_PATH = "serdegen";
 
@@ -81,7 +81,7 @@ public class SerdeGenJavaUtils {
 
         for (int i = 0; i < serdeFormatFiles.size(); i++) {
             List<Set<String>> externalNamesList = concatenatedMapList.subList(0, i)
-                    .stream().map(m -> m.keySet()).collect(Collectors.toList());
+                    .stream().map(Map::keySet).collect(Collectors.toList());
             Map<String, Object> concatenatedMap = concatenatedMapList.get(i);
             String packageName = serdeFormatFiles.get(i).getPackageName();
             String targetSourceDirectoryPath = serdeFormatFiles.get(i).getTargetSourceDirectoryPath();
@@ -175,7 +175,7 @@ public class SerdeGenJavaUtils {
                                                       Map<String, Object> concatenatedMap,
                                                       List<Set<String>> externalNamesList) {
         List<String> namesToRemove = new ArrayList<>(concatenatedMap.keySet());
-        namesToRemove.retainAll(externalNamesList.stream().flatMap(m -> m.stream()).collect(Collectors.toSet()));
+        namesToRemove.retainAll(externalNamesList.stream().flatMap(Collection::stream).collect(Collectors.toSet()));
         //System.out.println(namesToRemove);
         namesToRemove.forEach(n -> {
             Path pathToRemove = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);
@@ -205,7 +205,7 @@ public class SerdeGenJavaUtils {
         //System.out.println(cmd);
         Process process;
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder(new String[]{shellPath, "-c", cmd});
+            ProcessBuilder processBuilder = new ProcessBuilder(shellPath, "-c", cmd);
             processBuilder.directory(new File(workingDirectory));
             //processBuilder.inheritIO();
             processBuilder.redirectErrorStream(true);

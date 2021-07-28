@@ -4,14 +4,14 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 
 import static org.starcoin.serde.format.utils.TextFileUtils.readTextFile;
 
 public class YamlUtils {
-    private YamlUtils() {}
+    private YamlUtils() {
+    }
 
     public static void dumpToFile(Path filePath, Map<String, Object> map) {
         Yaml yaml = new Yaml();
@@ -28,8 +28,7 @@ public class YamlUtils {
     public static Map<String, Object> loadYamlMap(Path filePath) {
         Yaml yaml = new Yaml();
         String doc = readTextFile(filePath);
-        Map<String, Object> yamlMap = yaml.load(doc);
-        return yamlMap;
+        return yaml.load(doc);
     }
 
 

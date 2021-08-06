@@ -44,7 +44,6 @@ public class StateRPCClient {
             Map<String, Resource> resourceMap = listResource.getResources();
         for(String key: resourceMap.keySet()) {
             JsonNode node = resourceMap.get(key).getJson().get("token");
-            System.out.println(node);
             if (node != null) {
                 return node.get("value").asLong();
             }

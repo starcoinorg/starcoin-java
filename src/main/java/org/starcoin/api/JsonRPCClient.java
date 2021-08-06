@@ -2,11 +2,13 @@ package org.starcoin.api;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 
+import java.io.IOException;
 import java.util.List;
 
 public class JsonRPCClient<T> {
@@ -22,6 +24,19 @@ public class JsonRPCClient<T> {
         }
         return null;
     }
+    public T getObjectParseJackson(JSONRPC2Session session, String method, List<Object> params, int requestId, Class<T> clazz) throws JSONRPC2SessionException,IOException {
+        JSONRPC2Request request = new JSONRPC2Request(method, params, requestId);
+        JSONRPC2Response response = session.send(request);
+        if (response.indicatesSuccess()) {
+            Object result = response.getResult();
+            if (result != null) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                return  objectMapper.readValue(result.toString(), clazz);
+            }
+        }
+        return null;
+    }
+
 
     public T getSubObject(JSONRPC2Session session, String method, List<Object> params, int requestId, String subKey, Class<T> clazz) throws JSONRPC2SessionException {
         JSONRPC2Request request = new JSONRPC2Request(method, params, requestId);

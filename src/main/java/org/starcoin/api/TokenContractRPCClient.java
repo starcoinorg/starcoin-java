@@ -10,6 +10,10 @@ import java.util.List;
 
 public class TokenContractRPCClient extends ContractRPCClient{
 
+    public static final String STCTypeTag = "0x00000000000000000000000000000001::STC::STC";
+    public static final String TreasuryBalanceTypeTag = "0x00000000000000000000000000000001::Treasury::balance";
+    public static final String TokenMarketCapTypeTag = "0x00000000000000000000000000000001::Token::market_cap";
+
     public TokenContractRPCClient(URL baseUrl){
         super(baseUrl);
     }
@@ -17,7 +21,7 @@ public class TokenContractRPCClient extends ContractRPCClient{
     public BigInteger getTokenMarketCap(String tokenTypeTag) throws JSONRPC2SessionException {
         ContractCall call = new ContractCall();
 
-        call.setFunctionId("0x00000000000000000000000000000001::Token::market_cap");
+        call.setFunctionId(TokenMarketCapTypeTag);
 
         List<String> typeTags = new ArrayList<>();
         typeTags.add(tokenTypeTag);
@@ -37,7 +41,7 @@ public class TokenContractRPCClient extends ContractRPCClient{
     public BigInteger getTreasurByalance(String tokenTypeTag) throws JSONRPC2SessionException {
         ContractCall call = new ContractCall();
 
-        call.setFunctionId("0x00000000000000000000000000000001::Treasury::balance");
+        call.setFunctionId(TreasuryBalanceTypeTag);
 
         List<String> typeTags = new ArrayList<>();
         typeTags.add(tokenTypeTag);
@@ -55,11 +59,11 @@ public class TokenContractRPCClient extends ContractRPCClient{
     }
 
     public BigInteger getSTCMarketCap() throws JSONRPC2SessionException {
-        return this.getTokenMarketCap("0x00000000000000000000000000000001::STC::STC");
+        return this.getTokenMarketCap(STCTypeTag);
     }
 
     public BigInteger getSTCTreasurByalance() throws JSONRPC2SessionException {
-        return this.getTreasurByalance("0x00000000000000000000000000000001::STC::STC");
+        return this.getTreasurByalance(STCTypeTag);
     }
 
     public BigInteger getSTCCurrentSupply() throws JSONRPC2SessionException {

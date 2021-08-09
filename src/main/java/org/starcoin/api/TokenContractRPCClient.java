@@ -1,6 +1,8 @@
 package org.starcoin.api;
 
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.starcoin.bean.ContractCall;
 
 import java.math.BigInteger;
@@ -56,6 +58,12 @@ public class TokenContractRPCClient extends ContractRPCClient{
         }else{
             throw new JSONRPC2SessionException("fetch token"+ tokenTypeTag+" market cap failed");
         }
+    }
+
+    public BigInteger getTokenCurrentSupply(String tokenTypeTag) throws JSONRPC2SessionException {
+        BigInteger tokenMarketCap = this.getTokenMarketCap(tokenTypeTag);
+        BigInteger tokenTreasureBalance = this.getTreasurBalance(tokenTypeTag);
+        return tokenMarketCap.subtract(tokenTreasureBalance);
     }
 
     public BigInteger getSTCMarketCap() throws JSONRPC2SessionException {

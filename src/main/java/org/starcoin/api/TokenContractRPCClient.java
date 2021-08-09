@@ -38,7 +38,7 @@ public class TokenContractRPCClient extends ContractRPCClient{
         }
     }
 
-    public BigInteger getTreasurByalance(String tokenTypeTag) throws JSONRPC2SessionException {
+    public BigInteger getTreasurBalance(String tokenTypeTag) throws JSONRPC2SessionException {
         ContractCall call = new ContractCall();
 
         call.setFunctionId(TreasuryBalanceTypeTag);
@@ -62,11 +62,11 @@ public class TokenContractRPCClient extends ContractRPCClient{
         return this.getTokenMarketCap(STCTypeTag);
     }
 
-    public BigInteger getSTCTreasurByalance() throws JSONRPC2SessionException {
-        return this.getTreasurByalance(STCTypeTag);
+    public BigInteger getSTCTreasurBalance() throws JSONRPC2SessionException {
+        return this.getTreasurBalance(STCTypeTag);
     }
 
     public BigInteger getSTCCurrentSupply() throws JSONRPC2SessionException {
-        return this.getSTCMarketCap().subtract(this.getSTCTreasurByalance());
+        return this.getSTCMarketCap().subtract(this.getSTCTreasurBalance());
     }
 }

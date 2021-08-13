@@ -12,7 +12,7 @@ Starcoin Java SDK implementation.
 <dependency>
     <groupId>org.starcoin</groupId>
     <artifactId>sdk</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.5-SNAPSHOT</version>
 </dependency>
 ```
 

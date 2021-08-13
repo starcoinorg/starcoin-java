@@ -39,7 +39,7 @@ public class Transaction {
     @JSONField(serialize = false)
     List<Event> events;
 
-    @JSONField(serialize = false)
+    @JSONField(name= "transaction_type")
     TransactionType transactionType;
 
     public TransactionType getTransactionType() {

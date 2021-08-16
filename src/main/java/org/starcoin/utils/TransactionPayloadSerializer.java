@@ -1,7 +1,6 @@
 package org.starcoin.utils;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.starcoin.types.TransactionPayload;
@@ -12,21 +11,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TransactionPayloadSerializer extends StdSerializer<TransactionPayload> {
-    protected TransactionPayloadSerializer(Class<TransactionPayload> t) {
-        super(t);
-    }
-
-    protected TransactionPayloadSerializer(JavaType type) {
-        super(type);
-    }
-
-    protected TransactionPayloadSerializer(Class<?> t, boolean dummy) {
-        super(t, dummy);
-    }
-
-    protected TransactionPayloadSerializer(StdSerializer<?> src) {
-        super(src);
-    }
 
     public TransactionPayloadSerializer(){
         super(TransactionPayload.class);
@@ -53,7 +37,7 @@ public class TransactionPayloadSerializer extends StdSerializer<TransactionPaylo
                 .collect( Collectors.toList()));
         data.put("type_args",script.value.ty_args);
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeObjectField("type_name","script");
+        jsonGenerator.writeObjectField("type_name","Script");
         jsonGenerator.writeObjectField("value",data);
         jsonGenerator.writeEndObject();
     }
@@ -75,7 +59,7 @@ public class TransactionPayloadSerializer extends StdSerializer<TransactionPaylo
             data.put("init_script",pkg.value.init_script.get());
         }
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeObjectField("type_name","package");
+        jsonGenerator.writeObjectField("type_name","Package");
         jsonGenerator.writeObjectField("value",data);
         jsonGenerator.writeEndObject();
     }

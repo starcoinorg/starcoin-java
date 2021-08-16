@@ -9,9 +9,6 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 public class ScriptFunctionSerializer extends StdSerializer<ScriptFunction> {
-    protected ScriptFunctionSerializer(Class<ScriptFunction> t) {
-        super(t);
-    }
 
     public ScriptFunctionSerializer(){
         super(ScriptFunction.class);
@@ -20,7 +17,7 @@ public class ScriptFunctionSerializer extends StdSerializer<ScriptFunction> {
     @Override
     public void serialize(ScriptFunction scriptFunction, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeObjectField("module",scriptFunction.module.name);
+        jsonGenerator.writeObjectField("module",scriptFunction.module);
         jsonGenerator.writeObjectField("function",scriptFunction.function.value);
         jsonGenerator.writeObjectField("type_args",scriptFunction.ty_args);
         jsonGenerator.writeObjectField("args",scriptFunction.args.stream()

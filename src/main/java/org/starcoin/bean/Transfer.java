@@ -14,6 +14,8 @@ public class Transfer {
     String receiver;
     @JSONField(name = "amount")
     String amount;
+    @JSONField(name = "amount_value")
+    long amountValue;
     @JSONField(name = "type_tag")
     String typeTag;
 
@@ -71,6 +73,37 @@ public class Transfer {
 
     public void setTypeTag(String typeTag) {
         this.typeTag = typeTag;
+    }
+
+    public void setAmountValue(long amountValue) {
+        this.amountValue = amountValue;
+    }
+
+    public long getAmountValue() {
+        return transferAmount(this.amount);
+    }
+
+    private long transferAmount(String amountStr) {
+        if (amountStr == null && (!amountStr.startsWith("0x"))) {
+            return 0;
+        }
+        int len = amountStr.length();
+        int index = 0;
+        for (int i = len - 1; i > 1; i--) {
+            if (!(amountStr.charAt(i) == '0')) {
+                index = i;
+                break;
+            }
+        }
+        try {
+            if (index + 1 > 2) {
+                String tempStr = amountStr.substring(2, index + 1);
+                return Long.parseLong(tempStr, 16);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override

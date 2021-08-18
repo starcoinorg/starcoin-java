@@ -1,6 +1,11 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.novi.bcs.BcsDeserializer;
+import com.novi.serde.DeserializationError;
+import org.starcoin.utils.Hex;
+
+import java.math.BigInteger;
 
 public class Transfer {
 
@@ -15,7 +20,7 @@ public class Transfer {
     @JSONField(name = "amount")
     String amount;
     @JSONField(name = "amount_value")
-    long amountValue;
+    BigInteger amountValue;
     @JSONField(name = "type_tag")
     String typeTag;
 
@@ -75,12 +80,18 @@ public class Transfer {
         this.typeTag = typeTag;
     }
 
-    public void setAmountValue(long amountValue) {
+    public void setAmountValue(BigInteger amountValue) {
         this.amountValue = amountValue;
     }
 
-    public long getAmountValue() {
-        return transferAmount(this.amount);
+    public BigInteger getAmountValue() {
+        try {
+            BigInteger amount = new BcsDeserializer(Hex.decode(this.amount)).deserialize_u128();
+            return amount;
+        } catch (DeserializationError deserializationError) {
+            deserializationError.printStackTrace();
+        }
+        return BigInteger.ZERO;
     }
 
     private long transferAmount(String amountStr) {

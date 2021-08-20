@@ -34,15 +34,13 @@ import org.starcoin.types.TransactionPayload.ScriptFunction;
 
 import java.io.File;
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
 public class StarcoinClient {
     private static final long DEFAULT_MAX_GAS_AMOUNT = 10000000L;
+    private static final long DEFAULT_TRANSACTION_EXPIRATION_SECONDS = 2 * 60 * 60;
     private static final String GAS_TOKEN_CODE = "0x1::STC::STC";
     public static final MediaType JSON_MEDIA_TYPE = MediaType.parse(
             "application/json; charset=utf-8");
@@ -133,14 +131,17 @@ public class StarcoinClient {
     }
 
     private long getExpirationTimestampSecs() {
-        //todo get expiration timestamp on-chain
-        return System.currentTimeMillis() / 1000 + TimeUnit.HOURS.toSeconds(
-                1);
+        //return System.currentTimeMillis() / 1000 + TimeUnit.HOURS.toSeconds(1);
+        String resultStr = call("node.info", Collections.emptyList());
+        JSONObject jsonObject = JSON.parseObject(resultStr);
+        return jsonObject.getJSONObject("result").getLong("now_seconds") + DEFAULT_TRANSACTION_EXPIRATION_SECONDS;
     }
 
     private long getGasUnitPrice() {
-        //todo get gas price on-chain
-        return 1L;
+        //return 1L;
+        String resultStr = call("txpool.gas_price", Collections.emptyList());
+        JSONObject jsonObject = JSON.parseObject(resultStr);
+        return jsonObject.getLong("result");
     }
 
 

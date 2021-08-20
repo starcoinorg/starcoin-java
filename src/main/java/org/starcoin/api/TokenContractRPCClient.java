@@ -1,3 +1,18 @@
+/*
+ * Copyright 2002-2021 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.starcoin.api;
 
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
@@ -10,6 +25,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Starcoin Token 相关json-rpc接口的封装。
+ *
+ *
+ * @author fanngyuan
+ * @since 1.1.6
+ */
 public class TokenContractRPCClient extends ContractRPCClient{
 
     public static final String STCTypeTag = "0x00000000000000000000000000000001::STC::STC";
@@ -20,6 +43,10 @@ public class TokenContractRPCClient extends ContractRPCClient{
         super(baseUrl);
     }
 
+    /**
+     * 获取某个 token 的市场容量
+     *
+     */
     public BigInteger getTokenMarketCap(String tokenTypeTag) throws JSONRPC2SessionException {
         ContractCall call = new ContractCall();
 
@@ -40,6 +67,10 @@ public class TokenContractRPCClient extends ContractRPCClient{
         }
     }
 
+    /**
+     * 用于获取某个 token 在国库中的数量
+     *
+     */
     public BigInteger getTreasurBalance(String tokenTypeTag) throws JSONRPC2SessionException {
         ContractCall call = new ContractCall();
 
@@ -60,20 +91,36 @@ public class TokenContractRPCClient extends ContractRPCClient{
         }
     }
 
+    /**
+     * 获取某个 token 的实际供应量
+     *
+     */
     public BigInteger getTokenCurrentSupply(String tokenTypeTag) throws JSONRPC2SessionException {
         BigInteger tokenMarketCap = this.getTokenMarketCap(tokenTypeTag);
         BigInteger tokenTreasureBalance = this.getTreasurBalance(tokenTypeTag);
         return tokenMarketCap.subtract(tokenTreasureBalance);
     }
 
+    /**
+     * 用于获取 STC 的市场容量
+     *
+     */
     public BigInteger getSTCMarketCap() throws JSONRPC2SessionException {
         return this.getTokenMarketCap(STCTypeTag);
     }
 
+    /**
+     * 用于获取 STC 在国库中的数量
+     *
+     */
     public BigInteger getSTCTreasurBalance() throws JSONRPC2SessionException {
         return this.getTreasurBalance(STCTypeTag);
     }
 
+    /**
+     * 获取 STC 的实际供应量
+     *
+     */
     public BigInteger getSTCCurrentSupply() throws JSONRPC2SessionException {
         return this.getSTCMarketCap().subtract(this.getSTCTreasurBalance());
     }

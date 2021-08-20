@@ -1,3 +1,18 @@
+/*
+ * Copyright 2002-2021 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.starcoin.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,6 +30,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *
+ * Starcoin State 相关json-rpc接口的封装。
+ *
+ *
+ * @author fanngyuan
+ * @since 1.1.6
+ */
 public class StateRPCClient {
     private static Logger logger = LoggerFactory.getLogger(StateRPCClient.class);
     JSONRPC2Session session;
@@ -23,6 +46,10 @@ public class StateRPCClient {
         session = new JSONRPC2Session(baseUrl);
     }
 
+    /**
+     * 用于某个地址的状态
+     *
+     */
     public ListResource getState(String address) throws JSONRPC2SessionException {
         JsonRPCClient<ListResource> client = new JsonRPCClient<>();
         List<Object> param = new ArrayList<>();
@@ -38,6 +65,10 @@ public class StateRPCClient {
         return null;
     }
 
+    /**
+     * 用于获取某个地址下的token 数量
+     *
+     */
     public long getAddressAmount(String address) {
         try {
             ListResource listResource = getState(address);

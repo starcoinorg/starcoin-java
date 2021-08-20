@@ -19,8 +19,8 @@ public abstract class VariantFormat implements IReferenceContainerType {
         }
 
         @Override
-        public List referencedContainerTypeNames() {
-            return Collections.EMPTY_LIST;
+        public List<String> referencedContainerTypeNames() {
+            return Collections.emptyList();
         }
 
     }

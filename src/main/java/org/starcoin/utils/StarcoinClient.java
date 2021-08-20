@@ -42,8 +42,8 @@ import java.util.concurrent.TimeUnit;
 
 
 public class StarcoinClient {
-
-
+    private static final long DEFAULT_MAX_GAS_AMOUNT = 10000000L;
+    private static final String GAS_TOKEN_CODE = "0x1::STC::STC";
     public static final MediaType JSON_MEDIA_TYPE = MediaType.parse(
             "application/json; charset=utf-8");
     private final String baseUrl;
@@ -68,7 +68,7 @@ public class StarcoinClient {
         jsonBody.put("method", method);
         jsonBody.put("id", UUID.randomUUID().toString());
         jsonBody.put("params", params);
-        RequestBody body = RequestBody.create(JSON_MEDIA_TYPE, jsonBody.toString());
+        RequestBody body = RequestBody.create(jsonBody.toString(), JSON_MEDIA_TYPE);
         Request request = new Request.Builder().post(body).url(this.baseUrl).build();
         Response response = okHttpClient.newCall(request).execute();
         return response.body().string();
@@ -126,11 +126,21 @@ public class StarcoinClient {
 
         long seqNumber = accountResource.sequence_number;
         ChainId chainId = new ChainId((byte) chaindId);
-        return new RawUserTransaction(sender, seqNumber, payload,
-                10000000L, 1L, "0x1::STC::STC",
-                System.currentTimeMillis() / 1000 + TimeUnit.HOURS.toSeconds(
-                        1), chainId);
 
+        return new RawUserTransaction(sender, seqNumber, payload, DEFAULT_MAX_GAS_AMOUNT, getGasUnitPrice(),
+                GAS_TOKEN_CODE, getExpirationTimestampSecs(), chainId);
+
+    }
+
+    private long getExpirationTimestampSecs() {
+        //todo get expiration timestamp on-chain
+        return System.currentTimeMillis() / 1000 + TimeUnit.HOURS.toSeconds(
+                1);
+    }
+
+    private long getGasUnitPrice() {
+        //todo get gas price on-chain
+        return 1L;
     }
 
 

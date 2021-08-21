@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class StarcoinClientSample {
 
-    private StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.BARNARD);
+    private StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.DEFAULT_BARNARD);
     private String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
     private String privateKeyString = "0x7899f7cac425b5ce7239eb313db06ac2a93c731ea4512b857f975c0447176b25";
     private Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);

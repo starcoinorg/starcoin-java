@@ -33,6 +33,7 @@ public class EventFilter {
 
     public EventFilter(long fromBlock,  String address) {
         this.fromBlock = fromBlock;
+        address = address.replaceFirst("0x","");
         this.eventKeys = Arrays.asList(recvPrefix+address,sendPrefix+address);
     }
 

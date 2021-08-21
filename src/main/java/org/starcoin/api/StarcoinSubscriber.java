@@ -16,10 +16,7 @@
 package org.starcoin.api;
 
 import io.reactivex.Flowable;
-import org.starcoin.bean.EventFilter;
-import org.starcoin.bean.EventNotification;
-import org.starcoin.bean.Kind;
-import org.starcoin.bean.PendingTransactionNotification;
+import org.starcoin.bean.*;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthSubscribe;
@@ -65,6 +62,7 @@ public class StarcoinSubscriber {
         return web3jService.subscribe(
                 new Request<>(
                         "starcoin_subscribe",
+                        //Arrays.asList(Kind.NewEvent, new EventParams(eventFilter,true)),
                         Arrays.asList(Kind.NewEvent, eventFilter),
                         web3jService,
                         EthSubscribe.class),

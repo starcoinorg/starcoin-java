@@ -23,7 +23,7 @@ public abstract class ContainerFormat implements IReferenceContainerType {
 
         @Override
         public List<String> referencedContainerTypeNames() {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
     }
@@ -32,7 +32,7 @@ public abstract class ContainerFormat implements IReferenceContainerType {
      * A struct with a single unnamed parameter, e.g. `struct A(u16)`
      */
     public static class NewTypeStruct extends ContainerFormat {
-        private Format format;
+        private final Format format;
 
         public NewTypeStruct(Format format) {
             this.format = format;
@@ -59,7 +59,7 @@ public abstract class ContainerFormat implements IReferenceContainerType {
      * A struct with several unnamed parameters, e.g. `struct A(u16, u32)`
      */
     public static class TupleStruct extends ContainerFormat {
-        private List<Format> formats;
+        private final List<Format> formats;
 
         public TupleStruct(List<Format> formats) {
             this.formats = formats;
@@ -87,7 +87,7 @@ public abstract class ContainerFormat implements IReferenceContainerType {
      * A struct with named parameters, e.g. `struct A { a: Foo }`.
      */
     public static class Struct extends ContainerFormat {
-        private List<NamedFormat> namedFormats;
+        private final List<NamedFormat> namedFormats;
 
         public Struct(List<NamedFormat> namedFormats) {
             this.namedFormats = namedFormats;
@@ -116,7 +116,7 @@ public abstract class ContainerFormat implements IReferenceContainerType {
      * Each variant has a unique name and index within the enum.
      */
     public static class Enum extends ContainerFormat {
-        private Map<Integer, NamedVariantFormat> indexedNamedVariantFormats;
+        private final Map<Integer, NamedVariantFormat> indexedNamedVariantFormats;
 
         public Enum(Map<Integer, NamedVariantFormat> indexedNamedVariantFormats) {
             this.indexedNamedVariantFormats = indexedNamedVariantFormats;

@@ -105,8 +105,8 @@ public abstract class Format implements IReferenceContainerType {
         }
 
         @Override
-        public List referencedContainerTypeNames() {
-            return Collections.EMPTY_LIST;
+        public List<String> referencedContainerTypeNames() {
+            return Collections.emptyList();
         }
     }
 
@@ -114,7 +114,7 @@ public abstract class Format implements IReferenceContainerType {
      * The name of a container.
      */
     public static class TypeName extends Format {
-        private String name;
+        private final String name;
 
         public TypeName(String name) {
             this.name = name;
@@ -141,7 +141,7 @@ public abstract class Format implements IReferenceContainerType {
      * The format of `Option<T>`.
      */
     public static class Option extends Format {
-        private Format format;
+        private final Format format;
 
         public Option(Format format) {
             this.format = format;
@@ -168,7 +168,7 @@ public abstract class Format implements IReferenceContainerType {
      * A sequence, e.g. the format of `Vec<Foo>`.
      */
     public static class Seq extends Format {
-        private Format format;
+        private final Format format;
 
         public Seq(Format format) {
             this.format = format;
@@ -195,8 +195,8 @@ public abstract class Format implements IReferenceContainerType {
      * A map, e.g. the format of `BTreeMap<K, V>`.
      */
     public static class Map extends Format {
-        private Format key;
-        private Format value;
+        private final Format key;
+        private final Format value;
 
         public Map(Format key, Format value) {
             this.key = key;
@@ -230,7 +230,7 @@ public abstract class Format implements IReferenceContainerType {
      * A tuple, e.g. the format of `(Foo, Bar)`.
      */
     public static class Tuple extends Format {
-        private List<Format> formats;
+        private final List<Format> formats;
 
         public Tuple(List<Format> formats) {
             this.formats = formats;
@@ -259,8 +259,8 @@ public abstract class Format implements IReferenceContainerType {
      * E.g. the format of `[Foo; N]`.
      */
     public static class TupleArray extends Format {
-        private Format content;
-        private int size;
+        private final Format content;
+        private final int size;
 
         public TupleArray(Format content, int size) {
             this.content = content;

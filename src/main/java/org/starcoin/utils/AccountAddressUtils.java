@@ -15,6 +15,7 @@
  */
 package org.starcoin.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.starcoin.types.AccountAddress;
 
 import java.util.ArrayList;
@@ -41,6 +42,29 @@ public class AccountAddressUtils {
             return create(Hex.decode(address.substring("0x".length())));
         }
         return create(Hex.decode(address));
+    }
+
+    /**
+     * 从十六进制字符串转AccountAddress，支持短地址
+     * @param hexLiteral
+     * @return
+     */
+    public static AccountAddress from_hex_literal(String hexLiteral) {
+        if (StringUtils.startsWithIgnoreCase(hexLiteral, "0x")) {
+            hexLiteral = hexLiteral.substring(2);
+        }
+        String hexStr = hexLiteral;
+        int hexLen = hexLiteral.length();
+        if (hexLen < AccountAddress.LENGTH * 2) {
+            StringBuilder builder = new StringBuilder();
+            int missing = AccountAddress.LENGTH * 2 - hexLen;
+            for(int i =0; i <missing; i ++) {
+                builder.append('0');
+            }
+            builder.append(hexLiteral);
+            hexStr = builder.toString();
+        }
+        return AccountAddress.valueOf(Hex.decode(hexStr));
     }
 
     public static String hex(AccountAddress address) {

@@ -4,10 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.novi.serde.DeserializationError;
+import com.novi.serde.SerializationError;
 import org.junit.Test;
 import org.starcoin.types.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.starcoin.utils.AccountAddressUtils.from_hex_literal;
 
 public class BcsTestCase {
 
@@ -38,6 +40,22 @@ public class BcsTestCase {
         String scriptPayloadString = objectMapper.writeValueAsString(scriptPayload);
         System.out.println(scriptPayloadString);
 
+    }
+
+    @Test
+    public void  testAddress() throws DeserializationError, SerializationError {
+//        String addr = "0x1";
+        String addr = "00000000000000000000000000000001";
+        AccountAddress accountAddress = AccountAddress.bcsDeserialize(Hex.decode(addr));
+        System.out.println(accountAddress);
+        addr = "1";
+        accountAddress = from_hex_literal(addr);
+        System.out.println(accountAddress);
+        assertEquals(accountAddress, AccountAddress.valueOf(Hex.decode("0x00000000000000000000000000000001")));
+        addr = "a550c18";
+        accountAddress = from_hex_literal(addr);
+        System.out.println(accountAddress);
+        assertEquals(accountAddress, AccountAddress.valueOf(Hex.decode("0x0000000000000000000000000a550c18")));
     }
 
     @Test

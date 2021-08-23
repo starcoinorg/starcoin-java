@@ -26,8 +26,22 @@ import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * JsonRPC client 通用的封装类
+ * @param <T>
+ */
 class JsonRPCClient<T> {
 
+    /**
+     * 获取单个对象的接口
+     * @param session
+     * @param method rpc接口的方法名
+     * @param params rpc接口的参数列表
+     * @param requestId 请求id
+     * @param clazz 返回对象的封装类
+     * @return
+     * @throws JSONRPC2SessionException
+     */
     protected T getObject(JSONRPC2Session session, String method, List<Object> params, int requestId, Class<T> clazz) throws JSONRPC2SessionException {
         JSONRPC2Request request = new JSONRPC2Request(method, params, requestId);
         JSONRPC2Response response = session.send(request);
@@ -40,6 +54,16 @@ class JsonRPCClient<T> {
         return null;
     }
 
+    /**
+     * 获取单个对象的接口（返回用Jackson封装，某些json格式用fastjson解析有问题，故此增加此方法）
+     * @param session
+     * @param method rpc接口的方法名
+     * @param params rpc接口的参数列表
+     * @param requestId 请求id
+     * @param clazz 返回对象的封装类
+     * @return
+     * @throws JSONRPC2SessionException
+     */
     protected T getObjectParseJackson(JSONRPC2Session session, String method, List<Object> params, int requestId, Class<T> clazz) throws JSONRPC2SessionException,IOException {
         JSONRPC2Request request = new JSONRPC2Request(method, params, requestId);
         JSONRPC2Response response = session.send(request);
@@ -54,6 +78,16 @@ class JsonRPCClient<T> {
     }
 
 
+    /**
+     * 获取单个对象的属性值接口
+     * @param session
+     * @param method rpc接口的方法名
+     * @param params rpc接口的参数列表
+     * @param requestId 请求id
+     * @param clazz 返回对象的封装类
+     * @return
+     * @throws JSONRPC2SessionException
+     */
     protected T getSubObject(JSONRPC2Session session, String method, List<Object> params, int requestId, String subKey, Class<T> clazz) throws JSONRPC2SessionException {
         JSONRPC2Request request = new JSONRPC2Request(method, params, requestId);
         JSONRPC2Response response = session.send(request);
@@ -67,6 +101,16 @@ class JsonRPCClient<T> {
         return null;
     }
 
+    /**
+     * 获取对象列表的接口
+     * @param session
+     * @param method rpc接口的方法名
+     * @param params rpc接口的参数列表
+     * @param requestId 请求id
+     * @param clazz 返回对象的封装类
+     * @return
+     * @throws JSONRPC2SessionException
+     */
     protected List<T> getObjectArray(JSONRPC2Session session, String method, List<Object> params, int requestId, Class<T> clazz) throws JSONRPC2SessionException {
         JSONRPC2Request request = new JSONRPC2Request(method, params, requestId);
         JSONRPC2Response response = session.send(request);

@@ -31,6 +31,8 @@ public class EventFilter {
     @JsonProperty("event_keys")
     private List<String> eventKeys;
 
+    private boolean decode = true;
+
     public EventFilter(long fromBlock,  String address) {
         this.fromBlock = fromBlock;
         address = address.replaceFirst("0x","");
@@ -45,4 +47,7 @@ public class EventFilter {
         return eventKeys;
     }
 
+    public boolean isDecode() {
+        return decode;
+    }
 }

@@ -25,6 +25,7 @@ public class ChainInfo {
 
     //  MAIN("main", "", 1),
     public static final ChainInfo DEFAULT_BARNARD = new ChainInfo("barnard", "https://barnard-seed.starcoin.org", 251);
+    public static final ChainInfo DEFAULT_DEV = new ChainInfo("dev", "https://localhost", 254);
 
     private String name;
     private String url;

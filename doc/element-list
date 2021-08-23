@@ -1,0 +1,14 @@
+com.novi.bcs
+com.novi.serde
+org.starcoin.api
+org.starcoin.bean
+org.starcoin.serde.format
+org.starcoin.serde.format.cli
+org.starcoin.serde.format.jackson
+org.starcoin.serde.format.jackson.utils
+org.starcoin.serde.format.snakeyaml
+org.starcoin.serde.format.utils
+org.starcoin.stdlib
+org.starcoin.types
+org.starcoin.types.event
+org.starcoin.utils

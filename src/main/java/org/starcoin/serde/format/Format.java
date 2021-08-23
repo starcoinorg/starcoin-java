@@ -137,9 +137,6 @@ public abstract class Format implements IReferenceContainerType {
         }
     }
 
-    /**
-     * The format of `Option<T>`.
-     */
     public static class Option extends Format {
         private final Format format;
 
@@ -164,9 +161,6 @@ public abstract class Format implements IReferenceContainerType {
         }
     }
 
-    /**
-     * A sequence, e.g. the format of `Vec<Foo>`.
-     */
     public static class Seq extends Format {
         private final Format format;
 
@@ -191,9 +185,6 @@ public abstract class Format implements IReferenceContainerType {
         }
     }
 
-    /**
-     * A map, e.g. the format of `BTreeMap<K, V>`.
-     */
     public static class Map extends Format {
         private final Format key;
         private final Format value;

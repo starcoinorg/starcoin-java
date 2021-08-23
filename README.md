@@ -86,7 +86,7 @@ starcoin -n dev --http-apis all console
     String rst = SignatureUtils.signPersonalMessage(privateKey, message);
 ```
 
-#### 签名交易
+#### 转账
 ```
     StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.DEFAULT_DEV);
     String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
@@ -100,6 +100,23 @@ starcoin -n dev --http-apis all console
                 typeObj, new BigInteger("1000"));
     System.out.println(rst);
 
+```
+
+#### 签名交易
+```
+    StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.DEFAULT_DEV);
+    String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
+    String privateKeyString = "0x7899f7cac425b5ce7239eb313db06ac2a93c731ea4512b857f975c0447176b25";
+    Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);
+    AccountAddress sender = AccountAddressUtils.create(address);
+
+    String toAddress = "0xd7f20befd34b9f1ab8aeae98b82a5a51";
+    TypeObj typeObj = TypeObj.STC();
+    
+    TransactionPayload payload = starcoinClient.buildTransferPayload(privateKey, typeObj, amount);
+    String rst = starcoinClient.submitTransaction(sender, privateKey, payload);
+    
+    System.out.println(rst);
 ```
 
 #### 部署合约

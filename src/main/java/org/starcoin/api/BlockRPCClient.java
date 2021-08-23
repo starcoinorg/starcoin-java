@@ -28,9 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
  * Starcoin Block相关json-rpc接口的封装。
- *
  *
  * @author fanngyuan
  * @since 1.1.6
@@ -45,7 +43,6 @@ public class BlockRPCClient {
 
     /**
      * 获取当前主链的block header
-     *
      */
     @SuppressWarnings("unchecked")
     public BlockHeader getChainHeader() throws JSONRPC2SessionException {
@@ -55,7 +52,6 @@ public class BlockRPCClient {
 
     /**
      * 通过block_hash 获取block详细数据
-     *
      */
     public Block getBlockByHash(String hash) throws JSONRPC2SessionException {
         JsonRPCClient<Block> client = new JsonRPCClient<>();
@@ -64,7 +60,6 @@ public class BlockRPCClient {
 
     /**
      * 通过block 高度 获取block详细数据
-     *
      */
     public Block getBlockByHeight(long height) throws JSONRPC2SessionException {
         JsonRPCClient<Block> client = new JsonRPCClient<>();
@@ -73,7 +68,6 @@ public class BlockRPCClient {
 
     /**
      * 从某个高度开始获取之后的block，可以通过参数count指定获取多少个
-     *
      */
     public List<Block> getBlockListFromHeight(long height, int count) throws JSONRPC2SessionException {
         JsonRPCClient<Block> client = new JsonRPCClient<>();

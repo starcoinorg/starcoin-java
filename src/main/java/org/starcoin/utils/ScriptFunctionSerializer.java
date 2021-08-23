@@ -24,28 +24,26 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 /**
- *
  * 用于 ScriptFunction 类在 jackson 库的序列化。
- *
  *
  * @author fanngyuan
  * @since 1.1.6
  */
 public class ScriptFunctionSerializer extends StdSerializer<ScriptFunction> {
 
-    public ScriptFunctionSerializer(){
+    public ScriptFunctionSerializer() {
         super(ScriptFunction.class);
     }
 
     @Override
     public void serialize(ScriptFunction scriptFunction, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeObjectField("module",scriptFunction.module);
-        jsonGenerator.writeObjectField("function",scriptFunction.function.value);
-        jsonGenerator.writeObjectField("type_args",scriptFunction.ty_args);
-        jsonGenerator.writeObjectField("args",scriptFunction.args.stream()
-                .map( arg -> Hex.encode(arg) )
-                .collect( Collectors.toList()));
+        jsonGenerator.writeObjectField("module", scriptFunction.module);
+        jsonGenerator.writeObjectField("function", scriptFunction.function.value);
+        jsonGenerator.writeObjectField("type_args", scriptFunction.ty_args);
+        jsonGenerator.writeObjectField("args", scriptFunction.args.stream()
+                .map(arg -> Hex.encode(arg))
+                .collect(Collectors.toList()));
         jsonGenerator.writeEndObject();
     }
 }

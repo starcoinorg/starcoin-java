@@ -33,8 +33,8 @@ public class ContractRPCClientTestCase extends TestCase {
 
             List result = client.call(call);
             System.out.println(result);
-            if(result.size()>0){
-                long cap=(Long) result.get(0);
+            if (result.size() > 0) {
+                long cap = (Long) result.get(0);
                 System.out.println(cap);
             }
         } catch (JSONRPC2SessionException e) {
@@ -44,7 +44,7 @@ public class ContractRPCClientTestCase extends TestCase {
 
     public void testSTCMarketCap() throws MalformedURLException, JSONRPC2SessionException {
         TokenContractRPCClient tokenContractRPCClient = new TokenContractRPCClient(new URL("http://localhost:9850"));
-        BigInteger cap= tokenContractRPCClient.getSTCMarketCap();
+        BigInteger cap = tokenContractRPCClient.getSTCMarketCap();
         System.out.println(cap);
 
         BigInteger balance = tokenContractRPCClient.getSTCTreasurBalance();

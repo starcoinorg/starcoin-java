@@ -23,24 +23,22 @@ import org.starcoin.types.StructTag;
 import java.io.IOException;
 
 /**
- *
  * 用于 StructTag 类在 jackson 库的序列化。
- *
  *
  * @author fanngyuan
  * @since 1.1.6
  */
 public class StructTagSerializer extends StdSerializer<StructTag> {
 
-    public StructTagSerializer(){
+    public StructTagSerializer() {
         super(StructTag.class);
     }
 
     @Override
     public void serialize(StructTag structTag, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField("struct_tag_type",Hex.encode(structTag.address.value)+"::"+structTag.module.value+"::"+structTag.name.value);
-        jsonGenerator.writeObjectField("struct_tag_params",structTag.type_params);
+        jsonGenerator.writeStringField("struct_tag_type", Hex.encode(structTag.address.value) + "::" + structTag.module.value + "::" + structTag.name.value);
+        jsonGenerator.writeObjectField("struct_tag_params", structTag.type_params);
         jsonGenerator.writeEndObject();
     }
 }

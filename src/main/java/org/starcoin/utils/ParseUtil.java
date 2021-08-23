@@ -32,13 +32,13 @@ public class ParseUtil {
         return t;
     }
 
-    public static Bytes parseBytes(JsonNode typeTagNode){
+    public static Bytes parseBytes(JsonNode typeTagNode) {
         return Bytes.valueOf(Hex.decode(typeTagNode.textValue()));
     }
 
-    public static List<Bytes> parseBytesList(JsonNode typeTagNode){
+    public static List<Bytes> parseBytesList(JsonNode typeTagNode) {
         List<Bytes> result = new ArrayList<>();
-        if(typeTagNode.isArray()){
+        if (typeTagNode.isArray()) {
             for (final JsonNode objNode : typeTagNode) {
                 result.add(parseBytes(objNode));
             }
@@ -48,9 +48,9 @@ public class ParseUtil {
 
     public static <T> List<T> parseObjectList(JsonParser jsonParser, JsonNode typeTagNode, Class<T> valueType) throws IOException {
         List<T> result = new ArrayList<>();
-        if(typeTagNode.isArray()){
+        if (typeTagNode.isArray()) {
             for (final JsonNode objNode : typeTagNode) {
-                T t = parseObject(jsonParser,objNode,valueType);
+                T t = parseObject(jsonParser, objNode, valueType);
                 result.add(t);
             }
         }

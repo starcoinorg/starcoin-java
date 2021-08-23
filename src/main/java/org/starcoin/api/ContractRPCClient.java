@@ -26,9 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * Starcoin Contract 相关json-rpc接口的封装。
- *
  *
  * @author fanngyuan
  * @since 1.1.6
@@ -43,13 +41,12 @@ public class ContractRPCClient {
 
     /**
      * 调用 某个contract 的方法，获取运算结果
-     *
      */
     public List<Object> call(ContractCall call) throws JSONRPC2SessionException {
         JsonRPCClient<Object> client = new JsonRPCClient<>();
         List<Object> parameter = new ArrayList<>();
         parameter.add(call.toMap());
-        return client.getObjectArray(session, "contract.call_v2", parameter, 0,Object.class);
+        return client.getObjectArray(session, "contract.call_v2", parameter, 0, Object.class);
     }
 
 }

@@ -27,16 +27,14 @@ import org.starcoin.types.ModuleId;
 import java.io.IOException;
 
 /**
- *
  * 用于 Module 类在 jackson 库的反序列化。
- *
  *
  * @author fanngyuan
  * @since 1.1.6
  */
 public class ModuleDeserializer extends StdDeserializer<ModuleId> {
 
-    public ModuleDeserializer(){
+    public ModuleDeserializer() {
         super(ModuleId.class);
     }
 
@@ -46,6 +44,6 @@ public class ModuleDeserializer extends StdDeserializer<ModuleId> {
 
         String name = typeTagNode.get("name").textValue();
         AccountAddress address = AccountAddress.valueOf(Hex.decode(typeTagNode.get("address").textValue()));
-        return new ModuleId(address,new Identifier(name));
+        return new ModuleId(address, new Identifier(name));
     }
 }

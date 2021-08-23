@@ -30,27 +30,26 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- *
  * 用于 ScriptFunction 类在 jackson 库的反序列化。
- *
  *
  * @author fanngyuan
  * @since 1.1.6
  */
-public class ScriptFunctionDeserializer  extends StdDeserializer<ScriptFunction> {
+public class ScriptFunctionDeserializer extends StdDeserializer<ScriptFunction> {
 
-    public ScriptFunctionDeserializer(){
+    public ScriptFunctionDeserializer() {
         super(ScriptFunction.class);
     }
 
     @Override
     public ScriptFunction deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-        ModuleId module = ParseUtil.parseObject(jsonParser,node.get("module"),ModuleId.class);
+        ModuleId module = ParseUtil.parseObject(jsonParser, node.get("module"), ModuleId.class);
         Identifier function = new Identifier(node.get("function").asText());
-        List<TypeTag> tyArgs = ParseUtil.parseObjectList(jsonParser,node.get("type_args"),TypeTag.class);
-        List<Bytes> args = ParseUtil.parseBytesList(node.get("args"));;
+        List<TypeTag> tyArgs = ParseUtil.parseObjectList(jsonParser, node.get("type_args"), TypeTag.class);
+        List<Bytes> args = ParseUtil.parseBytesList(node.get("args"));
+        ;
 
-        return new ScriptFunction(module,function,tyArgs,args);
+        return new ScriptFunction(module, function, tyArgs, args);
     }
 }

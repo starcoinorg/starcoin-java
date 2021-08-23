@@ -30,16 +30,14 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
  * Starcoin Transaction 相关json-rpc接口的封装。
- *
  *
  * @author fanngyuan
  * @since 1.1.6
  */
 public class TransactionRPCClient {
 
-    private static Logger log = LoggerFactory.getLogger(TransactionRPCClient.class);
+    private static final Logger log = LoggerFactory.getLogger(TransactionRPCClient.class);
     JSONRPC2Session session;
 
     public TransactionRPCClient(URL baseUrl) {
@@ -48,7 +46,6 @@ public class TransactionRPCClient {
 
     /**
      * 通过 transaction hash 获取某个 PendingTransaction
-     *
      */
     public PendingTransaction getPendingTransaction(String hash) throws JSONRPC2SessionException {
         JsonRPCClient<PendingTransaction> client = new JsonRPCClient<>();
@@ -57,7 +54,6 @@ public class TransactionRPCClient {
 
     /**
      * 通过 transaction hash 获取某个 Transaction
-     *
      */
     public Transaction getTransactionByHash(String hash) throws JSONRPC2SessionException {
         JsonRPCClient<Transaction> client = new JsonRPCClient<>();
@@ -71,7 +67,6 @@ public class TransactionRPCClient {
 
     /**
      * 通过 transaction hash 获取某个 TransactionInfo
-     *
      */
     public Transaction getTransactionInfoByHash(String hash) throws JSONRPC2SessionException {
         JsonRPCClient<Transaction> client = new JsonRPCClient<>();
@@ -80,7 +75,6 @@ public class TransactionRPCClient {
 
     /**
      * 通过 block hash 获取所有 Transaction
-     *
      */
     public List<Transaction> getBlockTransactions(String blockHash) throws JSONRPC2SessionException {
         JsonRPCClient<Transaction> client = new JsonRPCClient<>();
@@ -89,7 +83,6 @@ public class TransactionRPCClient {
 
     /**
      * 通过 transaction hash 获取某个 Transaction 的所有 Event
-     *
      */
     public List<Event> getTransactionEvents(String transactionHash) throws JSONRPC2SessionException {
         JsonRPCClient<Event> client = new JsonRPCClient<>();

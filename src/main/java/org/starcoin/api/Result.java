@@ -18,9 +18,7 @@ package org.starcoin.api;
 import java.util.List;
 
 /**
- *
  * 用于查询结果的封装。
- *
  *
  * @author fanngyuan
  * @since 1.1.6

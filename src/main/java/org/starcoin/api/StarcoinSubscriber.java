@@ -16,7 +16,10 @@
 package org.starcoin.api;
 
 import io.reactivex.Flowable;
-import org.starcoin.bean.*;
+import org.starcoin.bean.EventFilter;
+import org.starcoin.bean.EventNotification;
+import org.starcoin.bean.Kind;
+import org.starcoin.bean.PendingTransactionNotification;
 import org.web3j.protocol.Web3jService;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthSubscribe;
@@ -24,7 +27,6 @@ import org.web3j.protocol.core.methods.response.EthSubscribe;
 import java.util.Arrays;
 
 /**
- *
  * 用于通过 websocket 订阅 Starcoin 的事件，暂时只实现了 PendingTransaction 相关的事件。
  * example 参考 SubscribleSample
  *
@@ -41,7 +43,6 @@ public class StarcoinSubscriber {
 
     /**
      * 用于获取 PendingTransaction 相关的通知
-     *
      */
     public Flowable<PendingTransactionNotification> newPendingTransactionsNotifications() {
         return web3jService.subscribe(
@@ -56,7 +57,6 @@ public class StarcoinSubscriber {
 
     /**
      * 用于获取 Event 相关的通知
-     *
      */
     public Flowable<EventNotification> newTxnSendRecvEventNotifications(EventFilter eventFilter) {
         return web3jService.subscribe(

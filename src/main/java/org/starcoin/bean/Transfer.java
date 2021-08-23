@@ -95,10 +95,6 @@ public class Transfer {
         this.typeTag = typeTag;
     }
 
-    public void setAmountValue(BigInteger amountValue) {
-        this.amountValue = amountValue;
-    }
-
     public BigInteger getAmountValue() {
         try {
             BigInteger amount = new BcsDeserializer(Hex.decode(this.amount)).deserialize_u128();
@@ -107,6 +103,10 @@ public class Transfer {
             deserializationError.printStackTrace();
         }
         return BigInteger.ZERO;
+    }
+
+    public void setAmountValue(BigInteger amountValue) {
+        this.amountValue = amountValue;
     }
 
     private long transferAmount(String amountStr) {

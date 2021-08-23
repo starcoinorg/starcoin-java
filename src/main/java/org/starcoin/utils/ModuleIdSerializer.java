@@ -23,23 +23,21 @@ import org.starcoin.types.ModuleId;
 import java.io.IOException;
 
 /**
- *
  * 用于 Module 类在 jackson 库的序列化。
- *
  *
  * @author fanngyuan
  * @since 1.1.6
  */
 public class ModuleIdSerializer extends StdSerializer<ModuleId> {
 
-    public ModuleIdSerializer(){
+    public ModuleIdSerializer() {
         super(ModuleId.class);
     }
 
     @Override
     public void serialize(ModuleId moduleId, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField("address",Hex.encode(moduleId.address.toBytes()));
+        jsonGenerator.writeStringField("address", Hex.encode(moduleId.address.toBytes()));
         jsonGenerator.writeStringField("name", moduleId.name.value);
         jsonGenerator.writeEndObject();
     }

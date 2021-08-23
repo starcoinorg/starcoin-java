@@ -29,16 +29,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * 用于 StructTag 类在 jackson 库的反序列化。
- *
  *
  * @author fanngyuan
  * @since 1.1.6
  */
 public class StructTagDeserializer extends StdDeserializer<StructTag> {
 
-    public StructTagDeserializer(){
+    public StructTagDeserializer() {
         super(StructTag.class);
     }
 
@@ -49,10 +47,10 @@ public class StructTagDeserializer extends StdDeserializer<StructTag> {
         Identifier module = null;
         Identifier name = null;
         List<TypeTag> type_params = new ArrayList<>();
-        while (!jsonParser.isClosed()){
+        while (!jsonParser.isClosed()) {
             String token = jsonParser.nextTextValue();
-            if(token!=null){
-                switch (jsonParser.getCurrentName()){
+            if (token != null) {
+                switch (jsonParser.getCurrentName()) {
                     case "struct_tag_type":
                         String[] tokens = token.split("::");
                         address = AccountAddress.valueOf(Hex.decode(tokens[0]));
@@ -64,8 +62,8 @@ public class StructTagDeserializer extends StdDeserializer<StructTag> {
                 }
             }
         }
-        if (address!=null&&module!=null&name!=null){
-            structTag = new StructTag(address,module,name,type_params);
+        if (address != null && module != null & name != null) {
+            structTag = new StructTag(address, module, name, type_params);
         }
         return structTag;
     }

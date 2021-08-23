@@ -54,7 +54,7 @@ public class Transaction {
     @JSONField(serialize = false)
     List<Event> events;
 
-    @JSONField(name= "transaction_type")
+    @JSONField(name = "transaction_type")
     TransactionType transactionType;
 
     public TransactionType getTransactionType() {

@@ -33,10 +33,10 @@ public class EventFilter {
 
     private boolean decode = true;
 
-    public EventFilter(long fromBlock,  String address) {
+    public EventFilter(long fromBlock, String address) {
         this.fromBlock = fromBlock;
-        address = address.replaceFirst("0x","");
-        this.eventKeys = Arrays.asList(recvPrefix+address,sendPrefix+address);
+        address = address.replaceFirst("0x", "");
+        this.eventKeys = Arrays.asList(recvPrefix + address, sendPrefix + address);
     }
 
     public long getFromBlock() {

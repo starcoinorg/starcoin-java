@@ -27,16 +27,14 @@ import org.starcoin.types.TypeTag;
 import java.io.IOException;
 
 /**
- *
  * 用于 TypeTag 类在 jackson 库的反序列化。
- *
  *
  * @author fanngyuan
  * @since 1.1.6
  */
 public class TypeTagDeserializer extends StdDeserializer<TypeTag> {
 
-    public TypeTagDeserializer(){
+    public TypeTagDeserializer() {
         super(TypeTag.class);
     }
 
@@ -46,8 +44,8 @@ public class TypeTagDeserializer extends StdDeserializer<TypeTag> {
 
         TypeTag typeTag = null;
         String typeName = typeTagNode.get("type_name").textValue();
-        if(typeName!=null){
-            switch (typeName){
+        if (typeName != null) {
+            switch (typeName) {
                 case "U8":
                     typeTag = new TypeTag.U8();
                     break;
@@ -67,22 +65,22 @@ public class TypeTagDeserializer extends StdDeserializer<TypeTag> {
                     typeTag = new TypeTag.Signer();
                     break;
                 case "Vector":
-                    TypeTag structTag = getTypeTag(jsonParser, typeTagNode,TypeTag.class);
+                    TypeTag structTag = getTypeTag(jsonParser, typeTagNode, TypeTag.class);
                     typeTag = new TypeTag.Vector(structTag);
                     break;
                 case "Struct":
-                    StructTag st = getTypeTag(jsonParser, typeTagNode,StructTag.class);
+                    StructTag st = getTypeTag(jsonParser, typeTagNode, StructTag.class);
                     typeTag = new TypeTag.Struct(st);
                     break;
-                }
             }
+        }
 
         return typeTag;
     }
 
     @NotNull
-    private <T> T getTypeTag(JsonParser jsonParser, JsonNode typeTagNode,Class<T> valueType) throws IOException {
-        JsonNode valueNode= typeTagNode.get("value");
+    private <T> T getTypeTag(JsonParser jsonParser, JsonNode typeTagNode, Class<T> valueType) throws IOException {
+        JsonNode valueNode = typeTagNode.get("value");
         JsonParser parser = valueNode.traverse();
         parser.setCodec(jsonParser.getCodec());
         T t = parser.readValueAs(valueType);

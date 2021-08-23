@@ -5,9 +5,13 @@ starcoin-java
 
 Starcoin Java SDK implementation.
 
+## 文档
+Home page: [Home page](https://starcoinorg.github.io/starcoin-java/)
+
 ## 用户指南
 
 ### 引入依赖
+
 ** Maven **
 
 ```xml
@@ -22,30 +26,31 @@ Starcoin Java SDK implementation.
 ** Gradle **
 
 ``` 
-implementation group: 'org.starcoin', name: 'sdk', version: '1.1.9'
+implementation group: 'org.starcoin', name: 'sdk', version: '1.1.10'
 ```
 
 ** Gradle short **
 
 ``` 
-implementation 'org.starcoin:sdk:1.1.9'
+implementation 'org.starcoin:sdk:1.1.10'
 ```
 
 ** Gradle kotlin **
 
 ``` 
-implementation("org.starcoin:sdk:1.1.9")
+implementation("org.starcoin:sdk:1.1.10")
 ```
 
 ** SBT **
 
 ``` 
-libraryDependencies += "org.starcoin" % "sdk" % "1.1.9"
+libraryDependencies += "org.starcoin" % "sdk" % "1.1.10"
 ```
 
 ### 节点配置
 
-在 starcoin [github](https://github.com/starcoinorg/starcoin) 下载 starcoin 预编译好的包。通过如下命令启动 dev 测试网，当然你也可以启动其他网络如 barnard/main 等等。
+在 starcoin [github](https://github.com/starcoinorg/starcoin) 下载 starcoin 预编译好的包。通过如下命令启动 dev 测试网，当然你也可以启动其他网络如
+barnard/main 等等。
 
 ```
 starcoin -n dev --http-apis all console
@@ -74,7 +79,9 @@ starcoin -n dev --http-apis all console
 ## Examples
 
 ### 签名并发送交易
+
 #### 签名消息
+
 ```
     String privateKeyString = "0x587737ebefb4961d377a3ab2f9ceb37b1fa96eb862dfaf954a4a1a99535dfec0";
     String publicKeyString = "0x32ed52d319694aebc5b52e00836e2f7c7d2c7c7791270ede450d21dbc90cbfa1";
@@ -87,6 +94,7 @@ starcoin -n dev --http-apis all console
 ```
 
 #### 转账
+
 ```
     StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.DEFAULT_DEV);
     String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
@@ -103,6 +111,7 @@ starcoin -n dev --http-apis all console
 ```
 
 #### 签名交易
+
 ```
     StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.DEFAULT_DEV);
     String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
@@ -120,6 +129,7 @@ starcoin -n dev --http-apis all console
 ```
 
 #### 部署合约
+
 ```
     StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.DEFAULT_DEV);
     String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
@@ -149,10 +159,10 @@ starcoin -n dev --http-apis all console
     System.out.println(txn);
 ```
 
-
 ### 根据地址查询链上最新状态或者资源
 
 #### 查询资源
+
 ```
     StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.DEFAULT_DEV);
     String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
@@ -171,12 +181,14 @@ starcoin -n dev --http-apis all console
 ```
 
 #### 查询最新状态
+
 ```
     StateRPCClient stateRPCClient = new StateRPCClient(new URL("http://localhost:9850"));
     stateRPCClient.getState("0xb75994d55eae88219dc57e7e62a11bc0");
 ```
 
 #### 查询txn
+
 ```
     TransactionRPCClient client = new TransactionRPCClient(new URL("http://localhost:9850"));
     Transaction transaction = client.getTransactionByHash("0x9497fc455c962ee27a2321e88af6c8eeae9842f3d3ea70dc349cdbe004250897");
@@ -185,6 +197,7 @@ starcoin -n dev --http-apis all console
 ```
 
 ### 监听链上Event
+
 ```
         WebSocketService service = new WebSocketService("ws://localhost:9870", true);
         service.connect();
@@ -196,7 +209,6 @@ starcoin -n dev --http-apis all console
             System.out.println(notification.getParams().getResult().toString());
         }
 ```
-
 
 ## License
 

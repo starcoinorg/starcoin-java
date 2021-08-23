@@ -16,8 +16,6 @@
 package org.starcoin.api;
 
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.starcoin.bean.ContractCall;
 
 import java.math.BigInteger;
@@ -26,26 +24,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * Starcoin Token 相关json-rpc接口的封装。
- *
  *
  * @author fanngyuan
  * @since 1.1.6
  */
-public class TokenContractRPCClient extends ContractRPCClient{
+public class TokenContractRPCClient extends ContractRPCClient {
 
     public static final String STCTypeTag = "0x00000000000000000000000000000001::STC::STC";
     public static final String TreasuryBalanceTypeTag = "0x00000000000000000000000000000001::Treasury::balance";
     public static final String TokenMarketCapTypeTag = "0x00000000000000000000000000000001::Token::market_cap";
 
-    public TokenContractRPCClient(URL baseUrl){
+    public TokenContractRPCClient(URL baseUrl) {
         super(baseUrl);
     }
 
     /**
      * 获取某个 token 的市场容量
-     *
      */
     public BigInteger getTokenMarketCap(String tokenTypeTag) throws JSONRPC2SessionException {
         ContractCall call = new ContractCall();
@@ -59,17 +54,16 @@ public class TokenContractRPCClient extends ContractRPCClient{
         call.setArgs(new ArrayList<>());
 
         List result = this.call(call);
-        if(result!=null && result.size()>0) {
+        if (result != null && result.size() > 0) {
             String capInString = String.valueOf(result.get(0));
             return new BigInteger(capInString);
-        }else{
-            throw new JSONRPC2SessionException("fetch token"+ tokenTypeTag+" market cap failed");
+        } else {
+            throw new JSONRPC2SessionException("fetch token" + tokenTypeTag + " market cap failed");
         }
     }
 
     /**
      * 用于获取某个 token 在国库中的数量
-     *
      */
     public BigInteger getTreasurBalance(String tokenTypeTag) throws JSONRPC2SessionException {
         ContractCall call = new ContractCall();
@@ -83,17 +77,16 @@ public class TokenContractRPCClient extends ContractRPCClient{
         call.setArgs(new ArrayList<>());
 
         List result = this.call(call);
-        if(result!=null && result.size()>0) {
+        if (result != null && result.size() > 0) {
             String capInString = String.valueOf(result.get(0));
             return new BigInteger(capInString);
-        }else{
-            throw new JSONRPC2SessionException("fetch token"+ tokenTypeTag+" market cap failed");
+        } else {
+            throw new JSONRPC2SessionException("fetch token" + tokenTypeTag + " market cap failed");
         }
     }
 
     /**
      * 获取某个 token 的实际供应量
-     *
      */
     public BigInteger getTokenCurrentSupply(String tokenTypeTag) throws JSONRPC2SessionException {
         BigInteger tokenMarketCap = this.getTokenMarketCap(tokenTypeTag);
@@ -103,7 +96,6 @@ public class TokenContractRPCClient extends ContractRPCClient{
 
     /**
      * 用于获取 STC 的市场容量
-     *
      */
     public BigInteger getSTCMarketCap() throws JSONRPC2SessionException {
         return this.getTokenMarketCap(STCTypeTag);
@@ -111,7 +103,6 @@ public class TokenContractRPCClient extends ContractRPCClient{
 
     /**
      * 用于获取 STC 在国库中的数量
-     *
      */
     public BigInteger getSTCTreasurBalance() throws JSONRPC2SessionException {
         return this.getTreasurBalance(STCTypeTag);
@@ -119,7 +110,6 @@ public class TokenContractRPCClient extends ContractRPCClient{
 
     /**
      * 获取 STC 的实际供应量
-     *
      */
     public BigInteger getSTCCurrentSupply() throws JSONRPC2SessionException {
         return this.getSTCMarketCap().subtract(this.getSTCTreasurBalance());

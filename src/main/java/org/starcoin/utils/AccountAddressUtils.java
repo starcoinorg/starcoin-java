@@ -46,6 +46,7 @@ public class AccountAddressUtils {
 
     /**
      * 从十六进制字符串转AccountAddress，支持短地址
+     *
      * @param hexLiteral
      * @return
      */
@@ -58,7 +59,7 @@ public class AccountAddressUtils {
         if (hexLen < AccountAddress.LENGTH * 2) {
             StringBuilder builder = new StringBuilder();
             int missing = AccountAddress.LENGTH * 2 - hexLen;
-            for(int i =0; i <missing; i ++) {
+            for (int i = 0; i < missing; i++) {
                 builder.append('0');
             }
             builder.append(hexLiteral);

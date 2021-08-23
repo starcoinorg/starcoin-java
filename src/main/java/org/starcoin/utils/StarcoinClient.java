@@ -35,15 +35,14 @@ import org.starcoin.types.TransactionPayload.ScriptFunction;
 import java.io.File;
 import java.math.BigInteger;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 
 public class StarcoinClient {
+    public static final MediaType JSON_MEDIA_TYPE = MediaType.parse(
+            "application/json; charset=utf-8");
     private static final long DEFAULT_MAX_GAS_AMOUNT = 10000000L;
     private static final long DEFAULT_TRANSACTION_EXPIRATION_SECONDS = 2 * 60 * 60;
     private static final String GAS_TOKEN_CODE = "0x1::STC::STC";
-    public static final MediaType JSON_MEDIA_TYPE = MediaType.parse(
-            "application/json; charset=utf-8");
     private final String baseUrl;
     private final int chaindId;
     private OkHttpClient okHttpClient = new OkHttpClient.Builder().build();

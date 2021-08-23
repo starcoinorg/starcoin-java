@@ -31,9 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * Starcoin State 相关json-rpc接口的封装。
- *
  *
  * @author fanngyuan
  * @since 1.1.6
@@ -48,7 +46,6 @@ public class StateRPCClient {
 
     /**
      * 用于某个地址的状态
-     *
      */
     public ListResource getState(String address) throws JSONRPC2SessionException {
         JsonRPCClient<ListResource> client = new JsonRPCClient<>();
@@ -67,20 +64,19 @@ public class StateRPCClient {
 
     /**
      * 用于获取某个地址下的token 数量
-     *
      */
     public long getAddressAmount(String address) {
         try {
             ListResource listResource = getState(address);
             Map<String, Resource> resourceMap = listResource.getResources();
-        for(String key: resourceMap.keySet()) {
-            JsonNode node = resourceMap.get(key).getJson().get("token");
-            if (node != null) {
-                return node.get("value").asLong();
+            for (String key : resourceMap.keySet()) {
+                JsonNode node = resourceMap.get(key).getJson().get("token");
+                if (node != null) {
+                    return node.get("value").asLong();
+                }
             }
-        }
         } catch (JSONRPC2SessionException e) {
-           logger.error("get amount error:", e);
+            logger.error("get amount error:", e);
         }
         return 0;
     }

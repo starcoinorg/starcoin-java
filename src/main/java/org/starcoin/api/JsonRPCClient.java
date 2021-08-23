@@ -28,17 +28,19 @@ import java.util.List;
 
 /**
  * JsonRPC client 通用的封装类
+ *
  * @param <T>
  */
 class JsonRPCClient<T> {
 
     /**
      * 获取单个对象的接口
+     *
      * @param session
-     * @param method rpc接口的方法名
-     * @param params rpc接口的参数列表
+     * @param method    rpc接口的方法名
+     * @param params    rpc接口的参数列表
      * @param requestId 请求id
-     * @param clazz 返回对象的封装类
+     * @param clazz     返回对象的封装类
      * @return
      * @throws JSONRPC2SessionException
      */
@@ -56,22 +58,23 @@ class JsonRPCClient<T> {
 
     /**
      * 获取单个对象的接口（返回用Jackson封装，某些json格式用fastjson解析有问题，故此增加此方法）
+     *
      * @param session
-     * @param method rpc接口的方法名
-     * @param params rpc接口的参数列表
+     * @param method    rpc接口的方法名
+     * @param params    rpc接口的参数列表
      * @param requestId 请求id
-     * @param clazz 返回对象的封装类
+     * @param clazz     返回对象的封装类
      * @return
      * @throws JSONRPC2SessionException
      */
-    protected T getObjectParseJackson(JSONRPC2Session session, String method, List<Object> params, int requestId, Class<T> clazz) throws JSONRPC2SessionException,IOException {
+    protected T getObjectParseJackson(JSONRPC2Session session, String method, List<Object> params, int requestId, Class<T> clazz) throws JSONRPC2SessionException, IOException {
         JSONRPC2Request request = new JSONRPC2Request(method, params, requestId);
         JSONRPC2Response response = session.send(request);
         if (response.indicatesSuccess()) {
             Object result = response.getResult();
             if (result != null) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                return  objectMapper.readValue(result.toString(), clazz);
+                return objectMapper.readValue(result.toString(), clazz);
             }
         }
         return null;
@@ -80,11 +83,12 @@ class JsonRPCClient<T> {
 
     /**
      * 获取单个对象的属性值接口
+     *
      * @param session
-     * @param method rpc接口的方法名
-     * @param params rpc接口的参数列表
+     * @param method    rpc接口的方法名
+     * @param params    rpc接口的参数列表
      * @param requestId 请求id
-     * @param clazz 返回对象的封装类
+     * @param clazz     返回对象的封装类
      * @return
      * @throws JSONRPC2SessionException
      */
@@ -103,11 +107,12 @@ class JsonRPCClient<T> {
 
     /**
      * 获取对象列表的接口
+     *
      * @param session
-     * @param method rpc接口的方法名
-     * @param params rpc接口的参数列表
+     * @param method    rpc接口的方法名
+     * @param params    rpc接口的参数列表
      * @param requestId 请求id
-     * @param clazz 返回对象的封装类
+     * @param clazz     返回对象的封装类
      * @return
      * @throws JSONRPC2SessionException
      */

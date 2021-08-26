@@ -32,7 +32,7 @@ public class EventFilter {
     @JsonProperty("event_keys")
     private List<String> eventKeys;
 
-    @JsonProperty("event_keys")
+    @JsonProperty("decode")
     private boolean decode = true;
 
     public EventFilter(long fromBlock, String address) {

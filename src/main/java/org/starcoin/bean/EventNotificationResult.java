@@ -16,6 +16,7 @@
 package org.starcoin.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class EventNotificationResult {
 
@@ -31,7 +32,8 @@ public class EventNotificationResult {
     @JsonProperty("transaction_index")
     private int transactionIndex;
 
-    private String data;
+    @JsonProperty("decode_event_data")
+    private JsonNode data;
 
     @JsonProperty("type_tag")
     private String typeTag;
@@ -74,11 +76,11 @@ public class EventNotificationResult {
         this.transactionIndex = transactionIndex;
     }
 
-    public String getData() {
+    public JsonNode getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(JsonNode data) {
         this.data = data;
     }
 

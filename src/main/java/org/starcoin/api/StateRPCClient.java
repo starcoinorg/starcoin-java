@@ -65,19 +65,22 @@ public class StateRPCClient {
     /**
      * 用于获取某个地址下的token 数量
      */
-    public long getAddressAmount(String address) {
+    public long getAddressAmount(String address, String token) {
         try {
             ListResource listResource = getState(address);
             Map<String, Resource> resourceMap = listResource.getResources();
-            for (String key : resourceMap.keySet()) {
-                JsonNode node = resourceMap.get(key).getJson().get("token");
-                if (node != null) {
-                    return node.get("value").asLong();
-                }
+            JsonNode node = resourceMap.get(getResourceMapTokenKey(token)).getJson().get("token");
+            if( node != null) {
+                return node.get("value").asLong();
             }
         } catch (JSONRPC2SessionException e) {
             logger.error("get amount error:", e);
         }
         return 0;
     }
+
+    private String getResourceMapTokenKey(String token) {
+        return "0x00000000000000000000000000000001::Account::Balance<" + token + ">";
+    }
+
 }

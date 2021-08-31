@@ -19,32 +19,32 @@ Home page: [Home page](https://starcoinorg.github.io/starcoin-java/)
 <dependency>
     <groupId>org.starcoin</groupId>
     <artifactId>sdk</artifactId>
-    <version>1.1.10</version>
+    <version>1.1.12</version>
 </dependency>
 ```
 
 ** Gradle **
 
 ``` 
-implementation group: 'org.starcoin', name: 'sdk', version: '1.1.10'
+implementation group: 'org.starcoin', name: 'sdk', version: '1.1.12'
 ```
 
 ** Gradle short **
 
 ``` 
-implementation 'org.starcoin:sdk:1.1.10'
+implementation 'org.starcoin:sdk:1.1.12'
 ```
 
 ** Gradle kotlin **
 
 ``` 
-implementation("org.starcoin:sdk:1.1.10")
+implementation("org.starcoin:sdk:1.1.12")
 ```
 
 ** SBT **
 
 ``` 
-libraryDependencies += "org.starcoin" % "sdk" % "1.1.10"
+libraryDependencies += "org.starcoin" % "sdk" % "1.1.12"
 ```
 
 ### 节点配置

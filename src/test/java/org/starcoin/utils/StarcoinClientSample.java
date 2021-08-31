@@ -13,19 +13,21 @@ import org.starcoin.bean.TypeObj;
 import org.starcoin.types.AccountAddress;
 import org.starcoin.types.Ed25519PrivateKey;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class StarcoinClientSample {
 
-    private StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.DEFAULT_BARNARD);
-    private String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
-    private String privateKeyString = "0x7899f7cac425b5ce7239eb313db06ac2a93c731ea4512b857f975c0447176b25";
-    private Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);
-    private AccountAddress sender = AccountAddressUtils.create(address);
-
+    private final String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
+    private final String privateKeyString = "0x7899f7cac425b5ce7239eb313db06ac2a93c731ea4512b857f975c0447176b25";
+    private final Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);
+    private final AccountAddress sender = AccountAddressUtils.create(address);
+    private final StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.DEFAULT_BARNARD);
+    //private final StarcoinClient starcoinClient = new StarcoinClient(new ChainInfo("dev", "http://localhost:9850", 254));
 
     public void testSeqnubmer() {
         System.out.println(starcoinClient.getAccountSequence(sender).sequence_number);
@@ -143,6 +145,19 @@ public class StarcoinClientSample {
         System.out.println(rst);
     }
 
-
+    public void testPriceOracleRead() {
+        String stcUsdOracleType = "0x00000000000000000000000000000001::STCUSDOracle::STCUSD";
+        int stcUsdDecimals = 6;
+        String ethUsdOracleType = "0x07fa08a855753f0ff7292fdcbe871216::ETH_USD::ETH_USD";
+        int ethUsdDecimals = 8;
+        String oracleAddress = "0x07fa08a855753f0ff7292fdcbe871216";
+        System.out.println("STC / USD: " + new BigDecimal(starcoinClient.priceOracleRead(stcUsdOracleType, oracleAddress))
+                .divide(BigDecimal.TEN.pow(stcUsdDecimals), 8, RoundingMode.HALF_UP));
+        System.out.println("ETH / USD: " + new BigDecimal(starcoinClient.priceOracleRead(ethUsdOracleType, oracleAddress))
+                .divide(BigDecimal.TEN.pow(ethUsdDecimals), 8, RoundingMode.HALF_UP));
+        // Output like these:
+        //STC / USD: 0.15810000
+        //ETH / USD: 3450.61348696
+    }
 }
 

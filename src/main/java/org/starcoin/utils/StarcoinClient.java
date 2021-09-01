@@ -28,7 +28,6 @@ import org.starcoin.bean.ResourceObj;
 import org.starcoin.bean.ScriptFunctionObj;
 import org.starcoin.bean.TypeObj;
 import org.starcoin.stdlib.Helpers;
-import org.starcoin.types.Module;
 import org.starcoin.types.*;
 import org.starcoin.types.TransactionPayload.ScriptFunction;
 
@@ -43,9 +42,11 @@ public class StarcoinClient {
     private static final long DEFAULT_MAX_GAS_AMOUNT = 10000000L;
     private static final long DEFAULT_TRANSACTION_EXPIRATION_SECONDS = 2 * 60 * 60;
     private static final String GAS_TOKEN_CODE = "0x1::STC::STC";
+
+    private static final String FUNCTION_ID_PRICE_ORACLE_READ = "0x00000000000000000000000000000001::PriceOracle::read";
     private final String baseUrl;
     private final int chaindId;
-    private OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
+    private final OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
 
     public StarcoinClient(String url, int chainId) {
         this.baseUrl = url;
@@ -58,8 +59,12 @@ public class StarcoinClient {
         this.chaindId = chainInfo.getChainId();
     }
 
+    private static boolean indicatesSuccess(Map<String, Object> responseMap) {
+        return !responseMap.containsKey("error");//error == null;
+    }
+
     @SneakyThrows
-    public String call(String method, List<String> params) {
+    public String call(String method, List<Object> params) {
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("jsonrpc", "2.0");
         jsonBody.put("method", method);
@@ -70,7 +75,6 @@ public class StarcoinClient {
         Response response = okHttpClient.newCall(request).execute();
         return response.body().string();
     }
-
 
     public String transfer(AccountAddress sender, Ed25519PrivateKey privateKey, AccountAddress to,
                            TypeObj typeObj, BigInteger amount) {
@@ -84,13 +88,12 @@ public class StarcoinClient {
                 toAddress, amount);
     }
 
-
     @SneakyThrows
     public String submitHexTransaction(Ed25519PrivateKey privateKey,
                                        RawUserTransaction rawUserTransaction) {
         SignedUserTransaction signedUserTransaction = SignatureUtils.signTxn(privateKey,
                 rawUserTransaction);
-        List<String> params = Lists.newArrayList(Hex.encode(signedUserTransaction.bcsSerialize()));
+        List<Object> params = Lists.newArrayList(Hex.encode(signedUserTransaction.bcsSerialize()));
         return call("txpool.submit_hex_transaction", params);
     }
 
@@ -100,7 +103,6 @@ public class StarcoinClient {
         RawUserTransaction rawUserTransaction = buildRawUserTransaction(sender, scriptFunction);
         return submitHexTransaction(privateKey, rawUserTransaction);
     }
-
 
     @SneakyThrows
     //  @TODO 链上改了返回结构以后要修改
@@ -143,7 +145,6 @@ public class StarcoinClient {
         return jsonObject.getLong("result");
     }
 
-
     //  @TODO
     public String dryRunTransaction(AccountAddress sender, Ed25519PrivateKey privateKey,
                                     TransactionPayload payload) {
@@ -157,7 +158,7 @@ public class StarcoinClient {
                                         RawUserTransaction rawUserTransaction) {
         SignedUserTransaction signedUserTransaction = SignatureUtils.signTxn(privateKey,
                 rawUserTransaction);
-        List<String> params = Lists.newArrayList(Hex.encode(signedUserTransaction.bcsSerialize()));
+        List<Object> params = Lists.newArrayList(Hex.encode(signedUserTransaction.bcsSerialize()));
         return call("contract.dry_run_raw", params);
     }
 
@@ -166,7 +167,6 @@ public class StarcoinClient {
         RawUserTransaction rawUserTransaction = buildRawUserTransaction(sender, payload);
         return submitHexTransaction(privateKey, rawUserTransaction);
     }
-
 
     @SneakyThrows
     public String deployContractPackage(AccountAddress sender, Ed25519PrivateKey privateKey,
@@ -186,7 +186,6 @@ public class StarcoinClient {
         return submitTransaction(sender, privateKey, payload);
     }
 
-
     public String getTransactionInfo(String txn) {
         return call("chain.get_transaction_info", Lists.newArrayList(txn));
     }
@@ -194,5 +193,42 @@ public class StarcoinClient {
     public String getResource(AccountAddress sender, ResourceObj resourceObj) {
         return call("contract.get_resource",
                 Lists.newArrayList(AccountAddressUtils.hex(sender), resourceObj.toRPCString()));
+    }
+
+    /**
+     * Read price from oracle.
+     *
+     * @param priceOracleType Oracle type.
+     * @param address         Oracle address.
+     * @return price.
+     */
+    public BigInteger priceOracleRead(String priceOracleType, String address) {
+        String rspBody = contractCallV2(
+                FUNCTION_ID_PRICE_ORACLE_READ,
+                Collections.singletonList(priceOracleType),
+                Collections.singletonList(address));
+        JSONObject jsonObject = JSON.parseObject(rspBody);
+        if (!indicatesSuccess(jsonObject)) {
+            throw new RuntimeException("JSON RPC error: " + jsonObject.get("error"));
+        }
+        return new BigInteger(jsonObject.getJSONArray("result").get(0).toString());
+    }
+
+    /**
+     * JSON RPC call method 'contract.call_v2'.
+     *
+     * @param functionId function Id.
+     * @param typeArgs   type arguments.
+     * @param args       arguments.
+     * @return JSON RPC response body.
+     */
+    public String contractCallV2(String functionId, List<String> typeArgs, List<Object> args) {
+        String method = "contract.call_v2";
+        Map<String, Object> singleParamMap = new HashMap<>();
+        singleParamMap.put("function_id", functionId);
+        singleParamMap.put("type_args", typeArgs);
+        singleParamMap.put("args", args);
+        List<Object> params = Collections.singletonList(singleParamMap);
+        return call(method, params);
     }
 }

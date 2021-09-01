@@ -21,7 +21,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 
 @JSONType(naming = PropertyNamingStrategy.SnakeCase)
-public class UncleBlock {
+public class UncleBlock extends Base {
     private BlockHeader header;
     @JSONField(name = "uncle_block_number")
     private long uncleBlockNumber;

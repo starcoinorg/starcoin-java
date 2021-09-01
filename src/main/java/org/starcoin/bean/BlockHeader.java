@@ -20,7 +20,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 
 @JSONType(naming = PropertyNamingStrategy.SnakeCase)
-public class BlockHeader {
+public class BlockHeader  extends Base {
     long timestamp;
     private String author;
     @JSONField(name = "author_auth_key")

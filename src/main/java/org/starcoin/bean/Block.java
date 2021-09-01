@@ -23,7 +23,7 @@ import com.alibaba.fastjson.annotation.JSONType;
 import java.util.List;
 
 @JSONType(naming = PropertyNamingStrategy.SnakeCase)
-public class Block {
+public class Block extends Base {
     @JSONField(name = "metadata")
     BlockMetadata blockMetadata;
     @JSONField(name = "uncles")

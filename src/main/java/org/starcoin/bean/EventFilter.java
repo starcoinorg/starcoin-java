@@ -16,7 +16,6 @@
 package org.starcoin.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.starcoin.types.AccountAddress;
 
 import java.util.Arrays;
 import java.util.List;

@@ -70,7 +70,7 @@ public class StateRPCClient {
             ListResource listResource = getState(address);
             Map<String, Resource> resourceMap = listResource.getResources();
             JsonNode node = resourceMap.get(getResourceMapTokenKey(token)).getJson().get("token");
-            if( node != null) {
+            if (node != null) {
                 return node.get("value").asLong();
             }
         } catch (JSONRPC2SessionException e) {

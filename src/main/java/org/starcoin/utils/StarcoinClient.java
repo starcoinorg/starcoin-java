@@ -105,7 +105,7 @@ public class StarcoinClient {
     }
 
     @SneakyThrows
-    //  @TODO 链上改了返回结构以后要修改
+    //  @TODO 链上改了返回结构以后要修改，命名好像改为 getAccountResource 更好一些？
     public AccountResource getAccountSequence(AccountAddress sender) {
         String path = AccountAddressUtils.hex(
                 sender) + "/1/0x00000000000000000000000000000001::Account::Account";
@@ -118,17 +118,23 @@ public class StarcoinClient {
         return AccountResource.bcsDeserialize(ArrayUtils.toPrimitive(bytes));
     }
 
+    public long getAccountSequenceNumber(AccountAddress sender) {
+        AccountResource accountResource = getAccountSequence(sender);
+        return accountResource.sequence_number;
+    }
+
     @SneakyThrows
     private RawUserTransaction buildRawUserTransaction(AccountAddress sender,
                                                        TransactionPayload payload) {
-        AccountResource accountResource = getAccountSequence(sender);
+        long seqNumber = getAccountSequenceNumber(sender);
+        return buildRawUserTransaction(sender, seqNumber, payload);
+    }
 
-        long seqNumber = accountResource.sequence_number;
+    private RawUserTransaction buildRawUserTransaction(AccountAddress sender, long seqNumber,
+                                                       TransactionPayload payload) {
         ChainId chainId = new ChainId((byte) chaindId);
-
         return new RawUserTransaction(sender, seqNumber, payload, DEFAULT_MAX_GAS_AMOUNT, getGasUnitPrice(),
                 GAS_TOKEN_CODE, getExpirationTimestampSecs(), chainId);
-
     }
 
     private long getExpirationTimestampSecs() {
@@ -165,6 +171,12 @@ public class StarcoinClient {
     public String submitTransaction(AccountAddress sender, Ed25519PrivateKey privateKey,
                                     TransactionPayload payload) {
         RawUserTransaction rawUserTransaction = buildRawUserTransaction(sender, payload);
+        return submitHexTransaction(privateKey, rawUserTransaction);
+    }
+
+    public String submitTransaction(AccountAddress sender, long seqNumber,  Ed25519PrivateKey privateKey,
+                                    TransactionPayload payload) {
+        RawUserTransaction rawUserTransaction = buildRawUserTransaction(sender, seqNumber, payload);
         return submitHexTransaction(privateKey, rawUserTransaction);
     }
 

@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.starcoin.bean.ListResource;
 import org.starcoin.bean.ListResourceOption;
 import org.starcoin.bean.Resource;
+import org.starcoin.bean.TokenInfo;
 
 import java.io.IOException;
 import java.net.URL;
@@ -62,22 +63,39 @@ public class StateRPCClient {
         return null;
     }
 
+    public TokenInfo getTokenInfo(String address, String tokenCode) throws JSONRPC2SessionException {
+        JsonRPCClient<TokenInfo> client = new JsonRPCClient<>();
+        List<Object> param = new ArrayList<>();
+        param.add(address);
+        param.add(tokenInfoParameter(tokenCode));
+        ListResourceOption option = new ListResourceOption();
+        option.setDecode(true);
+        param.add(option);
+        return client.getSubObject(session, "state.get_resource", param, 0, "json", TokenInfo.class);
+    }
+
     /**
      * 用于获取某个地址下的token 数量
      */
-    public long getAddressAmount(String address) {
+    public long getAddressAmount(String address, String token) {
         try {
             ListResource listResource = getState(address);
             Map<String, Resource> resourceMap = listResource.getResources();
-            for (String key : resourceMap.keySet()) {
-                JsonNode node = resourceMap.get(key).getJson().get("token");
-                if (node != null) {
-                    return node.get("value").asLong();
-                }
+            JsonNode node = resourceMap.get(getResourceMapTokenKey(token)).getJson().get("token");
+            if (node != null) {
+                return node.get("value").asLong();
             }
         } catch (JSONRPC2SessionException e) {
             logger.error("get amount error:", e);
         }
         return 0;
+    }
+
+    private String getResourceMapTokenKey(String token) {
+        return "0x00000000000000000000000000000001::Account::Balance<" + token + ">";
+    }
+
+    private String tokenInfoParameter(String code) {
+        return "0x1::Token::TokenInfo<" + code + ">";
     }
 }

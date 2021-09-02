@@ -18,7 +18,7 @@ package org.starcoin.bean;
 import com.alibaba.fastjson.annotation.JSONField;
 import org.starcoin.types.AccountAddress;
 
-public class Event {
+public class Event extends Base {
     @JSONField(name = "block_hash")
     String blockHash;
 

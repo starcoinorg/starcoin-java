@@ -17,7 +17,7 @@ package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-public class PendingTransaction {
+public class PendingTransaction extends Base {
 
     @JSONField(name = "authenticator")
     private Authenticator authenticator;

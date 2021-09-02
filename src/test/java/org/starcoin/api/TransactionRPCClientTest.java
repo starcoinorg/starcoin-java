@@ -1,3 +1,18 @@
+/*
+ * Copyright 2002-2021 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.starcoin.api;
 
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
@@ -19,13 +34,8 @@ public class TransactionRPCClientTest extends TestCase {
     public void testGetTransactionByHash() {
 
         try {
-            StateRPCClient stateRPCClient = new StateRPCClient(new URL("http://localhost:9850"));
-            stateRPCClient.getState("0xb75994d55eae88219dc57e7e62a11bc0");
-
             Transaction transaction = client.getTransactionByHash("0x9497fc455c962ee27a2321e88af6c8eeae9842f3d3ea70dc349cdbe004250897");
-//            TransactionPayload payload = transaction.getUserTransaction().getRawTransaction();
-//            System.out.println("txn: " + payload.getClass());
-        } catch (JSONRPC2SessionException | MalformedURLException e) {
+        } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }
     }

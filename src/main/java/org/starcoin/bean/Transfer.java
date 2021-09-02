@@ -22,7 +22,7 @@ import org.starcoin.utils.Hex;
 
 import java.math.BigInteger;
 
-public class Transfer {
+public class Transfer extends Base {
 
     long timestamp;
     String identifier;

@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.novi.bcs.BcsSerializer;
 import com.novi.serde.Bytes;
 import lombok.SneakyThrows;
+import org.junit.Test;
 import org.starcoin.bean.ResourceObj;
 import org.starcoin.bean.ScriptFunctionObj;
 import org.starcoin.bean.TypeObj;
@@ -111,6 +112,7 @@ public class StarcoinClientSample {
         checkTxt(txn);
     }
 
+    @Test
     public void testGetResource() {
         ResourceObj resourceObj = ResourceObj
                 .builder()

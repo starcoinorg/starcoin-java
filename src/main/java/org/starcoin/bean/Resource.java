@@ -39,4 +39,12 @@ public class Resource {
     public void setJson(JsonNode json) {
         this.json = json;
     }
+
+    @Override
+    public String toString() {
+        return "Resource{" +
+                "raw='" + raw + '\'' +
+                ", json=" + json +
+                '}';
+    }
 }

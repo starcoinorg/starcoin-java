@@ -1,6 +1,6 @@
 package org.starcoin.bean;
 
-public class Tvl <T>{
+public class Tvl<T> {
 
     private T t;
 

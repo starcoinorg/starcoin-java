@@ -19,7 +19,6 @@ import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import junit.framework.TestCase;
 import org.starcoin.bean.Transaction;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class TransactionRPCClientTest extends TestCase {

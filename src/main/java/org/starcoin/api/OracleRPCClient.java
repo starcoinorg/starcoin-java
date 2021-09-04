@@ -21,12 +21,12 @@ public class OracleRPCClient {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url(baseUrl+"/v1/priceFeeds")
+                .url(baseUrl + "/v1/priceFeeds")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
             String res = response.body().string();
-            return JSON.parseArray(res,OracleTokenPair.class);
+            return JSON.parseArray(res, OracleTokenPair.class);
         }
     }
 }

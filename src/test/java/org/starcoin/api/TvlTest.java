@@ -20,24 +20,24 @@ public class TvlTest {
         String address = "0xbd7e8be8fae9f60f2f5136433e36a091";
         ListResource resources = stateRPCClient.getState(address);
 
-        for (String key :resources.getResources().keySet()){
+        for (String key : resources.getResources().keySet()) {
 
-            if(key.contains("Balance")){
-                long value=resources.getResources().get(key).getJson().get("token").get("value").longValue();
-                String token = key.replaceFirst("0x00000000000000000000000000000001::Account::Balance<","");
-                token = token.substring(0,token.length()-1);
+            if (key.contains("Balance")) {
+                long value = resources.getResources().get(key).getJson().get("token").get("value").longValue();
+                String token = key.replaceFirst("0x00000000000000000000000000000001::Account::Balance<", "");
+                token = token.substring(0, token.length() - 1);
 
                 Map<String, Tvl> tokenMap = new HashMap<>();
-                if(token.contains("LiquidityToken")){
-                    String tokenPair = token.substring(token.indexOf("<")+1,token.length()-1);
+                if (token.contains("LiquidityToken")) {
+                    String tokenPair = token.substring(token.indexOf("<") + 1, token.length() - 1);
                     String[] tokens = tokenPair.split(",");
-                    if(tokens.length!=2){
+                    if (tokens.length != 2) {
                         continue;
                     }
-                    TokenSwapLiquidityToken tokenSwapLiquidityToken = new TokenSwapLiquidityToken(tokens[0],tokens[1]);
-                    tokenMap.put(token,new Tvl(tokenSwapLiquidityToken,value));
-                }else {
-                    tokenMap.put(token,new Tvl(token,value));
+                    TokenSwapLiquidityToken tokenSwapLiquidityToken = new TokenSwapLiquidityToken(tokens[0], tokens[1]);
+                    tokenMap.put(token, new Tvl(tokenSwapLiquidityToken, value));
+                } else {
+                    tokenMap.put(token, new Tvl(token, value));
                 }
                 System.out.println(tokenMap);
             }

@@ -20,6 +20,8 @@ import junit.framework.TestCase;
 import org.starcoin.bean.TokenInfo;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class StateRPCClientTest extends TestCase {
     private StateRPCClient stateRPCClient;
@@ -32,6 +34,8 @@ public class StateRPCClientTest extends TestCase {
     public void testGetState() {
 
         try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd-HH:mm:ss");
+            System.out.println(format.format(new Date()));
             stateRPCClient.getState("0x5c04bb88984f933151bf69504692074d");
             long amount = stateRPCClient.getAddressAmount("0x5c04bb88984f933151bf69504692074d", "0x9350502a3af6c617e9a42fa9e306a385::BX_USDT::BX_USDT");
             System.out.println("amount: " + amount);

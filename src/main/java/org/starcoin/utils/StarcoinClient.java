@@ -174,7 +174,7 @@ public class StarcoinClient {
         return submitHexTransaction(privateKey, rawUserTransaction);
     }
 
-    public String submitTransaction(AccountAddress sender, long seqNumber,  Ed25519PrivateKey privateKey,
+    public String submitTransaction(AccountAddress sender, long seqNumber, Ed25519PrivateKey privateKey,
                                     TransactionPayload payload) {
         RawUserTransaction rawUserTransaction = buildRawUserTransaction(sender, seqNumber, payload);
         return submitHexTransaction(privateKey, rawUserTransaction);

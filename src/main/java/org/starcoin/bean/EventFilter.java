@@ -31,6 +31,9 @@ public class EventFilter {
     @JsonProperty("event_keys")
     private List<String> eventKeys;
 
+    @JsonProperty("addrs")
+    private List<String> accountAddress;
+
     @JsonProperty("decode")
     private boolean decode = true;
 
@@ -38,6 +41,10 @@ public class EventFilter {
         this.fromBlock = fromBlock;
         address = address.replaceFirst("0x", "");
         this.eventKeys = Arrays.asList(recvPrefix + address, sendPrefix + address);
+    }
+
+    public EventFilter(List<String> accountAddress) {
+        this.accountAddress = accountAddress;
     }
 
     public long getFromBlock() {

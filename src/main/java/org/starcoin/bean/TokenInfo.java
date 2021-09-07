@@ -19,10 +19,20 @@ package org.starcoin.bean;
 import com.alibaba.fastjson.annotation.JSONField;
 
 public class TokenInfo extends Base {
+    @JSONField(name = "token_code")
+    private String tokenCode;
     @JSONField(name = "total_value")
     private long totalValue;
     @JSONField(name = "scaling_factor")
     private long scalingFactor;
+
+    public String getTokenCode() {
+        return tokenCode;
+    }
+
+    public void setTokenCode(String tokenCode) {
+        this.tokenCode = tokenCode;
+    }
 
     public long getTotalValue() {
         return totalValue;
@@ -43,7 +53,8 @@ public class TokenInfo extends Base {
     @Override
     public String toString() {
         return "TokenInfo{" +
-                "totalValue=" + totalValue +
+                "tokenCode='" + tokenCode + '\'' +
+                ", totalValue=" + totalValue +
                 ", scalingFactor=" + scalingFactor +
                 '}';
     }

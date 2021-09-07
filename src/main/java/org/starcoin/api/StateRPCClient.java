@@ -71,7 +71,11 @@ public class StateRPCClient {
         ListResourceOption option = new ListResourceOption();
         option.setDecode(true);
         param.add(option);
-        return client.getSubObject(session, "state.get_resource", param, 0, "json", TokenInfo.class);
+        TokenInfo tokenInfo = client.getSubObject(session, "state.get_resource", param, 0, "json", TokenInfo.class);
+        if(tokenInfo != null) {
+            tokenInfo.setTokenCode(tokenCode);
+        }
+        return tokenInfo;
     }
 
     /**

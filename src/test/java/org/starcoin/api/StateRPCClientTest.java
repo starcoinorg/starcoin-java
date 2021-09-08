@@ -16,23 +16,24 @@
 package org.starcoin.api;
 
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.starcoin.bean.TokenInfo;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class StateRPCClientTest extends TestCase {
+public class StateRPCClientTest  {
     private StateRPCClient stateRPCClient;
 
-    @Override
+    @Before
     protected void setUp() throws Exception {
         stateRPCClient = new StateRPCClient(new URL("http://localhost:9850"));
     }
 
+    @Ignore
     public void testGetState() {
-
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd-HH:mm:ss");
             System.out.println(format.format(new Date()));

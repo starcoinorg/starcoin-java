@@ -187,7 +187,7 @@ public class StarcoinClient {
         org.starcoin.types.ScriptFunction sf =
                 Objects.isNull(initScriptObj) ? null : initScriptObj.toScriptFunction();
         byte[] contractBytes = Files.toByteArray(new File(filePath));
-        Module module = new Module(new Bytes(contractBytes));
+        org.starcoin.types.Module module = new org.starcoin.types.Module(new Bytes(contractBytes));
         org.starcoin.types.Package contractPackage = new org.starcoin.types.Package(sender,
                 Lists.newArrayList(
                         module),

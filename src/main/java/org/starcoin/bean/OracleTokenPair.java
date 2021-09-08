@@ -13,7 +13,7 @@ public class OracleTokenPair {
 
     private float heartbeatHours;
 
-    private float decimals;
+    private int decimals;
 
     private BigInteger latestPrice;
 
@@ -63,11 +63,11 @@ public class OracleTokenPair {
         this.heartbeatHours = heartbeatHours;
     }
 
-    public float getDecimals() {
+    public int getDecimals() {
         return decimals;
     }
 
-    public void setDecimals(float decimals) {
+    public void setDecimals(int decimals) {
         this.decimals = decimals;
     }
 

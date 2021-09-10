@@ -72,7 +72,7 @@ public class StateRPCClient {
         option.setDecode(true);
         param.add(option);
         TokenInfo tokenInfo = client.getSubObject(session, "state.get_resource", param, 0, "json", TokenInfo.class);
-        if(tokenInfo != null) {
+        if (tokenInfo != null) {
             tokenInfo.setTokenCode(tokenCode);
         }
         return tokenInfo;
@@ -84,6 +84,10 @@ public class StateRPCClient {
     public long getAddressAmount(String address, String token) {
         try {
             ListResource listResource = getState(address);
+            if (listResource == null) {
+                // add result = -1 for resource not exist
+                return -1;
+            }
             Map<String, Resource> resourceMap = listResource.getResources();
             JsonNode node = resourceMap.get(getResourceMapTokenKey(token)).getJson().get("token");
             if (node != null) {

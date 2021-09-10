@@ -24,7 +24,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class StateRPCClientTest  {
+public class StateRPCClientTest {
     private StateRPCClient stateRPCClient;
 
     @Before

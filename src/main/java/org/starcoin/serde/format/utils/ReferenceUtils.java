@@ -31,10 +31,16 @@ public class ReferenceUtils {
                                                              List<Map<String, Object>> externalMaps) {
         List<String> referencedNames = ReferenceUtils.getReferencedExternalContainerTypeNames(containerFormatMap, externalContainerFormatMap);
         List referencedValues = ReferenceUtils.findValuesByNames(referencedNames, externalMaps.toArray(new Map[0]));
-        Map<String, Object> concatenatedMap = Stream.concat(originMap.entrySet().stream(),
+        Stream<Map.Entry<String, Object>> entryStream = Stream.concat(originMap.entrySet().stream(),
                 IntStream.range(0, referencedNames.size())
                         .mapToObj(n -> new AbstractMap.SimpleEntry<String, Object>(referencedNames.get(n), referencedValues.get(n)))
-        ).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+        );
+        Map<String, Object> concatenatedMap = new HashMap<>();
+        entryStream.forEach((e) -> {
+            if (!concatenatedMap.containsKey(e.getKey())) {
+                concatenatedMap.put(e.getKey(), e.getValue());
+            }
+        });
         return concatenatedMap;
     }
 

@@ -93,7 +93,7 @@ public class StateRPCClient {
             if (node != null) {
                 return node.get("value").asLong();
             }
-        } catch (JSONRPC2SessionException e) {
+        } catch (Exception e) {
             logger.error("get amount error:", e);
         }
         return 0;

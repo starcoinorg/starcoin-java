@@ -17,6 +17,8 @@ public class OracleTokenPair {
 
     private BigInteger latestPrice;
 
+    private BigInteger price;
+
     private String onChainStatus;
 
     private String onChainTransactionHash;
@@ -135,6 +137,14 @@ public class OracleTokenPair {
         this.version = version;
     }
 
+    public BigInteger getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigInteger price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "OracleTokenPair{" +
@@ -144,6 +154,7 @@ public class OracleTokenPair {
                 ", heartbeatHours=" + heartbeatHours +
                 ", decimals=" + decimals +
                 ", latestPrice=" + latestPrice +
+                ", price=" + price +
                 ", onChainStatus='" + onChainStatus + '\'' +
                 ", onChainTransactionHash='" + onChainTransactionHash + '\'' +
                 ", createdBy='" + createdBy + '\'' +

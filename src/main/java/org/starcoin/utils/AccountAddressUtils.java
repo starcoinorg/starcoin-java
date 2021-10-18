@@ -16,13 +16,18 @@
 package org.starcoin.utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.jcajce.provider.digest.SHA3;
 import org.starcoin.types.AccountAddress;
+import org.starcoin.types.Ed25519PublicKey;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AccountAddressUtils {
 
+    public static final byte SCHEME_ID_ED25519 = 0;
+    public static final byte SCHEME_ID_MULTIED25519 = 1;
     public static int ACCOUNT_ADDRESS_LENGTH = 16;
 
     public static AccountAddress create(byte[] bytes) {
@@ -78,5 +83,16 @@ public class AccountAddressUtils {
             ret[i] = address.value.get(i);
         }
         return ret;
+    }
+
+    public static AccountAddress getFromPublicKey(Ed25519PublicKey publicKey) {
+        byte[] rawBytes = com.google.common.primitives.Bytes.concat(publicKey.value.content(), new byte[]{SCHEME_ID_ED25519});
+        byte[] digestedBytes = new SHA3.Digest256().digest(rawBytes);
+        byte[] addressBytes = Arrays.copyOfRange(digestedBytes, digestedBytes.length - ACCOUNT_ADDRESS_LENGTH, digestedBytes.length);
+        return create(addressBytes);
+    }
+
+    public static String getHexFromPublicKey(Ed25519PublicKey publicKey) {
+        return hex(getFromPublicKey(publicKey));
     }
 }

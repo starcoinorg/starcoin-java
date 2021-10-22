@@ -32,7 +32,7 @@ public class SerdeGenJava {
         }).collect(Collectors.toList());
 
         SerdeGenJavaUtils.processSerdeFormatFiles(serdeGenJavaArgs.getWorkingDirectory(),
-                serdeGenJavaArgs.getSerdegenPath(), serdeFormatFiles, getObjectMapper(),
+                serdeGenJavaArgs.getSerdegenPath(), serdeGenJavaArgs.getLanguage(), serdeFormatFiles, getObjectMapper(),
                 serdeGenJavaArgs.getTempYamlFileExtension(), serdeGenJavaArgs.getOnlyRetainDependenciesOfLast());
 
         System.out.println("All seem ok.");

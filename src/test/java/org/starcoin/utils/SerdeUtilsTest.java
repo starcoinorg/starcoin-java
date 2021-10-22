@@ -95,7 +95,7 @@ public class SerdeUtilsTest {
                 new SerdeGenJavaUtils.SerdeFormatFile(textFilePath3, "org.starcoin.starswap.types", targetSrcDir)
         );
         String serdegenPath = "serdegen";
-        processSerdeFormatFiles(workingDirectory, serdegenPath, serdeFormatFiles, objectMapper,
+        processSerdeFormatFiles(workingDirectory, serdegenPath, "java", serdeFormatFiles, objectMapper,
                 SerdeGenJavaUtils.DEFAULT_TEMP_YAML_FILE_EXTENSION,
                 1);
     }

@@ -26,6 +26,7 @@ public class SerdeGenJavaArgs {
 
     @Parameter(names = "--targetSourceDirectoryPath", description = "Target source directory path")
     private String targetSourceDirectoryPath = "./src/main/java";
+
 //    @Parameter(names = "-debug", description = "Debug mode")
 //    private boolean debug = false;
 
@@ -35,32 +36,71 @@ public class SerdeGenJavaArgs {
     @Parameter(names = "--onlyRetainDependenciesOfLast", description = "Only retains dependencies of last N file(s)")
     private Integer onlyRetainDependenciesOfLast;
 
+    @Parameter(names = "--language", description = "Target source language")
+    private String language;
+
     public List<String> getParameters() {
         return parameters;
+    }
+
+    public void setParameters(List<String> parameters) {
+        this.parameters = parameters;
     }
 
     public String getWorkingDirectory() {
         return workingDirectory;
     }
 
+    public void setWorkingDirectory(String workingDirectory) {
+        this.workingDirectory = workingDirectory;
+    }
+
     public String getSerdegenPath() {
         return serdegenPath;
+    }
+
+    public void setSerdegenPath(String serdegenPath) {
+        this.serdegenPath = serdegenPath;
     }
 
     public String getTempYamlFileExtension() {
         return tempYamlFileExtension;
     }
 
+    public void setTempYamlFileExtension(String tempYamlFileExtension) {
+        this.tempYamlFileExtension = tempYamlFileExtension;
+    }
+
     public Integer getOnlyRetainDependenciesOfLast() {
         return onlyRetainDependenciesOfLast;
+    }
+
+    public void setOnlyRetainDependenciesOfLast(Integer onlyRetainDependenciesOfLast) {
+        this.onlyRetainDependenciesOfLast = onlyRetainDependenciesOfLast;
     }
 
     public boolean isHelp() {
         return help;
     }
 
+    public void setHelp(boolean help) {
+        this.help = help;
+    }
+
     public String getTargetSourceDirectoryPath() {
         return targetSourceDirectoryPath;
+    }
+
+    public void setTargetSourceDirectoryPath(String targetSourceDirectoryPath) {
+        this.targetSourceDirectoryPath = targetSourceDirectoryPath;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     @Override
@@ -73,6 +113,7 @@ public class SerdeGenJavaArgs {
                 ", targetSourceDirectoryPath='" + targetSourceDirectoryPath + '\'' +
                 ", tempYamlFileExtension='" + tempYamlFileExtension + '\'' +
                 ", onlyRetainDependenciesOfLast=" + onlyRetainDependenciesOfLast +
+                ", language='" + language + '\'' +
                 '}';
     }
 }

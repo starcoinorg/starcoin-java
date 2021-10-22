@@ -30,6 +30,7 @@ public class SerdeGenJavaUtils {
 
 
     public static void processSerdeFormatFiles(String workingDirectory, String serdegenPath,
+                                               String language,
                                                List<SerdeFormatFile> serdeFormatFiles,
                                                ObjectMapper objectMapper, String tempYamlFileExtension,
                                                Integer onlyRetainDependenciesOfLast) {
@@ -88,10 +89,10 @@ public class SerdeGenJavaUtils {
             String tmpFilePath = serdeFormatFiles.get(i).formatFilePath + tempYamlFileExtension;
             dumpToFile(Paths.get(tmpFilePath), concatenatedMap);
             if (i == 0) {
-                int ec_0 = waitForSerdegenProcess(workingDirectory, serdegenPath, packageName, WITH_RUNTIMES_SERDE, targetSourceDirectoryPath, tmpFilePath);
+                int ec_0 = waitForSerdegenProcess(workingDirectory, serdegenPath, language, packageName, WITH_RUNTIMES_SERDE, targetSourceDirectoryPath, tmpFilePath);
                 if (ec_0 != 0) throw new RuntimeException("Run serdegen command failed.");//System.out.println(ec_0);
             }
-            int ec = waitForSerdegenProcess(workingDirectory, serdegenPath, packageName, WITH_RUNTIMES_BCS, targetSourceDirectoryPath, tmpFilePath);
+            int ec = waitForSerdegenProcess(workingDirectory, serdegenPath, language, packageName, WITH_RUNTIMES_BCS, targetSourceDirectoryPath, tmpFilePath);
             if (ec != 0) throw new RuntimeException("Run serdegen command failed.");//System.out.println(ec);
             try {
                 Files.deleteIfExists(Paths.get(tmpFilePath));
@@ -104,7 +105,7 @@ public class SerdeGenJavaUtils {
                     targetSourceDirectoryPath, concatenatedMap, externalNamesList);
 
             Map<String, ContainerFormat> containerFormatMap = containerFormatMapList.get(i);
-            modifyGeneratedFiles(workingDirectory, serdeFormatFiles, externalNamesList, containerFormatMap, i,
+            modifyGeneratedFiles(workingDirectory, language, serdeFormatFiles, externalNamesList, containerFormatMap, i,
                     removedNames, onlyRetainedNames);
         }
 
@@ -126,7 +127,8 @@ public class SerdeGenJavaUtils {
 
     }
 
-    private static void modifyGeneratedFiles(String workingDirectory, List<SerdeFormatFile> serdeFormatFiles,
+    private static void modifyGeneratedFiles(String workingDirectory, String language,
+                                             List<SerdeFormatFile> serdeFormatFiles,
                                              List<Set<String>> externalNamesList,
                                              Map<String, ContainerFormat> containerFormatMap, int currentFileIndex, List<String> removedNames,
                                              List<String> onlyRetainedNames) {
@@ -152,19 +154,21 @@ public class SerdeGenJavaUtils {
             }
             //System.out.println(n + ": " + importPackageIds);
             if (!importPackageIds.isEmpty()) {
-                Path pathToModify = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);
-                String importStr = importPackageIds.stream().map(idx ->
-                        "import " + serdeFormatFiles.get(idx).getPackageName() + ".*;")
-                        .reduce((s1, s2) -> s1 + System.lineSeparator() + s2).get();
-                //System.out.println(importStr);
-                String sourceCode = TextFileUtils.readTextFile(pathToModify);
-                int classLineIdx = sourceCode.indexOf(JAVA_SOURCE_CLASS_LINE_START);
-                if (classLineIdx != -1) {
-                    String newSourceCode = sourceCode.substring(0, classLineIdx)
-                            + importStr + System.lineSeparator() + System.lineSeparator()
-                            + sourceCode.substring(classLineIdx);
-                    TextFileUtils.writeTextFile(pathToModify, newSourceCode);
-                }
+                if ("java".equalsIgnoreCase(language)) {
+                    Path pathToModify = getJavaFilePathByTypeName(workingDirectory, packageName, targetSourceDirectoryPath, n);
+                    String importStr = importPackageIds.stream().map(idx ->
+                            "import " + serdeFormatFiles.get(idx).getPackageName() + ".*;")
+                            .reduce((s1, s2) -> s1 + System.lineSeparator() + s2).get();
+                    //System.out.println(importStr);
+                    String sourceCode = TextFileUtils.readTextFile(pathToModify);
+                    int classLineIdx = sourceCode.indexOf(JAVA_SOURCE_CLASS_LINE_START);
+                    if (classLineIdx != -1) {
+                        String newSourceCode = sourceCode.substring(0, classLineIdx)
+                                + importStr + System.lineSeparator() + System.lineSeparator()
+                                + sourceCode.substring(classLineIdx);
+                        TextFileUtils.writeTextFile(pathToModify, newSourceCode);
+                    }
+                } //todo other languages...
             }
         });
     }
@@ -195,13 +199,18 @@ public class SerdeGenJavaUtils {
                 packageName.replace(".", File.separator), n + ".java");
     }
 
+    /**
+     * @param language Java, Go, etc...
+     * @param moduleName module name. For java it is package name
+     */
     public static int waitForSerdegenProcess(String workingDirectory, String serdegenPath,
-                                             String packageName, String withRuntimesOrEmpty,
+                                             String language,
+                                             String moduleName, String withRuntimesOrEmpty,
                                              String targetSrcDir, String yamlFilePath) {
         String shellPath = "/bin/sh";
-        String cmdFormat = "%1$s --language java --module-name %2$s %3$s --target-source-dir %4$s %5$s";
-        String cmd = String.format(cmdFormat, serdegenPath, packageName, withRuntimesOrEmpty,
-                targetSrcDir, yamlFilePath);
+        String cmdFormat = "%1$s --language %2$s --module-name %3$s %4$s --target-source-dir %5$s %6$s";
+        String cmd = String.format(cmdFormat, serdegenPath, language == null ? "java" : language,
+                moduleName, withRuntimesOrEmpty, targetSrcDir, yamlFilePath);
         //System.out.println(cmd);
         Process process;
         try {
@@ -224,9 +233,9 @@ public class SerdeGenJavaUtils {
 
 
     public static class SerdeFormatFile {
-        private String formatFilePath;
-        private String packageName;
-        private String targetSourceDirectoryPath;
+        private final String formatFilePath;
+        private final String packageName;
+        private final String targetSourceDirectoryPath;
 
         public SerdeFormatFile(String formatFilePath, String packageName, String targetSourceDirectoryPath) {
             this.formatFilePath = formatFilePath;

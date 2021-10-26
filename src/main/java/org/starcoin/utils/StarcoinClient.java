@@ -44,6 +44,8 @@ public class StarcoinClient {
     private static final String GAS_TOKEN_CODE = "0x1::STC::STC";
 
     private static final String FUNCTION_ID_PRICE_ORACLE_READ = "0x00000000000000000000000000000001::PriceOracle::read";
+    private static final String FUNCTION_ID_PRICE_ORACLE_GET_SCALING_FACTOR = "0x00000000000000000000000000000001::PriceOracle::get_scaling_factor";
+
     private final String baseUrl;
     private final int chaindId;
     private final OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
@@ -219,6 +221,24 @@ public class StarcoinClient {
                 FUNCTION_ID_PRICE_ORACLE_READ,
                 Collections.singletonList(priceOracleType),
                 Collections.singletonList(address));
+        JSONObject jsonObject = JSON.parseObject(rspBody);
+        if (!indicatesSuccess(jsonObject)) {
+            throw new RuntimeException("JSON RPC error: " + jsonObject.get("error"));
+        }
+        return new BigInteger(jsonObject.getJSONArray("result").get(0).toString());
+    }
+
+    /**
+     * Get price oracle scaling factor.
+     *
+     * @param priceOracleType Oracle type.
+     * @return scaling factor.
+     */
+    public BigInteger priceOracleGetScalingFactor(String priceOracleType) {
+        String rspBody = contractCallV2(
+                FUNCTION_ID_PRICE_ORACLE_GET_SCALING_FACTOR,
+                Collections.singletonList(priceOracleType),
+                Collections.emptyList());
         JSONObject jsonObject = JSON.parseObject(rspBody);
         if (!indicatesSuccess(jsonObject)) {
             throw new RuntimeException("JSON RPC error: " + jsonObject.get("error"));

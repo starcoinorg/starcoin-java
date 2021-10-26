@@ -19,8 +19,14 @@ import org.bouncycastle.jcajce.provider.digest.SHA3;
 import org.bouncycastle.util.encoders.Hex;
 
 public class HashUtils {
+    
+    public static String hashStarcoinSignedUserTransaction(byte[] signedMessage) {
+        byte[] bytesForHash = com.google.common.primitives.Bytes
+                .concat(hashWithStarcoinPrefix("SignedUserTransaction"), signedMessage);
+        return Hex.toHexString(new SHA3.Digest256().digest(bytesForHash));
+    }
 
-    public static byte[] hashPrefix(String name) {
+    public static byte[] hashWithStarcoinPrefix(String name) {
         return hash("STARCOIN::".getBytes(), name.getBytes());
     }
 

@@ -161,5 +161,14 @@ public class StarcoinClientSample {
         //STC / USD: 0.15810000
         //ETH / USD: 3450.61348696
     }
+
+    public void testPriceOracleGetScalingFactor() {
+        String stcUsdOracleType = "0x00000000000000000000000000000001::STCUSDOracle::STCUSD";
+        //int stcUsdDecimals = 6;
+        String ethUsdOracleType = "0x07fa08a855753f0ff7292fdcbe871216::ETH_USD::ETH_USD";
+        //int ethUsdDecimals = 8;
+        System.out.println("STC / USD: " + starcoinClient.priceOracleGetScalingFactor(stcUsdOracleType));
+        System.out.println("ETH / USD: " + starcoinClient.priceOracleGetScalingFactor(ethUsdOracleType));
+    }
 }
 

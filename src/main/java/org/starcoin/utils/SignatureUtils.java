@@ -23,15 +23,57 @@ import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.starcoin.types.*;
 import org.starcoin.types.TransactionAuthenticator.Ed25519;
 
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
+import static org.starcoin.utils.HashUtils.hashStarcoinSignedUserTransaction;
+
 public class SignatureUtils {
+
+    public static final String GAS_TOKEN_CODE_STC = "0x1::STC::STC";
+
+    @SneakyThrows
+    public static String getTransactionHash(Ed25519PrivateKey ed25519PrivateKey, Integer chainId, AccountAddress accountAddress,
+                                            BigInteger accountSeqNumber,
+                                            TransactionPayload payload,
+                                            BigInteger gasPrice, BigInteger gasLimit,
+                                            Long expirationTimestampSecs) {
+        SignedUserTransaction signedUserTransaction = createSignedUserTransaction(ed25519PrivateKey, chainId, accountAddress,
+                accountSeqNumber, payload, gasPrice, gasLimit, expirationTimestampSecs);
+        byte[] signedMessage = signedUserTransaction.bcsSerialize();
+        return hashStarcoinSignedUserTransaction(signedMessage);
+    }
+
+    @SneakyThrows
+    public static SignedUserTransaction createSignedUserTransaction(Ed25519PrivateKey ed25519PrivateKey, Integer chainId, AccountAddress accountAddress,
+                                                                    BigInteger accountSeqNumber,
+                                                                    TransactionPayload payload,
+                                                                    BigInteger gasPrice, BigInteger gasLimit,
+                                                                    Long expirationTimestampSecs) {
+        RawUserTransaction rawUserTransaction = createRawUserTransaction(chainId, accountAddress,
+                accountSeqNumber, payload, gasPrice, gasLimit, expirationTimestampSecs);
+
+        return SignatureUtils.signTxn(ed25519PrivateKey, rawUserTransaction);
+    }
+
+
+    public static RawUserTransaction createRawUserTransaction(Integer chainId, AccountAddress accountAddress,
+                                                              BigInteger accountSeqNumber,
+                                                              TransactionPayload payload,
+                                                              BigInteger gasPrice, BigInteger gasLimit,
+                                                              Long expirationTimestampSecs) {
+        ChainId chainIdObj = new ChainId(chainId.byteValue());
+        return new RawUserTransaction(accountAddress, accountSeqNumber.longValue(), payload,
+                gasLimit.longValue(), gasPrice.longValue(), GAS_TOKEN_CODE_STC,
+                expirationTimestampSecs,
+                chainIdObj);
+    }
 
     @SneakyThrows
     public static SignedUserTransaction signTxn(Ed25519PrivateKey privateKey,
                                                 RawUserTransaction rawUserTransaction) {
         byte[] bytes = com.google.common.primitives.Bytes
-                .concat(HashUtils.hashPrefix("RawUserTransaction"), rawUserTransaction.bcsSerialize());
+                .concat(HashUtils.hashWithStarcoinPrefix("RawUserTransaction"), rawUserTransaction.bcsSerialize());
         byte[] signRst = ed25519Sign(privateKey, bytes);
         Ed25519PublicKey publicKey = getPublicKey(privateKey);
         Ed25519Signature signature = new Ed25519Signature(new Bytes(signRst));
@@ -53,7 +95,7 @@ public class SignatureUtils {
 
 //    @TODO
         byte[] bytes = com.google.common.primitives.Bytes
-                .concat(HashUtils.hashPrefix("TransactionAuthenticator"), ed25519.bcsSerialize());
+                .concat(HashUtils.hashWithStarcoinPrefix("TransactionAuthenticator"), ed25519.bcsSerialize());
 
         byte[] signRst = ed25519Sign(privateKey, bytes);
         return Hex.encode(signRst);

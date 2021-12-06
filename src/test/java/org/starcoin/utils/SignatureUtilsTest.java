@@ -1,7 +1,6 @@
 package org.starcoin.utils;
 
 import com.novi.bcs.BcsDeserializer;
-import com.novi.bcs.BcsSerializer;
 import com.novi.serde.Bytes;
 import lombok.SneakyThrows;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
@@ -55,19 +54,22 @@ public class SignatureUtilsTest {
         Ed25519PublicKey ed25519PublicKey = authenticator.public_key;
         Ed25519Signature signature = new Ed25519Signature(message);
         TransactionAuthenticator.Ed25519 ed25519 = new TransactionAuthenticator.Ed25519(ed25519PublicKey, signature);
-        assert ed25519Verify(ed25519PublicKey, ed25519.bcsSerialize(), authenticator.signature.bcsSerialize());
+        assert ed25519Verify(ed25519PublicKey, ed25519.bcsSerialize(), authenticator.signature.value.content());
     }
 
     @SneakyThrows
     public static boolean ed25519Verify(Ed25519PublicKey publicKey, byte[] data, byte[] signature) {
         Ed25519PublicKeyParameters key = new Ed25519PublicKeyParameters(publicKey.value.content(),
                 0);
+        return verify(data, signature, key);
+    }
+
+    private static boolean verify(byte[] data, byte[] signature, Ed25519PublicKeyParameters key) {
         Ed25519Signer signer = new Ed25519Signer();
         signer.init(false, key);
         signer.update(data, 0, data.length);
         return signer.verifySignature(signature);
     }
-
 
     @Test
     public void testSign() {
@@ -76,5 +78,10 @@ public class SignatureUtilsTest {
         String rst = "b287e9259649cfd38b075993fa825ddd7c0697a365d4981505a6046e25a2c4009018e6cdeb76dfe07f29197cf43ff34971fb55140a58eea07f7d21d0c261c70b";
         Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyEncoded);
         byte[] m = SignatureUtils.ed25519Sign(privateKey, Hex.decode(message));
+
+        Ed25519PrivateKeyParameters key = new Ed25519PrivateKeyParameters(privateKey.value.content(),0);
+        Ed25519PublicKeyParameters publicKey = key.generatePublicKey();
+
+        verify(message.getBytes(StandardCharsets.UTF_8),m,publicKey);
     }
 }

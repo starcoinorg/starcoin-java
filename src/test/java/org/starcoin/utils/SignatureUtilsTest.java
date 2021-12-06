@@ -1,9 +1,16 @@
 package org.starcoin.utils;
 
+import com.novi.bcs.BcsDeserializer;
+import com.novi.bcs.BcsSerializer;
+import com.novi.serde.Bytes;
 import lombok.SneakyThrows;
+import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.junit.Test;
-import org.starcoin.types.Ed25519PrivateKey;
-import org.starcoin.types.Ed25519PublicKey;
+import org.starcoin.types.*;
+
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,6 +30,42 @@ public class SignatureUtilsTest {
         String message = "Example `personal_sign` message";
         String rst = SignatureUtils.signPersonalMessage(privateKey, message);
 
+    }
+
+    @SneakyThrows
+    @Test
+    public void testVerifyPersonalMessage() {
+        String signedMessage = "0x290c7b35320a4dd26f651fd184373fe7264578616d706c652060706572736f6e616c5f7369676e60206d65737361676520e4b8ade696870020a4b14715924ad0627409fbabed863e360b066c039ea46c0094c1ced721d9a7d9404e7f2d656b6640631c71684fe46c93de759571f82d7cc5750a913c978e1b8170cd73238c82addd0fc915eab6a3ef27b3447506513d035bfd1fb21bb33b08750601";
+        BcsDeserializer deserializer = new BcsDeserializer(Hex.decode(signedMessage));
+        AccountAddress accountAddress = AccountAddress.deserialize(deserializer);
+        System.out.println("address: " + accountAddress);
+        Bytes message = deserializer.deserialize_bytes();
+        System.out.println("message: " + new String(message.content()));
+        TransactionAuthenticator.Ed25519 authenticator = (TransactionAuthenticator.Ed25519) TransactionAuthenticator.deserialize(deserializer);
+        ChainId chainId = ChainId.deserialize(deserializer);
+        System.out.println("chainId: " + chainId.id);
+
+        Bytes signatureBytes = authenticator.signature.value;
+        System.out.println("signature: " + Hex.encode(signatureBytes.content()));
+
+        Bytes publicKeyBytes = authenticator.public_key.value;
+        System.out.println("publicKey: " + Hex.encode(publicKeyBytes.content()));
+
+        // verify
+        Ed25519PublicKey ed25519PublicKey = authenticator.public_key;
+        Ed25519Signature signature = new Ed25519Signature(message);
+        TransactionAuthenticator.Ed25519 ed25519 = new TransactionAuthenticator.Ed25519(ed25519PublicKey, signature);
+        assert ed25519Verify(ed25519PublicKey, ed25519.bcsSerialize(), authenticator.signature.bcsSerialize());
+    }
+
+    @SneakyThrows
+    public static boolean ed25519Verify(Ed25519PublicKey publicKey, byte[] data, byte[] signature) {
+        Ed25519PublicKeyParameters key = new Ed25519PublicKeyParameters(publicKey.value.content(),
+                0);
+        Ed25519Signer signer = new Ed25519Signer();
+        signer.init(false, key);
+        signer.update(data, 0, data.length);
+        return signer.verifySignature(signature);
     }
 
 

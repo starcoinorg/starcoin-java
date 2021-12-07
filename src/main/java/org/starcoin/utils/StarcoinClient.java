@@ -185,15 +185,20 @@ public class StarcoinClient {
     @SneakyThrows
     public String deployContractPackage(AccountAddress sender, Ed25519PrivateKey privateKey,
                                         String filePath, ScriptFunctionObj initScriptObj) {
-
-        org.starcoin.types.ScriptFunction sf =
-                Objects.isNull(initScriptObj) ? null : initScriptObj.toScriptFunction();
-        byte[] contractBytes = Files.toByteArray(new File(filePath));
-        org.starcoin.types.Module module = new org.starcoin.types.Module(new Bytes(contractBytes));
-        org.starcoin.types.Package contractPackage = new org.starcoin.types.Package(sender,
-                Lists.newArrayList(
-                        module),
-                Optional.ofNullable(sf));
+        String fileExt = filePath.substring(filePath.lastIndexOf(".") + 1);
+        org.starcoin.types.Package contractPackage;
+        if ("mv".equalsIgnoreCase(fileExt)) {
+            org.starcoin.types.ScriptFunction sf =
+                    Objects.isNull(initScriptObj) ? null : initScriptObj.toScriptFunction();
+            byte[] contractBytes = Files.toByteArray(new File(filePath));
+            org.starcoin.types.Module module = new org.starcoin.types.Module(new Bytes(contractBytes));
+            contractPackage = new org.starcoin.types.Package(sender,
+                    Lists.newArrayList(
+                            module),
+                    Optional.ofNullable(sf));
+        } else {
+            contractPackage = org.starcoin.types.Package.bcsDeserialize(Files.toByteArray(new File(filePath)));
+        }
         TransactionPayload.Package.Builder builder = new TransactionPayload.Package.Builder();
         builder.value = contractPackage;
         TransactionPayload payload = builder.build();

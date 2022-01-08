@@ -1,12 +1,27 @@
 package org.starcoin.types;
 
 
+import org.bouncycastle.jcajce.provider.digest.SHA3;
+
 public final class HashValue {
+
+    public static final int LENGTH = 32;
+
     public final com.novi.serde.Bytes value;
 
     public HashValue(com.novi.serde.Bytes value) {
         java.util.Objects.requireNonNull(value, "value must not be null");
         this.value = value;
+    }
+
+    public static HashValue zero() {
+        byte[] val = new byte[LENGTH];
+        return new HashValue(com.novi.serde.Bytes.valueOf(val));
+    }
+
+    public static HashValue sha3Of(byte[] content) {
+        byte[] digestedBytes = new SHA3.Digest256().digest(content);
+        return new HashValue(com.novi.serde.Bytes.valueOf(digestedBytes));
     }
 
     public static HashValue deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {

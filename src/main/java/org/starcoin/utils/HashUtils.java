@@ -18,24 +18,24 @@ package org.starcoin.utils;
 import org.bouncycastle.jcajce.provider.digest.SHA3;
 import org.bouncycastle.util.encoders.Hex;
 
+import static org.starcoin.constant.Constant.STARCOIN_HASH_PREFIX;
+
 public class HashUtils {
-    
+
     public static String hashStarcoinSignedUserTransaction(byte[] signedMessage) {
         byte[] bytesForHash = com.google.common.primitives.Bytes
                 .concat(hashWithStarcoinPrefix("SignedUserTransaction"), signedMessage);
-        return Hex.toHexString(new SHA3.Digest256().digest(bytesForHash));
+        return sha3HashStr(sha3Hash(bytesForHash));
     }
 
     public static byte[] hashWithStarcoinPrefix(String name) {
-        return hash("STARCOIN::".getBytes(), name.getBytes());
+        return hash(STARCOIN_HASH_PREFIX.getBytes(), name.getBytes());
     }
 
     public static byte[] hash(byte[] prefix, byte[] bytes) {
         SHA3.DigestSHA3 digestSHA3 = new SHA3.Digest256();
-
         digestSHA3.update(prefix);
         digestSHA3.update(bytes);
-
         return digestSHA3.digest();
     }
 

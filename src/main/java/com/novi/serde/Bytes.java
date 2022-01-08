@@ -3,7 +3,9 @@
 
 package com.novi.serde;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,6 +34,25 @@ public final class Bytes {
         } else {
             return new Bytes(content.clone());
         }
+    }
+
+    public static Bytes fromList(List<@com.novi.serde.Unsigned Byte> listBytes) {
+        Objects.requireNonNull(listBytes, "list bytes must not be null");
+        byte[] content = new byte[listBytes.size()];
+        int i = 0;
+        for (Byte item : listBytes) {
+            content[i] = item.byteValue();
+            i++;
+        }
+        return valueOf(content);
+    }
+
+    public List<@com.novi.serde.Unsigned Byte> toList() {
+        List<@com.novi.serde.Unsigned Byte> result = new ArrayList<>();
+        for (byte item : this.content.clone()) {
+            result.add(item);
+        }
+        return result;
     }
 
     public byte[] content() {

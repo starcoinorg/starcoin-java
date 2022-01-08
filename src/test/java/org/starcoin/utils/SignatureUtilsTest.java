@@ -1,17 +1,16 @@
 package org.starcoin.utils;
 
-import com.novi.bcs.BcsDeserializer;
 import com.novi.serde.Bytes;
 import lombok.SneakyThrows;
+import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.junit.Test;
 import org.starcoin.types.*;
 
-import java.nio.charset.StandardCharsets;
-
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SignatureUtilsTest {
 
@@ -20,68 +19,67 @@ public class SignatureUtilsTest {
     @Test
     public void testSignPersonalMessage() {
 
-        String privateKeyString = "0x587737ebefb4961d377a3ab2f9ceb37b1fa96eb862dfaf954a4a1a99535dfec0";
-        String publicKeyString = "0x32ed52d319694aebc5b52e00836e2f7c7d2c7c7791270ede450d21dbc90cbfa1";
+        String privateKeyString = "0x94be71d34e32184138cbcad8d24a8deb510aaa74af579f74877b647392421a3f";
+        String publicKeyString = "0xa7d45ac5f1d1b5cb1b23303938b6da6b731acff6b05110e2aa0e3c1e677eeb47";
         Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);
         assertEquals(privateKeyString, Hex.encode(privateKey.value));
         Ed25519PublicKey publicKey = SignatureUtils.getPublicKey(privateKey);
         assertEquals(publicKeyString, Hex.encode(publicKey.value));
-        String message = "Example `personal_sign` message";
+        String message = "0568656c6c6f";
         String rst = SignatureUtils.signPersonalMessage(privateKey, message);
-
+        assertEquals(rst, "0xa2c75841ff3bd7d0903a90bba00c5e19a10b0c4434bbdf5dd38f055581f73d1b537808a43045ac7200f6ba7568b0947258477b62e17f09b1a6bc1771c43e1f03");
     }
 
     @SneakyThrows
     @Test
-    public void testVerifyPersonalMessage() {
-        String signedMessage = "0x290c7b35320a4dd26f651fd184373fe7264578616d706c652060706572736f6e616c5f7369676e60206d65737361676520e4b8ade696870020a4b14715924ad0627409fbabed863e360b066c039ea46c0094c1ced721d9a7d9404e7f2d656b6640631c71684fe46c93de759571f82d7cc5750a913c978e1b8170cd73238c82addd0fc915eab6a3ef27b3447506513d035bfd1fb21bb33b08750601";
-        BcsDeserializer deserializer = new BcsDeserializer(Hex.decode(signedMessage));
-        AccountAddress accountAddress = AccountAddress.deserialize(deserializer);
-        System.out.println("address: " + accountAddress);
-        Bytes message = deserializer.deserialize_bytes();
-        System.out.println("message: " + new String(message.content()));
-        TransactionAuthenticator.Ed25519 authenticator = (TransactionAuthenticator.Ed25519) TransactionAuthenticator.deserialize(deserializer);
-        ChainId chainId = ChainId.deserialize(deserializer);
-        System.out.println("chainId: " + chainId.id);
-
-        Bytes signatureBytes = authenticator.signature.value;
-        System.out.println("signature: " + Hex.encode(signatureBytes.content()));
-
-        Bytes publicKeyBytes = authenticator.public_key.value;
-        System.out.println("publicKey: " + Hex.encode(publicKeyBytes.content()));
-
-        // verify
-        Ed25519PublicKey ed25519PublicKey = authenticator.public_key;
-        Ed25519Signature signature = new Ed25519Signature(message);
-        TransactionAuthenticator.Ed25519 ed25519 = new TransactionAuthenticator.Ed25519(ed25519PublicKey, signature);
-        assert ed25519Verify(ed25519PublicKey, ed25519.bcsSerialize(), authenticator.signature.value.content());
+    public void testSignMessage() {
+        Ed25519PrivateKeyParameters privateKeyParameters = new Ed25519PrivateKeyParameters(Hex.decode("94be71d34e32184138cbcad8d24a8deb510aaa74af579f74877b647392421a3f"), 0);
+        Signer signer = new Ed25519Signer();
+        signer.init(true, privateKeyParameters);
+        byte[] message = Hex.decode("0x68656c6c6f");
+        signer.update(message, 0, message.length);
+        byte[] signature = signer.generateSignature();
+        System.out.println("msg:" + Hex.encode(signature));
+        Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(Hex.decode("0xa7d45ac5f1d1b5cb1b23303938b6da6b731acff6b05110e2aa0e3c1e677eeb47"), 0);
+        Signer verifier = new Ed25519Signer();
+        verifier.init(false, publicKeyParameters);
+        verifier.update(message, 0, message.length);
+        boolean shouldVerify = verifier.verifySignature(signature);
+        assertTrue(shouldVerify);
     }
 
     @SneakyThrows
-    public static boolean ed25519Verify(Ed25519PublicKey publicKey, byte[] data, byte[] signature) {
-        Ed25519PublicKeyParameters key = new Ed25519PublicKeyParameters(publicKey.value.content(),
-                0);
-        return verify(data, signature, key);
-    }
-
-    private static boolean verify(byte[] data, byte[] signature, Ed25519PublicKeyParameters key) {
-        Ed25519Signer signer = new Ed25519Signer();
-        signer.init(false, key);
-        signer.update(data, 0, data.length);
-        return signer.verifySignature(signature);
-    }
-
     @Test
-    public void testSign() {
-        String privateKeyEncoded = "e424e16db235e3f3b9ef2475516c51d4c15aa5287ceb364213698bd551eab4f2";
-        String message = "f7abb31497be2d952de2e1c64e2ce3edae7c4d9f5a522386a38af0c76457301e319ccfe5fc73a2cdae11c40f31ca1b619d0000000000000002000000000000000000000000000000010f5472616e73666572536372697074730f706565725f746f5f706565725f76320107000000000000000000000000000000010353544303535443000210d7f20befd34b9f1ab8aeae98b82a5a511010270000000000000000000000000000809698000000000001000000000000000d3078313a3a5354433a3a5354433d55e66000000000fb";
-        String rst = "b287e9259649cfd38b075993fa825ddd7c0697a365d4981505a6046e25a2c4009018e6cdeb76dfe07f29197cf43ff34971fb55140a58eea07f7d21d0c261c70b";
-        Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyEncoded);
-        byte[] m = SignatureUtils.ed25519Sign(privateKey, Hex.decode(message));
+    public void testVerifySignedMessage() {
+        String messageBytes = "0xb9cf94b29d74cb9a029e3d9db55e28a90568656c6c6f0020a7d45ac5f1d1b5cb1b23303938b6da6b731acff6b05110e2aa0e3c1e677eeb4740a2c75841ff3bd7d0903a90bba00c5e19a10b0c4434bbdf5dd38f055581f73d1b537808a43045ac7200f6ba7568b0947258477b62e17f09b1a6bc1771c43e1f03ff";
+        SignedMessage message = SignedMessage.bcsDeserialize(Hex.decode(messageBytes));
+        boolean checked = SignatureUtils.signedMessageCheckSignature(message);
+        assertTrue(checked);
+        checked = SignatureUtils.signedMessageCheckAccount(message, new ChainId((byte) 255), null);
+        assertTrue(checked);
+    }
 
-        Ed25519PrivateKeyParameters key = new Ed25519PrivateKeyParameters(privateKey.value.content(),0);
-        Ed25519PublicKeyParameters publicKey = key.generatePublicKey();
-
-        verify(message.getBytes(StandardCharsets.UTF_8),m,publicKey);
+    @SneakyThrows
+    @Test
+    public void testSignedMessageWithResource() {
+        String privateKeyString = "0x99d4590f7707c8277c9c591ffd56c2381e4e83c2218a00ce8d9745400843faab";
+        Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);
+        String message = "abcded346ddtest";
+//        String message = "0f616263646564333436646474657374";
+        Bytes signingBytes = Bytes.valueOf(message.getBytes());
+        SigningMessage signingMessage = new SigningMessage(signingBytes.toList());
+        String signedMsg = "0xfab981cf1ee57d043be6f4f80b5575060f61626364656433343664647465737400204a4f7becc8b33af1ad34ed6195ab1109c4793e915759aa0eb26792fed4674f3d40097e0a748706c30de6457261bfc40ca0b83704072fb7614aac5b2643fe30860ed2e256b832e5160cd9da14d0fa183599d5e89b3169c8aa764ff86fc16f115600fd";
+        String shouldSigned = SignatureUtils.signPersonalMessage(privateKey, Hex.encode(signingMessage.bcsSerialize()));
+        SignedMessage signedMessage = SignedMessage.bcsDeserialize(Hex.decode(signedMsg));
+        byte[] sigature = ((TransactionAuthenticator.Ed25519) signedMessage.authenticator).signature.value.content();
+        assertEquals(shouldSigned, Hex.encode(sigature));
+        // verify signature
+        boolean checked = SignatureUtils.signedMessageCheckSignature(signedMessage);
+        assertTrue(checked);
+        //verify check account
+        String resource = "0x205572bd99b2d9e6161d369a745b04bf9afab981cf1ee57d043be6f4f80b55750601fab981cf1ee57d043be6f4f80b55750601fab981cf1ee57d043be6f4f80b5575064c57000000000000180000000000000000fab981cf1ee57d043be6f4f80b55750630b6020000000000180100000000000000fab981cf1ee57d043be6f4f80b5575060100000000000000180200000000000000fab981cf1ee57d043be6f4f80b5575064c57000000000000";
+        AccountResource accountResource = AccountResource.bcsDeserialize(Hex.decode(resource));
+        checked = SignatureUtils.signedMessageCheckAccount(signedMessage, new ChainId((byte) 253), accountResource);
+        assertTrue(checked);
     }
 }

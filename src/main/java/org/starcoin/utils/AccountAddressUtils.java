@@ -19,15 +19,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.jcajce.provider.digest.SHA3;
 import org.starcoin.types.AccountAddress;
 import org.starcoin.types.Ed25519PublicKey;
+import org.starcoin.types.MultiEd25519PublicKey;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AccountAddressUtils {
+import static org.starcoin.constant.Constant.SCHEME_ID_ED25519;
+import static org.starcoin.constant.Constant.SCHEME_ID_MULTI_ED25519;
 
-    public static final byte SCHEME_ID_ED25519 = 0;
-    public static final byte SCHEME_ID_MULTIED25519 = 1;
+public class AccountAddressUtils {
     public static int ACCOUNT_ADDRESS_LENGTH = 16;
 
     public static AccountAddress create(byte[] bytes) {
@@ -86,8 +87,17 @@ public class AccountAddressUtils {
     }
 
     public static AccountAddress getFromPublicKey(Ed25519PublicKey publicKey) {
-        byte[] rawBytes = com.google.common.primitives.Bytes.concat(publicKey.value.content(), new byte[]{SCHEME_ID_ED25519});
+        return getFromPublicKey(publicKey.value.content(), SCHEME_ID_ED25519);
+    }
+
+    public static AccountAddress getFromMultiPublicKey(MultiEd25519PublicKey publicKey) {
+        return getFromPublicKey(publicKey.value.content(), SCHEME_ID_MULTI_ED25519);
+    }
+
+    private static AccountAddress getFromPublicKey(byte[] keyBytes, byte schemeId) {
+        byte[] rawBytes = com.google.common.primitives.Bytes.concat(keyBytes, new byte[]{schemeId});
         byte[] digestedBytes = new SHA3.Digest256().digest(rawBytes);
+
         byte[] addressBytes = Arrays.copyOfRange(digestedBytes, digestedBytes.length - ACCOUNT_ADDRESS_LENGTH, digestedBytes.length);
         return create(addressBytes);
     }

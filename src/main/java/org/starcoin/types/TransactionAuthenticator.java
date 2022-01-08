@@ -1,7 +1,30 @@
 package org.starcoin.types;
 
 
+import com.novi.serde.DeserializationError;
+import com.novi.serde.SerializationError;
+
+import static org.starcoin.constant.Constant.SCHEME_ID_ED25519;
+import static org.starcoin.constant.Constant.SCHEME_ID_MULTI_ED25519;
+
 public abstract class TransactionAuthenticator {
+
+    public static byte[] preimage(TransactionAuthenticator transactionAuthenticator) {
+        if (transactionAuthenticator instanceof Ed25519) {
+            byte[] rawBytes = ((Ed25519) transactionAuthenticator).public_key.value.content();
+            return com.google.common.primitives.Bytes.concat(rawBytes, new byte[]{SCHEME_ID_ED25519});
+        } else if (transactionAuthenticator instanceof MultiEd25519) {
+            byte[] rawBytes = ((MultiEd25519) transactionAuthenticator).public_key.value.content();
+            return com.google.common.primitives.Bytes.concat(rawBytes, new byte[]{SCHEME_ID_MULTI_ED25519});
+        } else {
+            throw new IllegalArgumentException("Unknown  authenticator type: " + transactionAuthenticator);
+        }
+    }
+
+    public static AuthenticationKey authenticationKey(TransactionAuthenticator transactionAuthenticator) throws SerializationError, DeserializationError {
+        byte[] preimage = preimage(transactionAuthenticator);
+        return new AuthenticationKey(HashValue.sha3Of(preimage).value);
+    }
 
     public static TransactionAuthenticator deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
         int index = deserializer.deserialize_variant_index();

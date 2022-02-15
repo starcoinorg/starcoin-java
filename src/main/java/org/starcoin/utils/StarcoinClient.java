@@ -32,8 +32,10 @@ import org.starcoin.types.*;
 import org.starcoin.types.TransactionPayload.ScriptFunction;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class StarcoinClient {
@@ -202,6 +204,31 @@ public class StarcoinClient {
         TransactionPayload.Package.Builder builder = new TransactionPayload.Package.Builder();
         builder.value = contractPackage;
         TransactionPayload payload = builder.build();
+        return submitTransaction(sender, privateKey, payload);
+    }
+
+    public String batchDeployContractPackage(AccountAddress sender, Ed25519PrivateKey privateKey,
+                                             List<String> filePathList, ScriptFunctionObj initScriptObj) {
+        org.starcoin.types.ScriptFunction sf =
+                Objects.isNull(initScriptObj) ? null : initScriptObj.toScriptFunction();
+
+        List<org.starcoin.types.Module> moduleList = filePathList.stream().map(file -> {
+            byte[] contractBytes = new byte[0];
+            try {
+                contractBytes = Files.toByteArray(new File(file));
+            } catch (IOException ioException) {
+                throw new RuntimeException("Files.toByteArray() error, file: " + file, ioException);
+            }
+            org.starcoin.types.Module module = new org.starcoin.types.Module(new Bytes(contractBytes));
+            return module;
+        }).collect(Collectors.toList());
+        org.starcoin.types.Package contractPackage = new org.starcoin.types.Package(sender,
+                moduleList,
+                Optional.ofNullable(sf));
+        TransactionPayload.Package.Builder builder = new TransactionPayload.Package.Builder();
+        builder.value = contractPackage;
+        TransactionPayload payload = builder.build();
+
         return submitTransaction(sender, privateKey, payload);
     }
 

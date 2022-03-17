@@ -69,6 +69,15 @@ public class ExtHelpers {
         return buildScriptFunctionTransactionPayload(moduleId, functionName, args);
     }
 
+
+    public static TransactionPayload encode_u8_and_u64_script_function(String moduleId, String functionName, Byte u8, Long u64) {
+        java.util.List<com.novi.serde.Bytes> args = java.util.Arrays.asList(
+                encode_u8_argument(u8),
+                encode_u64_argument(u64)
+        );
+        return buildScriptFunctionTransactionPayload(moduleId, functionName, args);
+    }
+
     public static TransactionPayload encode_u8vector_and_u64_script_function(String moduleId, String functionName, Bytes bytes, Long u64) {
         return buildScriptFunctionTransactionPayload(
                 moduleId,

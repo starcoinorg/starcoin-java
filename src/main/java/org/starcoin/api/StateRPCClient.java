@@ -63,6 +63,25 @@ public class StateRPCClient {
         return null;
     }
 
+    /**
+     * 用于某个地址的状态
+     */
+    public ListResource getState(String address, boolean isDecode, String state_root) throws JSONRPC2SessionException {
+        JsonRPCClient<ListResource> client = new JsonRPCClient<>();
+        List<Object> param = new ArrayList<>();
+        param.add(address);
+        ListResourceOption option = new ListResourceOption();
+        option.setDecode(isDecode);
+        option.setStateRoot(state_root);
+        param.add(option);
+        try {
+            return client.getObjectParseJackson(session, "state.list_resource", param, 0, ListResource.class);
+        } catch (IOException e) {
+            logger.error("get state error:", e);
+        }
+        return null;
+    }
+
     public TokenInfo getTokenInfo(String address, String tokenCode) throws JSONRPC2SessionException {
         JsonRPCClient<TokenInfo> client = new JsonRPCClient<>();
         List<Object> param = new ArrayList<>();

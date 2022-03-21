@@ -32,6 +32,9 @@ public class Transaction extends Base {
     @JSONField(name = "transaction_index")
     int transactionIndex;
 
+    @JSONField(name = "transaction_index")
+    long transactionGlobalIndex;
+
     @JSONField(name = "state_root_hash")
     String stateRootHash;
 
@@ -161,6 +164,14 @@ public class Transaction extends Base {
         this.userTransaction = userTransaction;
     }
 
+    public long getTransactionGlobalIndex() {
+        return transactionGlobalIndex;
+    }
+
+    public void setTransactionGlobalIndex(long transactionGlobalIndex) {
+        this.transactionGlobalIndex = transactionGlobalIndex;
+    }
+
     @Override
     public String toString() {
         return "Transaction{" +
@@ -168,6 +179,7 @@ public class Transaction extends Base {
                 ", blockNumber='" + blockNumber + '\'' +
                 ", transactionHash='" + transactionHash + '\'' +
                 ", transactionIndex=" + transactionIndex +
+                ", transactionGlobalIndex=" + transactionGlobalIndex +
                 ", stateRootHash='" + stateRootHash + '\'' +
                 ", eventRootHash='" + eventRootHash + '\'' +
                 ", gasUsed='" + gasUsed + '\'' +

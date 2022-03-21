@@ -18,6 +18,8 @@ package org.starcoin.api;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Test;
+import org.starcoin.bean.ListResource;
 import org.starcoin.bean.TokenInfo;
 
 import java.net.URL;
@@ -28,7 +30,7 @@ public class StateRPCClientTest {
     private StateRPCClient stateRPCClient;
 
     @Before
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         stateRPCClient = new StateRPCClient(new URL("http://localhost:9850"));
     }
 
@@ -49,5 +51,11 @@ public class StateRPCClientTest {
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testGetStateWithRoot() throws JSONRPC2SessionException {
+        ListResource resource = stateRPCClient.getState("0x8c109349c6bd91411d6bc962e080c4a3", true, "0x8bf6b724ae4342f7ef15e0fe21cf54639e548353bfeeb1e642386edc2a335781");
+        System.out.println(resource);
     }
 }

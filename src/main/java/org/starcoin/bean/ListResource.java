@@ -30,4 +30,11 @@ public class ListResource {
     public void setResources(Map<String, Resource> resources) {
         this.resources = resources;
     }
+
+    @Override
+    public String toString() {
+        return "ListResource{" +
+                "resources=" + resources +
+                '}';
+    }
 }

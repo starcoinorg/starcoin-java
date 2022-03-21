@@ -32,7 +32,7 @@ public class Transaction extends Base {
     @JSONField(name = "transaction_index")
     int transactionIndex;
 
-    @JSONField(name = "transaction_index")
+    @JSONField(name = "transaction_global_index")
     long transactionGlobalIndex;
 
     @JSONField(name = "state_root_hash")

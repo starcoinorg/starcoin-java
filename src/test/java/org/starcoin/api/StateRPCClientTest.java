@@ -55,7 +55,7 @@ public class StateRPCClientTest {
 
     @Test
     public void testGetStateWithRoot() throws JSONRPC2SessionException {
-        ListResource resource = stateRPCClient.getState("0x8c109349c6bd91411d6bc962e080c4a3", true, "0x8bf6b724ae4342f7ef15e0fe21cf54639e548353bfeeb1e642386edc2a335781");
+        ListResource resource = stateRPCClient.getState("0x8c109349c6bd91411d6bc962e080c4a3", true, "0x8bf6b724ae4342f7ef15e0fe21cf54639e548353bfeeb1e642386edc2a3357");
         System.out.println(resource);
     }
 }

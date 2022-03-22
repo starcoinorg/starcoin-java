@@ -74,6 +74,19 @@ public class TransactionRPCClient {
     }
 
     /**
+     * 通过 transaction hash 获取某个 TransactionInfo
+     */
+    public List<Transaction> getTransactionInfos(long startGlobalIndex, boolean reverse, int count) throws JSONRPC2SessionException {
+        JsonRPCClient<Transaction> client = new JsonRPCClient<>();
+        List<Object> parameter = new ArrayList<>();
+        parameter.add(startGlobalIndex);
+        parameter.add(reverse);
+        parameter.add(count);
+        return client.getObjectArray(session, "chain.get_transaction_infos", parameter, 0, Transaction.class);
+    }
+
+
+    /**
      * 通过 block hash 获取所有 Transaction
      */
     public List<Transaction> getBlockTransactions(String blockHash) throws JSONRPC2SessionException {

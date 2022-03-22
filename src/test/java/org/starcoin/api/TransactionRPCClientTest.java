@@ -20,6 +20,7 @@ import junit.framework.TestCase;
 import org.starcoin.bean.Transaction;
 
 import java.net.URL;
+import java.util.List;
 
 public class TransactionRPCClientTest extends TestCase {
 
@@ -36,6 +37,13 @@ public class TransactionRPCClientTest extends TestCase {
             Transaction transaction = client.getTransactionByHash("0x9497fc455c962ee27a2321e88af6c8eeae9842f3d3ea70dc349cdbe004250897");
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void testGetTransactionInfos() throws JSONRPC2SessionException {
+       List<Transaction> transactionList = client.getTransactionInfos(5222379, true, 10);
+        for (Transaction transaction: transactionList) {
+            System.out.println(transaction);
         }
     }
 }

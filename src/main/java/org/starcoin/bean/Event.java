@@ -31,6 +31,9 @@ public class Event extends Base {
     @JSONField(name = "transaction_index")
     int transactionIndex;
 
+    @JSONField(name = "transaction_global_index")
+    long transactionGlobalIndex;
+
     String data;
 
     @JSONField(name = "type_tag")
@@ -41,6 +44,9 @@ public class Event extends Base {
 
     @JSONField(name = "event_seq_number")
     String eventSeqNumber;
+
+    @JSONField(name = "decode_event_data")
+    String decodeEventData;
 
     public String getBlockHash() {
         return blockHash;
@@ -115,6 +121,22 @@ public class Event extends Base {
         }
     }
 
+    public String getDecodeEventData() {
+        return decodeEventData;
+    }
+
+    public void setDecodeEventData(String decodeEventData) {
+        this.decodeEventData = decodeEventData;
+    }
+
+    public long getTransactionGlobalIndex() {
+        return transactionGlobalIndex;
+    }
+
+    public void setTransactionGlobalIndex(long transactionGlobalIndex) {
+        this.transactionGlobalIndex = transactionGlobalIndex;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
@@ -122,10 +144,12 @@ public class Event extends Base {
                 ", blockNumber='" + blockNumber + '\'' +
                 ", transactionHash='" + transactionHash + '\'' +
                 ", transactionIndex=" + transactionIndex +
+                ", transactionGlobalIndex=" + transactionGlobalIndex +
                 ", data='" + data + '\'' +
                 ", typeTag='" + typeTag + '\'' +
                 ", eventKey='" + eventKey + '\'' +
                 ", eventSeqNumber='" + eventSeqNumber + '\'' +
+                ", decodeEventData='" + decodeEventData + '\'' +
                 '}';
     }
 }

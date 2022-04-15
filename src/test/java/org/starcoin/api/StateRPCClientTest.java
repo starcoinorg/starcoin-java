@@ -34,7 +34,7 @@ public class StateRPCClientTest {
         stateRPCClient = new StateRPCClient(new URL("http://localhost:9850"));
     }
 
-    @Ignore
+    @Test
     public void testGetState() {
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd-HH:mm:ss");
@@ -46,7 +46,10 @@ public class StateRPCClientTest {
             System.out.println("amount: " + amount);
             TokenInfo tokenInfo = stateRPCClient.getTokenInfo("0x44366bba9bc9ed51bc8f564ecb18b12a", "0x44366bba9bc9ed51bc8f564ecb18b12a::DummyToken::BBB");
             System.out.println(tokenInfo);
-            tokenInfo = stateRPCClient.getTokenInfo("0x1", "0x1::STC::STC");
+
+            String token = "0x8c109349c6bd91411d6bc962e080c4a3::STAR::STAR";
+            System.out.println(token.substring(0, 34));
+            tokenInfo = stateRPCClient.getTokenInfo("0x8c109349c6bd91411d6bc962e080c4a3", "0x8c109349c6bd91411d6bc962e080c4a3::STAR::STAR");
             System.out.println(tokenInfo);
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
@@ -55,7 +58,21 @@ public class StateRPCClientTest {
 
     @Test
     public void testGetStateWithRoot() throws JSONRPC2SessionException {
-        ListResource resource = stateRPCClient.getState("0x8c109349c6bd91411d6bc962e080c4a3", true, "0x8bf6b724ae4342f7ef15e0fe21cf54639e548353bfeeb1e642386edc2a3357");
+        ListResource resource = stateRPCClient.getState("0x8c109349c6bd91411d6bc962e080c4a3", true, "0xf4270a817e7d5f27fe46a033efa0c8be169d586e4e055553313a89e001dd79bc");
         System.out.println(resource);
+        for (String key : resource.getResources().keySet()) {
+             if(key.contains("TokenSwapPair")) {
+                 String tokenPair = key.substring(key.indexOf("<") + 1, key.length() - 1);
+                 String[] tokens = tokenPair.split(",");
+                 if (tokens.length != 2) {
+                     continue;
+                 }
+                 System.out.println("x: " + tokens[0] + ", y: " + tokens[1]);
+                 long xReserve = resource.getResources().get(key).getJson().get("token_x_reserve").get("value").longValue();
+                 long yReserve = resource.getResources().get(key).getJson().get("token_y_reserve").get("value").longValue();
+                 System.out.println("x: " + xReserve + ", y: " + yReserve);
+             }
+        }
     }
+
 }

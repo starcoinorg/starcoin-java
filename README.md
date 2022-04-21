@@ -87,9 +87,9 @@ starcoin -n dev --http-apis all console
     String privateKeyString = "0x587737ebefb4961d377a3ab2f9ceb37b1fa96eb862dfaf954a4a1a99535dfec0";
     String publicKeyString = "0x32ed52d319694aebc5b52e00836e2f7c7d2c7c7791270ede450d21dbc90cbfa1";
     Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);
-    assertEquals(privateKeyString, Hex.encode(privateKey.value));
+    Assert.assertEquals(privateKeyString, Hex.encode(privateKey.value));
     Ed25519PublicKey publicKey = SignatureUtils.getPublicKey(privateKey);
-    assertEquals(publicKeyString, Hex.encode(publicKey.value));
+    Assert.assertEquals(publicKeyString, Hex.encode(publicKey.value));
     String message = "Example `personal_sign` message";
     String rst = SignatureUtils.signPersonalMessage(privateKey, message);
 ```
@@ -112,7 +112,6 @@ starcoin -n dev --http-apis all console
 ```
 
 #### 签名交易
-
 ```
     StarcoinClient starcoinClient = new StarcoinClient(ChainInfo.DEFAULT_DEV);
     String address = "0xf8af03dd08de49d81e4efd9e24c039cc";
@@ -122,8 +121,13 @@ starcoin -n dev --http-apis all console
 
     String toAddress = "0xd7f20befd34b9f1ab8aeae98b82a5a51";
     TypeObj typeObj = TypeObj.STC();
+
+    BigInteger amount = new BigInteger("1000");
     
-    TransactionPayload payload = starcoinClient.buildTransferPayload(privateKey, typeObj, amount);
+    //TransactionPayload payload = starcoinClient.buildTransferPayload(privateKey, typeObj, amount);
+    //buildTransferPayload() 是私有方法
+    TransactionPayload payload = Helpers.encode_peer_to_peer_v2_script_function(typeObj.toTypeTag(), 
+    AccountAddressUtils.create(toAddress), amount);
     String rst = starcoinClient.submitTransaction(sender, privateKey, payload);
     
     System.out.println(rst);
@@ -191,10 +195,14 @@ starcoin -n dev --http-apis all console
 #### 查询txn
 
 ```
-    TransactionRPCClient client = new TransactionRPCClient(new URL("http://localhost:9850"));
-    Transaction transaction = client.getTransactionByHash("0x9497fc455c962ee27a2321e88af6c8eeae9842f3d3ea70dc349cdbe004250897");
-    TransactionPayload payload = transaction.getUserTransaction().getRawTransaction();
-    System.out.println("txn: " + payload.getClass());
+    try{
+        TransactionRPCClient client = new TransactionRPCClient(new URL("http://localhost:9850"));
+        Transaction transaction = client.getTransactionByHash("0x9497fc455c962ee27a2321e88af6c8eeae9842f3d3ea70dc349cdbe004250897");
+        TransactionPayload payload = transaction.getUserTransaction().getRawTransaction().getTransactionPayload();
+        System.out.println("txn: " + payload.getClass());
+    }catch (Exception ex){
+        ex.printStackTrace();
+    }
 ```
 
 ### 监听链上Event

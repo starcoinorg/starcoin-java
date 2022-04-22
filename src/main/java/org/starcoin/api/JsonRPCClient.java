@@ -22,6 +22,8 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,6 +34,8 @@ import java.util.List;
  * @param <T>
  */
 class JsonRPCClient<T> {
+
+    private static final Logger logger = LoggerFactory.getLogger(JsonRPCClient.class);
 
     /**
      * 获取单个对象的接口
@@ -51,7 +55,11 @@ class JsonRPCClient<T> {
             Object result = response.getResult();
             if (result != null) {
                 return JSON.parseObject(result.toString(), clazz);
+            }else {
+                logger.warn("get object result is null, method:" + method);
             }
+        }else {
+            logger.error("get object array error:" + response.getError());
         }
         return null;
     }
@@ -75,7 +83,12 @@ class JsonRPCClient<T> {
             if (result != null) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 return objectMapper.readValue(result.toString(), clazz);
+            }else {
+                logger.warn("get object parse jackson result is null, method:" + method);
             }
+
+        }else {
+            logger.error("get object parse jackson array error:" + response.getError());
         }
         return null;
     }
@@ -100,7 +113,11 @@ class JsonRPCClient<T> {
             if (result != null) {
                 JSONObject jb = JSON.parseObject(result.toString());
                 return jb.getObject(subKey, clazz);
+            }else {
+                logger.warn("get sub object result is null, method:" + method);
             }
+        }else {
+            logger.error("get sub object array error:" + response.getError());
         }
         return null;
     }
@@ -123,7 +140,11 @@ class JsonRPCClient<T> {
             Object result = response.getResult();
             if (result != null) {
                 return JSON.parseArray(result.toString(), clazz);
+            }else {
+                logger.warn("get object result is null, method:" + method);
             }
+        }else {
+            logger.error("get object array error:" + response.getError());
         }
         return null;
     }

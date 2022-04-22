@@ -19,15 +19,10 @@ import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.starcoin.bean.Event;
-import org.starcoin.bean.GetTransactionOption;
-import org.starcoin.bean.PendingTransaction;
-import org.starcoin.bean.Transaction;
+import org.starcoin.bean.*;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Starcoin Transaction 相关json-rpc接口的封装。
@@ -74,6 +69,19 @@ public class TransactionRPCClient {
     }
 
     /**
+     * 通过 transaction hash 获取某个 TransactionInfo
+     */
+    public List<Transaction> getTransactionInfos(long startGlobalIndex, boolean reverse, int count) throws JSONRPC2SessionException {
+        JsonRPCClient<Transaction> client = new JsonRPCClient<>();
+        List<Object> parameter = new ArrayList<>();
+        parameter.add(startGlobalIndex);
+        parameter.add(reverse);
+        parameter.add(count);
+        return client.getObjectArray(session, "chain.get_transaction_infos", parameter, 0, Transaction.class);
+    }
+
+
+    /**
      * 通过 block hash 获取所有 Transaction
      */
     public List<Transaction> getBlockTransactions(String blockHash) throws JSONRPC2SessionException {
@@ -87,6 +95,22 @@ public class TransactionRPCClient {
     public List<Event> getTransactionEvents(String transactionHash) throws JSONRPC2SessionException {
         JsonRPCClient<Event> client = new JsonRPCClient<>();
         return client.getObjectArray(session, "chain.get_events_by_txn_hash", Collections.singletonList(transactionHash), 0, Event.class);
+    }
+
+    public List<Event> getEvents(Long fromBlock, Long toBlock, List<String> eventKeys, List<String> accountAddress, List<String> typeTags, Integer limit) throws JSONRPC2SessionException {
+//        chain.get_events
+        JsonRPCClient<Event> client = new JsonRPCClient<>();
+        List<Object> parameter = new ArrayList<>();
+        Map<String, Object> mapParameter = new HashMap<>();
+        mapParameter.put("from_block", fromBlock);
+        mapParameter.put("to_block", toBlock);
+        mapParameter.put("event_keys", eventKeys);
+        mapParameter.put("addrs", accountAddress);
+        mapParameter.put("type_tags", typeTags);
+        mapParameter.put("limit", limit);
+        parameter.add(mapParameter);
+        parameter.add(new GetEventOption(true));
+        return client.getObjectArray(session, "chain.get_events", parameter, 0, Event.class);
     }
 
 }

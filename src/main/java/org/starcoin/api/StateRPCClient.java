@@ -15,6 +15,8 @@
  */
 package org.starcoin.api;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
@@ -55,6 +57,25 @@ public class StateRPCClient {
         ListResourceOption option = new ListResourceOption();
         option.setDecode(true);
         param.add(option);
+        try {
+            return client.getObjectParseJackson(session, "state.list_resource", param, 0, ListResource.class);
+        } catch (IOException e) {
+            logger.error("get state error:", e);
+        }
+        return null;
+    }
+
+    /**
+     * 用于某个地址的状态
+     */
+    public ListResource getState(String address, boolean isDecode, String state_root) throws JSONRPC2SessionException {
+        JsonRPCClient<ListResource> client = new JsonRPCClient<>();
+        List<Object> param = new ArrayList<>();
+        param.add(address);
+        ListResourceOption option = new ListResourceOption();
+        option.setDecode(isDecode);
+        option.setStateRoot(state_root);
+        param.add(JSON.toJSON(option));
         try {
             return client.getObjectParseJackson(session, "state.list_resource", param, 0, ListResource.class);
         } catch (IOException e) {

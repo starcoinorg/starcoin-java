@@ -2,6 +2,7 @@ com.novi.bcs
 com.novi.serde
 org.starcoin.api
 org.starcoin.bean
+org.starcoin.constant
 org.starcoin.serde.format
 org.starcoin.serde.format.cli
 org.starcoin.serde.format.jackson

@@ -17,9 +17,12 @@ package org.starcoin.api;
 
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import junit.framework.TestCase;
+import org.starcoin.bean.Event;
 import org.starcoin.bean.Transaction;
 
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 
 public class TransactionRPCClientTest extends TestCase {
 
@@ -37,5 +40,22 @@ public class TransactionRPCClientTest extends TestCase {
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }
+    }
+
+    public void testGetTransactionInfos() throws JSONRPC2SessionException {
+       List<Transaction> transactionList = client.getTransactionInfos(5222379, true, 10);
+        for (Transaction transaction: transactionList) {
+            System.out.println(transaction);
+        }
+    }
+
+    public void testGetEvents() throws JSONRPC2SessionException {
+        String tag = "0x8c109349c6bd91411d6bc962e080c4a3::TokenSwapFee::SwapFeeEvent";
+//        String tag ="0x00000000000000000000000000000001::Block::NewBlockEvent";
+       List<Event> result = client.getEvents(Long.valueOf(4887495), Long.valueOf(4887520) ,null, null, Collections.singletonList(tag), null);
+        for (Event event: result) {
+            System.out.println(event);
+        }
+
     }
 }

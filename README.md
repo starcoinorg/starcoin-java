@@ -91,7 +91,7 @@ starcoin -n dev --http-apis all console
     Ed25519PublicKey publicKey = SignatureUtils.getPublicKey(privateKey);
     Assert.assertEquals(publicKeyString, Hex.encode(publicKey.value));
     String message = "Example `personal_sign` message";
-    String rst = SignatureUtils.signPersonalMessage(privateKey, message);
+    String signature = SignatureUtils.signPersonalMessage(privateKey, message);
 ```
 
 #### 转账

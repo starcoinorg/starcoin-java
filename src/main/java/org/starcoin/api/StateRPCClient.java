@@ -28,6 +28,7 @@ import org.starcoin.bean.Resource;
 import org.starcoin.bean.TokenInfo;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +102,9 @@ public class StateRPCClient {
 
     /**
      * 用于获取某个地址下的token 数量
+     * 由于amount的数量可能超过long的最大值，所以这个方法已经在某些token下会溢出，建议使用getAddressAmountValue方法
      */
+    @Deprecated
     public long getAddressAmount(String address, String token) {
         try {
             ListResource listResource = getState(address);
@@ -119,6 +122,28 @@ public class StateRPCClient {
         }
         return 0;
     }
+
+    /**
+     * 用于获取某个地址下的token 数量
+     */
+    public BigInteger getAddressAmountValue(String address, String token) {
+        try {
+            ListResource listResource = getState(address);
+            if (listResource == null) {
+                // add result = -1 for resource not exist
+                return BigInteger.valueOf(-1);
+            }
+            Map<String, Resource> resourceMap = listResource.getResources();
+            JsonNode node = resourceMap.get(getResourceMapTokenKey(token)).getJson().get("token");
+            if (node != null) {
+                return new BigInteger(node.get("value").asText());
+            }
+        } catch (Exception e) {
+            logger.error("get amount error:", e);
+        }
+        return BigInteger.valueOf(0);
+    }
+
 
     private String getResourceMapTokenKey(String token) {
         return "0x00000000000000000000000000000001::Account::Balance<" + token + ">";

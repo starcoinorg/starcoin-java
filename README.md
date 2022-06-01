@@ -20,7 +20,7 @@ Home page: [Home page](https://starcoinorg.github.io/starcoin-java/)
 <dependency>
     <groupId>org.starcoin</groupId>
     <artifactId>sdk</artifactId>
-    <version>1.1.23</version>
+    <version>1.1.24</version>
 </dependency>
 ```
 

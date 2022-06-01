@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.starcoin.bean.ListResource;
 import org.starcoin.bean.TokenInfo;
 
+import java.math.BigInteger;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,7 +59,7 @@ public class StateRPCClientTest {
 
     @Test
     public void testGetStateWithRoot() throws JSONRPC2SessionException {
-        ListResource resource = stateRPCClient.getState("0x8c109349c6bd91411d6bc962e080c4a3", true, "0xf4270a817e7d5f27fe46a033efa0c8be169d586e4e055553313a89e001dd79bc");
+        ListResource resource = stateRPCClient.getState("0x8c109349c6bd91411d6bc962e080c4a3", true, "0xfd8077594464567fd1c60ec59e7d6bc78312d674ac3710febd2898d172f6e113");
         System.out.println(resource);
         for (String key : resource.getResources().keySet()) {
              if(key.contains("TokenSwapPair")) {
@@ -75,4 +76,11 @@ public class StateRPCClientTest {
         }
     }
 
+    @Test
+    public void testGetAddressAmountValue() {
+       BigInteger amount = stateRPCClient.getAddressAmountValue("0x86fDDFFbBB603C428e5c74442CE1e966", "0x49142e24bf3b34b323b3bd339e2434e3::AWW::AWW");
+       System.out.println(amount);
+       amount = stateRPCClient.getAddressAmountValue("0x86fDDFFbBB603C428e5c74442CE1e966", "0x00000000000000000000000000000001::STC::STC");
+       System.out.println(amount);
+    }
 }

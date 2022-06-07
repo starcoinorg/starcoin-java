@@ -16,7 +16,9 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import org.starcoin.utils.NumberUtils;
+import com.novi.bcs.BcsDeserializer;
+import com.novi.serde.DeserializationError;
+import org.starcoin.utils.Hex;
 
 import java.math.BigInteger;
 
@@ -94,7 +96,12 @@ public class Transfer extends Base {
     }
 
     public BigInteger getAmountValue() {
-        return NumberUtils.getValueFromString(this.amount);
+        try {
+            return new BcsDeserializer(Hex.decode(this.amount)).deserialize_u128();
+        } catch (DeserializationError deserializationError) {
+            deserializationError.printStackTrace();
+        }
+        return BigInteger.ZERO;
     }
 
     public void setAmountValue(BigInteger amountValue) {

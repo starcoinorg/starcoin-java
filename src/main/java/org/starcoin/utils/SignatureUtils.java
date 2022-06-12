@@ -88,7 +88,7 @@ public class SignatureUtils {
 
 
     /**
-     * Signe personal BCS serialized SigningMessage.
+     * Sign personal BCS serialized SigningMessage.
      *
      * @param privateKey           Private key
      * @param serializedMessageHex BCS serialized SigningMessage hex.
@@ -102,7 +102,7 @@ public class SignatureUtils {
     }
 
     /**
-     * Signe personal string message.
+     * Sign personal string message.
      *
      * @param privateKey Private key
      * @param message    string message to be signed as UTF_8 bytes

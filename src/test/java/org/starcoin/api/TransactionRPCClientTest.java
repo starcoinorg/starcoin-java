@@ -15,10 +15,10 @@
  */
 package org.starcoin.api;
 
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import junit.framework.TestCase;
 import org.starcoin.bean.Event;
 import org.starcoin.bean.Transaction;
+import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.net.URL;
 import java.util.Collections;
@@ -30,30 +30,32 @@ public class TransactionRPCClientTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        client = new TransactionRPCClient(new URL("http://localhost:9850"));
+        //client = new TransactionRPCClient(new URL("http://localhost:9850"));
+        client = new TransactionRPCClient(new URL("https://barnard-seed.starcoin.org"));
     }
 
     public void testGetTransactionByHash() {
-
         try {
-            Transaction transaction = client.getTransactionByHash("0x9497fc455c962ee27a2321e88af6c8eeae9842f3d3ea70dc349cdbe004250897");
+            Transaction transaction = client.getTransactionByHash("0x88e2f199dba3c4bef8b29b8e21a38cb4a6d36f17b5bd5f3394bfbf8268342ff2");
+            System.out.println(transaction);
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }
     }
 
     public void testGetTransactionInfos() throws JSONRPC2SessionException {
-       List<Transaction> transactionList = client.getTransactionInfos(5222379, true, 10);
-        for (Transaction transaction: transactionList) {
+        List<Transaction> transactionList = client.getTransactionInfos(5222379, true, 10);
+        for (Transaction transaction : transactionList) {
             System.out.println(transaction);
         }
     }
 
     public void testGetEvents() throws JSONRPC2SessionException {
-        String tag = "0x8c109349c6bd91411d6bc962e080c4a3::TokenSwapFee::SwapFeeEvent";
+//        String tag = "0x8c109349c6bd91411d6bc962e080c4a3::TokenSwapFee::SwapFeeEvent";
 //        String tag ="0x00000000000000000000000000000001::Block::NewBlockEvent";
-       List<Event> result = client.getEvents(Long.valueOf(4887495), Long.valueOf(4887520) ,null, null, Collections.singletonList(tag), null);
-        for (Event event: result) {
+        String tag = "0x00000000000000000000000000000001::Dao::ProposalCreatedEvent";
+        List<Event> result = client.getEvents(Long.valueOf(5061109), Long.valueOf(5061109), null, null, Collections.singletonList(tag), null);
+        for (Event event : result) {
             System.out.println(event);
         }
 

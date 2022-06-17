@@ -28,7 +28,7 @@ import java.util.Arrays;
 
 /**
  * 用于通过 websocket 订阅 Starcoin 的事件，暂时只实现了 PendingTransaction 相关的事件。
- * example 参考 SubscribleSample
+ * example 参考 SubscribeSample
  *
  * @author fanngyuan
  * @since 1.1.6

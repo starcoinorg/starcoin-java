@@ -15,12 +15,13 @@
  */
 package org.starcoin.api;
 
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.starcoin.bean.Block;
 import org.starcoin.bean.BlockHeader;
+import org.starcoin.jsonrpc.client.JSONRPC2Session;
+import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class BlockRPCClient {
      * 获取当前主链的block header
      */
     @SuppressWarnings("unchecked")
-    public BlockHeader getChainHeader() throws JSONRPC2SessionException {
+    public BlockHeader getChainHeader() throws JSONRPC2SessionException, JsonProcessingException {
         JsonRPCClient<BlockHeader> client = new JsonRPCClient<>();
         return client.getSubObject(session, "chain.info", Collections.EMPTY_LIST, 0, "head", BlockHeader.class);
     }

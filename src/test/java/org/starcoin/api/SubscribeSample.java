@@ -25,7 +25,8 @@ import java.net.ConnectException;
 public class SubscribeSample {
 
     public static void main(String... args) throws ConnectException {
-        WebSocketService service = new WebSocketService("ws://localhost:9870", true);
+        //WebSocketService service = new WebSocketService("ws://localhost:9870", true);
+        WebSocketService service = new WebSocketService("ws://barnard4.seed.starcoin.org", true);
         service.connect();
         StarcoinSubscriber subscriber = new StarcoinSubscriber(service);
         EventFilter eventFilter = new EventFilter(0, "b75994d55eae88219dc57e7e62a11bc0");

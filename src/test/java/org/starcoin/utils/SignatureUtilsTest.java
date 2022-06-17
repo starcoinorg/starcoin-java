@@ -75,6 +75,7 @@ public class SignatureUtilsTest {
         String shouldSigned = SignatureUtils.signPersonalBcsSerializedMessage(privateKey, Hex.encode(signingMessage.bcsSerialize()));
         SignedMessage signedMessage = SignedMessage.bcsDeserialize(Hex.decode(signedMsg));
         byte[] sigature = ((TransactionAuthenticator.Ed25519) signedMessage.authenticator).signature.value.content();
+        System.out.println(Hex.encode(signedMessage.authenticator.bcsSerialize()));
         assertEquals(shouldSigned, Hex.encode(sigature));
         // verify signature
         boolean checked = SignatureUtils.signedMessageCheckSignature(signedMessage);

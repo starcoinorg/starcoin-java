@@ -16,10 +16,12 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ListResourceOption {
     private boolean decode;
     @JSONField(name = "state_root")
+    @JsonProperty("state_root")
     private String stateRoot;
 
     public boolean isDecode() {

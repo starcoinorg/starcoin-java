@@ -18,36 +18,64 @@ package org.starcoin.bean;
 import com.alibaba.fastjson.PropertyNamingStrategy;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JSONType(naming = PropertyNamingStrategy.SnakeCase)
 public class BlockHeader extends Base {
     long timestamp;
+
     private String author;
+
     @JSONField(name = "author_auth_key")
+    @JsonProperty("author_auth_key")
     private String authorAuthKey;
+
     @JSONField(name = "block_accumulator_root")
+    @JsonProperty("block_accumulator_root")
     private String blockAccumulatorRoot;
+
     @JSONField(name = "block_hash")
+    @JsonProperty("block_hash")
     private String blockHash;
+
     @JSONField(name = "body_hash")
+    @JsonProperty("body_hash")
     private String bodyHash;
+
     @JSONField(name = "chain_id")
+    @JsonProperty("chain_id")
     private int chainId;
+
     @JSONField(name = "difficulty")
+    @JsonProperty("difficulty")
     private String difficultyHexStr;
+
     @JSONField(name = "difficulty_number")
+    @JsonProperty("difficulty_number")
     private long difficulty;
+
     private String extra;
+
     @JSONField(name = "gas_used")
+    @JsonProperty("gas_used")
     private long gasUsed;
+
     private long nonce;
+
     @JSONField(name = "number")
+    @JsonProperty("number")
     private long height;
+
     @JSONField(name = "parent_hash")
+    @JsonProperty("parent_hash")
     private String parentHash;
+
     @JSONField(name = "state_root")
+    @JsonProperty("state_root")
     private String stateRoot;
+
     @JSONField(name = "txn_accumulator_root")
+    @JsonProperty("txn_accumulator_root")
     private String txnAccumulatorRoot;
 
     public String getAuthor() {

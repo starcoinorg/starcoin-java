@@ -19,20 +19,29 @@ package org.starcoin.bean;
 import com.alibaba.fastjson.PropertyNamingStrategy;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 @JSONType(naming = PropertyNamingStrategy.SnakeCase)
 public class Block extends Base {
     @JSONField(name = "metadata")
+    @JsonProperty("metadata")
     BlockMetadata blockMetadata;
+
     @JSONField(name = "uncles")
+    @JsonProperty("uncles")
     List<BlockHeader> uncles;
+
     @JSONField(name = "header")
+    @JsonProperty("header")
     private BlockHeader header;
+
     private BlockBody body;
+
     @JSONField(serialize = false)
     private List<Transaction> transactionList;
+
 
     public List<Transaction> getTransactionList() {
         return transactionList;
@@ -75,6 +84,7 @@ public class Block extends Base {
         this.body = body;
     }
 
+
     @Override
     public String toString() {
         return "Block{" +
@@ -82,6 +92,7 @@ public class Block extends Base {
                 ", uncles=" + uncles +
                 ", header=" + header +
                 ", body=" + body +
+                ", transactionList=" + transactionList +
                 '}';
     }
 }

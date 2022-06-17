@@ -16,49 +16,65 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 public class Transaction extends Base {
     @JSONField(name = "block_hash")
+    @JsonProperty("block_hash")
     String blockHash;
 
     @JSONField(name = "block_number")
+    @JsonProperty("block_number")
     String blockNumber;
 
     @JSONField(name = "transaction_hash")
+    @JsonProperty("transaction_hash")
     String transactionHash;
 
     @JSONField(name = "transaction_index")
+    @JsonProperty("transaction_index")
     int transactionIndex;
 
     @JSONField(name = "transaction_global_index")
+    @JsonProperty("transaction_global_index")
     long transactionGlobalIndex;
 
     @JSONField(name = "state_root_hash")
+    @JsonProperty("state_root_hash")
     String stateRootHash;
 
     @JSONField(name = "event_root_hash")
+    @JsonProperty("event_root_hash")
     String eventRootHash;
 
     @JSONField(name = "gas_used")
+    @JsonProperty("gas_used")
     String gasUsed;
 
-    String status;
-
-    long timestamp;
-
     @JSONField(name = "user_transaction")
+    @JsonProperty("user_transaction")
     UserTransaction userTransaction;
 
     @JSONField(name = "block_metadata")
+    @JsonProperty("block_metadata")
     BlockMetadata blockMetadata;
 
     @JSONField(serialize = false)
+    @JsonIgnore
     List<Event> events;
 
     @JSONField(name = "transaction_type")
+    @JsonProperty("transaction_type")
     TransactionType transactionType;
+
+
+    Object status;
+
+    long timestamp;
+
 
     public TransactionType getTransactionType() {
         return transactionType;
@@ -92,11 +108,11 @@ public class Transaction extends Base {
         this.gasUsed = gasUsed;
     }
 
-    public String getStatus() {
+    public Object getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Object status) {
         this.status = status;
     }
 
@@ -183,12 +199,12 @@ public class Transaction extends Base {
                 ", stateRootHash='" + stateRootHash + '\'' +
                 ", eventRootHash='" + eventRootHash + '\'' +
                 ", gasUsed='" + gasUsed + '\'' +
-                ", status='" + status + '\'' +
-                ", timestamp=" + timestamp +
                 ", userTransaction=" + userTransaction +
                 ", blockMetadata=" + blockMetadata +
                 ", events=" + events +
                 ", transactionType=" + transactionType +
+                ", status=" + status +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }

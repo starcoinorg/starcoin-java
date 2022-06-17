@@ -15,18 +15,21 @@
  */
 package org.starcoin.api;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
-import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.starcoin.jsonrpc.JSONRPC2Request;
+import org.starcoin.jsonrpc.JSONRPC2Response;
+import org.starcoin.jsonrpc.client.JSONRPC2Session;
+import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * JsonRPC client 通用的封装类
@@ -54,11 +57,11 @@ class JsonRPCClient<T> {
         if (response.indicatesSuccess()) {
             Object result = response.getResult();
             if (result != null) {
-                return JSON.parseObject(result.toString(), clazz);
-            }else {
+                return new ObjectMapper().convertValue(result, clazz);
+            } else {
                 logger.warn("get object result is null, method:" + method);
             }
-        }else {
+        } else {
             logger.error("get object array error:" + response.getError());
         }
         return null;
@@ -82,12 +85,12 @@ class JsonRPCClient<T> {
             Object result = response.getResult();
             if (result != null) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                return objectMapper.readValue(result.toString(), clazz);
-            }else {
+                return objectMapper.convertValue(result, clazz);
+            } else {
                 logger.warn("get object parse jackson result is null, method:" + method);
             }
 
-        }else {
+        } else {
             logger.error("get object parse jackson array error:" + response.getError());
         }
         return null;
@@ -105,18 +108,19 @@ class JsonRPCClient<T> {
      * @return
      * @throws JSONRPC2SessionException
      */
-    protected T getSubObject(JSONRPC2Session session, String method, List<Object> params, int requestId, String subKey, Class<T> clazz) throws JSONRPC2SessionException {
+    @SuppressWarnings("rawtypes")
+    protected T getSubObject(JSONRPC2Session session, String method, List<Object> params, int requestId, String subKey, Class<T> clazz) throws JSONRPC2SessionException, JsonProcessingException {
         JSONRPC2Request request = new JSONRPC2Request(method, params, requestId);
         JSONRPC2Response response = session.send(request);
         if (response.indicatesSuccess()) {
             Object result = response.getResult();
             if (result != null) {
-                JSONObject jb = JSON.parseObject(result.toString());
-                return jb.getObject(subKey, clazz);
-            }else {
+                Map map = new ObjectMapper().convertValue(result, Map.class);
+                return map.get(subKey) == null ? null : new ObjectMapper().convertValue(map.get(subKey), clazz);
+            } else {
                 logger.warn("get sub object result is null, method:" + method);
             }
-        }else {
+        } else {
             logger.error("get sub object array error:" + response.getError());
         }
         return null;
@@ -139,11 +143,14 @@ class JsonRPCClient<T> {
         if (response.indicatesSuccess()) {
             Object result = response.getResult();
             if (result != null) {
-                return JSON.parseArray(result.toString(), clazz);
-            }else {
+                ObjectMapper objectMapper = new ObjectMapper();
+                List<Object> list = objectMapper.convertValue(result, new TypeReference<List<Object>>() {
+                });
+                return list.stream().map(item -> objectMapper.convertValue(item, clazz)).collect(Collectors.toList());
+            } else {
                 logger.warn("get object result is null, method:" + method);
             }
-        }else {
+        } else {
             logger.error("get object array error:" + response.getError());
         }
         return null;

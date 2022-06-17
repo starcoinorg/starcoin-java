@@ -15,17 +15,16 @@
  */
 package org.starcoin.api;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.starcoin.bean.ListResource;
 import org.starcoin.bean.ListResourceOption;
 import org.starcoin.bean.Resource;
 import org.starcoin.bean.TokenInfo;
+import org.starcoin.jsonrpc.client.JSONRPC2Session;
+import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -76,7 +75,7 @@ public class StateRPCClient {
         ListResourceOption option = new ListResourceOption();
         option.setDecode(isDecode);
         option.setStateRoot(state_root);
-        param.add(JSON.toJSON(option));
+        param.add(option);//JSON.toJSON(option)
         try {
             return client.getObjectParseJackson(session, "state.list_resource", param, 0, ListResource.class);
         } catch (IOException e) {
@@ -85,7 +84,7 @@ public class StateRPCClient {
         return null;
     }
 
-    public TokenInfo getTokenInfo(String address, String tokenCode) throws JSONRPC2SessionException {
+    public TokenInfo getTokenInfo(String address, String tokenCode) throws JSONRPC2SessionException, JsonProcessingException {
         JsonRPCClient<TokenInfo> client = new JsonRPCClient<>();
         List<Object> param = new ArrayList<>();
         param.add(address);

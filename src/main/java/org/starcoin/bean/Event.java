@@ -16,37 +16,62 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.starcoin.types.AccountAddress;
 
 public class Event extends Base {
     @JSONField(name = "block_hash")
+    @JsonProperty("block_hash")
     String blockHash;
 
     @JSONField(name = "block_number")
+    @JsonProperty("block_number")
     String blockNumber;
 
     @JSONField(name = "transaction_hash")
+    @JsonProperty("transaction_hash")
     String transactionHash;
 
     @JSONField(name = "transaction_index")
+    @JsonProperty("transaction_index")
     int transactionIndex;
 
     @JSONField(name = "transaction_global_index")
+    @JsonProperty("transaction_global_index")
     long transactionGlobalIndex;
 
     String data;
 
     @JSONField(name = "type_tag")
+    @JsonProperty("type_tag")
     String typeTag;
 
     @JSONField(name = "event_key")
+    @JsonProperty("event_key")
     String eventKey;
 
     @JSONField(name = "event_seq_number")
+    @JsonProperty("event_seq_number")
     String eventSeqNumber;
 
+
+    @JSONField(name = "event_index")
+    @JsonProperty("event_index")
+    Long eventIndex;
+
+
     @JSONField(name = "decode_event_data")
-    String decodeEventData;
+    @JsonProperty("decode_event_data")
+    Object decodeEventData;
+
+
+    public Long getEventIndex() {
+        return eventIndex;
+    }
+
+    public void setEventIndex(Long eventIndex) {
+        this.eventIndex = eventIndex;
+    }
 
     public String getBlockHash() {
         return blockHash;
@@ -121,11 +146,11 @@ public class Event extends Base {
         }
     }
 
-    public String getDecodeEventData() {
+    public Object getDecodeEventData() {
         return decodeEventData;
     }
 
-    public void setDecodeEventData(String decodeEventData) {
+    public void setDecodeEventData(Object decodeEventData) {
         this.decodeEventData = decodeEventData;
     }
 
@@ -136,6 +161,7 @@ public class Event extends Base {
     public void setTransactionGlobalIndex(long transactionGlobalIndex) {
         this.transactionGlobalIndex = transactionGlobalIndex;
     }
+
 
     @Override
     public String toString() {
@@ -149,7 +175,8 @@ public class Event extends Base {
                 ", typeTag='" + typeTag + '\'' +
                 ", eventKey='" + eventKey + '\'' +
                 ", eventSeqNumber='" + eventSeqNumber + '\'' +
-                ", decodeEventData='" + decodeEventData + '\'' +
+                ", eventIndex=" + eventIndex +
+                ", decodeEventData=" + decodeEventData +
                 '}';
     }
 }

@@ -26,6 +26,7 @@ import org.starcoin.types.*;
 import org.starcoin.types.TransactionAuthenticator.Ed25519;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 
 import static org.starcoin.utils.HashUtils.hashStarcoinSignedUserTransaction;
 
@@ -85,30 +86,48 @@ public class SignatureUtils {
         return signedUserTransaction;
     }
 
+
+    /**
+     * Signe personal BCS serialized SigningMessage.
+     *
+     * @param privateKey           Private key
+     * @param serializedMessageHex BCS serialized SigningMessage hex.
+     * @return Signature
+     */
     @SneakyThrows
-    public static String signPersonalMessage(Ed25519PrivateKey privateKey, String message) {
-        SigningMessage signingMessage = SigningMessage.bcsDeserialize(Hex.decode(message));
+    public static String signPersonalBcsSerializedMessage(Ed25519PrivateKey privateKey, String serializedMessageHex) {
+        SigningMessage signingMessage = SigningMessage.bcsDeserialize(Hex.decode(serializedMessageHex));
         byte[] signRst = ed25519Sign(privateKey, SigningMessage.hashBytes(signingMessage));
         return Hex.encode(signRst);
     }
+
+    /**
+     * Signe personal string message.
+     *
+     * @param privateKey Private key
+     * @param message    string message to be signed as UTF_8 bytes
+     * @return Signature
+     */
+    @SneakyThrows
+    public static String signPersonalMessage(Ed25519PrivateKey privateKey, String message) {
+        Bytes signingBytes = Bytes.valueOf(message.getBytes(StandardCharsets.UTF_8));
+        SigningMessage signingMessage = new SigningMessage(signingBytes.toList());
+        byte[] signRst = ed25519Sign(privateKey, SigningMessage.hashBytes(signingMessage));
+        return Hex.encode(signRst);
+    }
+
 
     public static boolean signedMessageCheckAccount(SignedMessage signedMessage, ChainId chainId, AccountResource accountResource) throws DeserializationError, SerializationError {
         AuthenticationKey authenticationKeyInMessage = TransactionAuthenticator.authenticationKey(signedMessage.authenticator);
         AuthenticationKey authenticationKeyOnChain;
         if (accountResource == null) {
-            if (signedMessage.account.equals(authenticationKeyInMessage.derivedAddress())) {
-                return true;
-            } else {
-                return false;
-            }
+            return signedMessage.account.equals(authenticationKeyInMessage.derivedAddress());
         } else {
             if (signedMessage.chain_id.equals(chainId)) {
                 Bytes serdeBytes = Bytes.fromList(accountResource.authentication_key);
                 if (serdeBytes != null) {
                     authenticationKeyOnChain = new AuthenticationKey(serdeBytes);
-                    if (authenticationKeyOnChain.equals(authenticationKeyInMessage)) {
-                        return true;
-                    }
+                    return authenticationKeyOnChain.equals(authenticationKeyInMessage);
                 }
             }
         }

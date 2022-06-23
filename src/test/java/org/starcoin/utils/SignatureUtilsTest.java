@@ -9,6 +9,8 @@ import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.junit.Test;
 import org.starcoin.types.*;
 
+import java.nio.charset.StandardCharsets;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -18,7 +20,6 @@ public class SignatureUtilsTest {
     @SneakyThrows
     @Test
     public void testSignPersonalMessage() {
-
         String privateKeyString = "0x94be71d34e32184138cbcad8d24a8deb510aaa74af579f74877b647392421a3f";
         String publicKeyString = "0xa7d45ac5f1d1b5cb1b23303938b6da6b731acff6b05110e2aa0e3c1e677eeb47";
         Ed25519PrivateKey privateKey = SignatureUtils.strToPrivateKey(privateKeyString);
@@ -26,9 +27,11 @@ public class SignatureUtilsTest {
         Ed25519PublicKey publicKey = SignatureUtils.getPublicKey(privateKey);
         assertEquals(publicKeyString, Hex.encode(publicKey.value));
         String message = "0568656c6c6f";
-        String rst = SignatureUtils.signPersonalMessage(privateKey, message);
-        assertEquals(rst, "0xa2c75841ff3bd7d0903a90bba00c5e19a10b0c4434bbdf5dd38f055581f73d1b537808a43045ac7200f6ba7568b0947258477b62e17f09b1a6bc1771c43e1f03");
+        String signature = SignatureUtils.signPersonalMessage(privateKey, message);
+
+        SignatureUtils.ed25519Verify(publicKey, message.getBytes(StandardCharsets.UTF_8), Hex.decode(signature));
     }
+
 
     @SneakyThrows
     @Test
@@ -69,7 +72,7 @@ public class SignatureUtilsTest {
         Bytes signingBytes = Bytes.valueOf(message.getBytes());
         SigningMessage signingMessage = new SigningMessage(signingBytes.toList());
         String signedMsg = "0xfab981cf1ee57d043be6f4f80b5575060f61626364656433343664647465737400204a4f7becc8b33af1ad34ed6195ab1109c4793e915759aa0eb26792fed4674f3d40097e0a748706c30de6457261bfc40ca0b83704072fb7614aac5b2643fe30860ed2e256b832e5160cd9da14d0fa183599d5e89b3169c8aa764ff86fc16f115600fd";
-        String shouldSigned = SignatureUtils.signPersonalMessage(privateKey, Hex.encode(signingMessage.bcsSerialize()));
+        String shouldSigned = SignatureUtils.signPersonalBcsSerializedMessage(privateKey, Hex.encode(signingMessage.bcsSerialize()));
         SignedMessage signedMessage = SignedMessage.bcsDeserialize(Hex.decode(signedMsg));
         byte[] sigature = ((TransactionAuthenticator.Ed25519) signedMessage.authenticator).signature.value.content();
         assertEquals(shouldSigned, Hex.encode(sigature));
@@ -82,4 +85,5 @@ public class SignatureUtilsTest {
         checked = SignatureUtils.signedMessageCheckAccount(signedMessage, new ChainId((byte) 253), accountResource);
         assertTrue(checked);
     }
+
 }

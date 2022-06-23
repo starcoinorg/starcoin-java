@@ -20,7 +20,7 @@ Home page: [Home page](https://starcoinorg.github.io/starcoin-java/)
 <dependency>
     <groupId>org.starcoin</groupId>
     <artifactId>sdk</artifactId>
-    <version>1.1.23</version>
+    <version>1.1.25</version>
 </dependency>
 ```
 
@@ -91,7 +91,7 @@ starcoin -n dev --http-apis all console
     Ed25519PublicKey publicKey = SignatureUtils.getPublicKey(privateKey);
     Assert.assertEquals(publicKeyString, Hex.encode(publicKey.value));
     String message = "Example `personal_sign` message";
-    String rst = SignatureUtils.signPersonalMessage(privateKey, message);
+    String signature = SignatureUtils.signPersonalMessage(privateKey, message);
 ```
 
 #### 转账

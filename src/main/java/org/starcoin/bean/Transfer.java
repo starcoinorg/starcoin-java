@@ -97,8 +97,7 @@ public class Transfer extends Base {
 
     public BigInteger getAmountValue() {
         try {
-            BigInteger amount = new BcsDeserializer(Hex.decode(this.amount)).deserialize_u128();
-            return amount;
+            return new BcsDeserializer(Hex.decode(this.amount)).deserialize_u128();
         } catch (DeserializationError deserializationError) {
             deserializationError.printStackTrace();
         }

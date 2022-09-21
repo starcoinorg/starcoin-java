@@ -15,8 +15,8 @@
  */
 package org.starcoin.api;
 
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import org.starcoin.bean.ContractCall;
+import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.math.BigInteger;
 import java.net.URL;
@@ -65,7 +65,7 @@ public class TokenContractRPCClient extends ContractRPCClient {
     /**
      * 用于获取某个 token 在国库中的数量
      */
-    public BigInteger getTreasurBalance(String tokenTypeTag) throws JSONRPC2SessionException {
+    public BigInteger getTreasuryBalance(String tokenTypeTag) throws JSONRPC2SessionException {
         ContractCall call = new ContractCall();
 
         call.setFunctionId(TreasuryBalanceTypeTag);
@@ -90,7 +90,7 @@ public class TokenContractRPCClient extends ContractRPCClient {
      */
     public BigInteger getTokenCurrentSupply(String tokenTypeTag) throws JSONRPC2SessionException {
         BigInteger tokenMarketCap = this.getTokenMarketCap(tokenTypeTag);
-        BigInteger tokenTreasureBalance = this.getTreasurBalance(tokenTypeTag);
+        BigInteger tokenTreasureBalance = this.getTreasuryBalance(tokenTypeTag);
         return tokenMarketCap.subtract(tokenTreasureBalance);
     }
 
@@ -105,7 +105,7 @@ public class TokenContractRPCClient extends ContractRPCClient {
      * 用于获取 STC 在国库中的数量
      */
     public BigInteger getSTCTreasurBalance() throws JSONRPC2SessionException {
-        return this.getTreasurBalance(STCTypeTag);
+        return this.getTreasuryBalance(STCTypeTag);
     }
 
     /**

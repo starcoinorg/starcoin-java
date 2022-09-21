@@ -15,14 +15,16 @@
  */
 package org.starcoin.api;
 
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.starcoin.bean.ListResource;
 import org.starcoin.bean.TokenInfo;
+import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.math.BigInteger;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,11 +34,12 @@ public class StateRPCClientTest {
 
     @Before
     public void setUp() throws Exception {
-        stateRPCClient = new StateRPCClient(new URL("http://localhost:9850"));
+        //stateRPCClient = new StateRPCClient(new URL("http://localhost:9850"));
+        stateRPCClient = new StateRPCClient(new URL("https://barnard-seed.starcoin.org"));
     }
 
     @Test
-    public void testGetState() {
+    public void testGetState() throws MalformedURLException {
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd-HH:mm:ss");
             System.out.println(format.format(new Date()));
@@ -52,35 +55,35 @@ public class StateRPCClientTest {
             System.out.println(token.substring(0, 34));
             tokenInfo = stateRPCClient.getTokenInfo("0x8c109349c6bd91411d6bc962e080c4a3", "0x8c109349c6bd91411d6bc962e080c4a3::STAR::STAR");
             System.out.println(tokenInfo);
-        } catch (JSONRPC2SessionException e) {
+        } catch (JSONRPC2SessionException | JsonProcessingException e) {
             e.printStackTrace();
         }
     }
 
     @Test
     public void testGetStateWithRoot() throws JSONRPC2SessionException {
-        ListResource resource = stateRPCClient.getState("0x8c109349c6bd91411d6bc962e080c4a3", true, "0xfd8077594464567fd1c60ec59e7d6bc78312d674ac3710febd2898d172f6e113");
+        ListResource resource = stateRPCClient.getState("0x86fDDFFbBB603C428e5c74442CE1e966", true, "0x5ee196ac92839743e79db7e6a7d75acdd4afe02b3c89c036e498f66df996c0cf");
         System.out.println(resource);
         for (String key : resource.getResources().keySet()) {
-             if(key.contains("TokenSwapPair")) {
-                 String tokenPair = key.substring(key.indexOf("<") + 1, key.length() - 1);
-                 String[] tokens = tokenPair.split(",");
-                 if (tokens.length != 2) {
-                     continue;
-                 }
-                 System.out.println("x: " + tokens[0] + ", y: " + tokens[1]);
-                 long xReserve = resource.getResources().get(key).getJson().get("token_x_reserve").get("value").longValue();
-                 long yReserve = resource.getResources().get(key).getJson().get("token_y_reserve").get("value").longValue();
-                 System.out.println("x: " + xReserve + ", y: " + yReserve);
-             }
+            if (key.contains("TokenSwapPair")) {
+                String tokenPair = key.substring(key.indexOf("<") + 1, key.length() - 1);
+                String[] tokens = tokenPair.split(",");
+                if (tokens.length != 2) {
+                    continue;
+                }
+                System.out.println("x: " + tokens[0] + ", y: " + tokens[1]);
+                long xReserve = resource.getResources().get(key).getJson().get("token_x_reserve").get("value").longValue();
+                long yReserve = resource.getResources().get(key).getJson().get("token_y_reserve").get("value").longValue();
+                System.out.println("x: " + xReserve + ", y: " + yReserve);
+            }
         }
     }
 
     @Test
     public void testGetAddressAmountValue() {
-       BigInteger amount = stateRPCClient.getAddressAmountValue("0x86fDDFFbBB603C428e5c74442CE1e966", "0x49142e24bf3b34b323b3bd339e2434e3::AWW::AWW");
-       System.out.println(amount);
-       amount = stateRPCClient.getAddressAmountValue("0x86fDDFFbBB603C428e5c74442CE1e966", "0x00000000000000000000000000000001::STC::STC");
-       System.out.println(amount);
+        BigInteger amount = stateRPCClient.getAddressAmountValue("0x86fDDFFbBB603C428e5c74442CE1e966", "0x49142e24bf3b34b323b3bd339e2434e3::AWW::AWW");
+        System.out.println(amount);
+        amount = stateRPCClient.getAddressAmountValue("0x86fDDFFbBB603C428e5c74442CE1e966", "0x00000000000000000000000000000001::STC::STC");
+        System.out.println(amount);
     }
 }

@@ -16,10 +16,12 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BlockMetadata {
 
     @JSONField(name = "parent_hash")
+    @JsonProperty("parent_hash")
     String parentHash;
 
     long timestamp;
@@ -27,6 +29,7 @@ public class BlockMetadata {
     String author;
 
     @JSONField(name = "author_auth_key")
+    @JsonProperty("author_auth_key")
     String authorAuthKey;
 
     String uncles;
@@ -34,9 +37,11 @@ public class BlockMetadata {
     String number;
 
     @JSONField(name = "chain_id")
+    @JsonProperty("chain_id")
     String chainId;
 
     @JSONField(name = "parent_gas_used")
+    @JsonProperty("parent_gas_used")
     long parentGasUsed;
 
     public String getParentHash() {

@@ -91,9 +91,9 @@ public class StarcoinClientSample {
     public void testDeployContract() {
 
         String contractPath = Objects.requireNonNull(this
-                .getClass()
-                .getClassLoader()
-                .getResource("contract/MyCounter.mv"))
+                        .getClass()
+                        .getClassLoader()
+                        .getResource("contract/MyCounter.mv"))
                 .getFile();
 
         ScriptFunctionObj scriptFunctionObj = ScriptFunctionObj

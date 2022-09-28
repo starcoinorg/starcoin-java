@@ -28,45 +28,62 @@ import org.starcoin.types.TransactionAuthenticator.Ed25519;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
-import static org.starcoin.utils.HashUtils.hashStarcoinSignedUserTransaction;
-
 public class SignatureUtils {
 
     public static final String GAS_TOKEN_CODE_STC = "0x1::STC::STC";
 
+    /**
+     * Compute transaction hash locally.
+     */
     @SneakyThrows
     public static String getTransactionHash(Ed25519PrivateKey ed25519PrivateKey, Integer chainId, AccountAddress accountAddress,
                                             BigInteger accountSeqNumber,
                                             TransactionPayload payload,
                                             BigInteger gasPrice, BigInteger gasLimit,
-                                            Long expirationTimestampSecs) {
-        SignedUserTransaction signedUserTransaction = createSignedUserTransaction(ed25519PrivateKey, chainId, accountAddress,
-                accountSeqNumber, payload, gasPrice, gasLimit, expirationTimestampSecs);
-        byte[] signedMessage = signedUserTransaction.bcsSerialize();
-        return hashStarcoinSignedUserTransaction(signedMessage);
+                                            Long expirationTimestampSecs, String gasTokenCode) {
+        SignedUserTransaction signedUserTransaction = newSignedUserTransaction(ed25519PrivateKey, chainId, accountAddress,
+                accountSeqNumber, payload, gasPrice, gasLimit, expirationTimestampSecs, gasTokenCode);
+        return getTransactionHash(signedUserTransaction);
+    }
+
+
+    /**
+     * Compute transaction hash locally.
+     */
+    @SneakyThrows
+    public static String getTransactionHash(SignedUserTransaction signedUserTransaction) throws SerializationError {
+        byte[] message = signedUserTransaction.bcsSerialize();
+        return hashStarcoinSignedUserTransactionHex(message);
+    }
+
+    private static String hashStarcoinSignedUserTransactionHex(byte[] m) {
+        byte[] bytesToHash = com.google.common.primitives.Bytes
+                .concat(HashUtils.hashWithStarcoinPrefix("SignedUserTransaction"), m);
+        return Hex.encode(HashUtils.sha3Hash(bytesToHash));
     }
 
     @SneakyThrows
-    public static SignedUserTransaction createSignedUserTransaction(Ed25519PrivateKey ed25519PrivateKey, Integer chainId, AccountAddress accountAddress,
-                                                                    BigInteger accountSeqNumber,
-                                                                    TransactionPayload payload,
-                                                                    BigInteger gasPrice, BigInteger gasLimit,
-                                                                    Long expirationTimestampSecs) {
-        RawUserTransaction rawUserTransaction = createRawUserTransaction(chainId, accountAddress,
-                accountSeqNumber, payload, gasPrice, gasLimit, expirationTimestampSecs);
+    private static SignedUserTransaction newSignedUserTransaction(Ed25519PrivateKey ed25519PrivateKey, Integer chainId, AccountAddress accountAddress,
+                                                                  BigInteger accountSeqNumber,
+                                                                  TransactionPayload payload,
+                                                                  BigInteger gasPrice, BigInteger gasLimit,
+                                                                  Long expirationTimestampSecs, String gasTokenCode) {
+        RawUserTransaction rawUserTransaction = newRawUserTransaction(chainId, accountAddress,
+                accountSeqNumber, payload, gasPrice, gasLimit, expirationTimestampSecs, gasTokenCode);
 
         return SignatureUtils.signTxn(ed25519PrivateKey, rawUserTransaction);
     }
 
 
-    public static RawUserTransaction createRawUserTransaction(Integer chainId, AccountAddress accountAddress,
-                                                              BigInteger accountSeqNumber,
-                                                              TransactionPayload payload,
-                                                              BigInteger gasPrice, BigInteger gasLimit,
-                                                              Long expirationTimestampSecs) {
+    private static RawUserTransaction newRawUserTransaction(Integer chainId, AccountAddress accountAddress,
+                                                            BigInteger accountSeqNumber,
+                                                            TransactionPayload payload,
+                                                            BigInteger gasPrice, BigInteger gasLimit,
+                                                            Long expirationTimestampSecs, String gasTokenCode) {
         ChainId chainIdObj = new ChainId(chainId.byteValue());
         return new RawUserTransaction(accountAddress, accountSeqNumber.longValue(), payload,
-                gasLimit.longValue(), gasPrice.longValue(), GAS_TOKEN_CODE_STC,
+                gasLimit.longValue(), gasPrice.longValue(),
+                gasTokenCode == null ? GAS_TOKEN_CODE_STC : gasTokenCode,
                 expirationTimestampSecs,
                 chainIdObj);
     }

@@ -22,12 +22,6 @@ import static org.starcoin.constant.Constant.STARCOIN_HASH_PREFIX;
 
 public class HashUtils {
 
-    public static String hashStarcoinSignedUserTransaction(byte[] signedMessage) {
-        byte[] bytesForHash = com.google.common.primitives.Bytes
-                .concat(hashWithStarcoinPrefix("SignedUserTransaction"), signedMessage);
-        return sha3HashStr(sha3Hash(bytesForHash));
-    }
-
     public static byte[] hashWithStarcoinPrefix(String name) {
         return hash(STARCOIN_HASH_PREFIX.getBytes(), name.getBytes());
     }

@@ -113,4 +113,70 @@ public class TransactionRPCClient {
         return client.getObjectArray(session, "chain.get_events", parameter, 0, Event.class);
     }
 
+    /**
+     * 通过 block hash 和 transaction index 获取某个 TransactionInfo
+     * @param blockHash
+     * @param transactionIndex
+     * @return
+     * @throws JSONRPC2SessionException
+     */
+    public Transaction getTransactionInfoByBlockAndIndex(String blockHash,int transactionIndex) throws JSONRPC2SessionException {
+        JsonRPCClient<Transaction> client = new JsonRPCClient<>();
+        List<Object> parameter = new ArrayList<>();
+        parameter.add(blockHash);
+        parameter.add(transactionIndex);
+        return client.getObject(session, "chain.get_txn_info_by_block_and_index", parameter, 0, Transaction.class);
+    }
+
+    /**
+     * 获取block和transaction证明的相关信息
+     * @param blockHash
+     * @param transactionGlobalIndex
+     * @return
+     * @throws JSONRPC2SessionException
+     */
+    public TransactionInfoWithProof getTransactionProof(String blockHash,long transactionGlobalIndex) throws JSONRPC2SessionException {
+        JsonRPCClient<TransactionInfoWithProof> client = new JsonRPCClient<>();
+        List<Object> parameter = new ArrayList<>();
+        parameter.add(blockHash);
+        parameter.add(transactionGlobalIndex);
+        return client.getObject(session, "chain.get_transaction_proof", parameter, 0, TransactionInfoWithProof.class);
+    }
+
+    /**
+     * 获取block和transaction证明的相关信息
+     * @param blockHash
+     * @param transactionGlobalIndex
+     * @param eventIndex
+     * @return
+     * @throws JSONRPC2SessionException
+     */
+    public TransactionInfoWithProof getTransactionProof(String blockHash,long transactionGlobalIndex,int eventIndex) throws JSONRPC2SessionException {
+        JsonRPCClient<TransactionInfoWithProof> client = new JsonRPCClient<>();
+        List<Object> parameter = new ArrayList<>();
+        parameter.add(blockHash);
+        parameter.add(transactionGlobalIndex);
+        parameter.add(eventIndex);
+        return client.getObject(session, "chain.get_transaction_proof", parameter, 0, TransactionInfoWithProof.class);
+    }
+
+    /**
+     * 获取block和transaction证明的相关信息
+     * @param blockHash
+     * @param transactionGlobalIndex
+     * @param eventIndex
+     * @param accessPath
+     * @return
+     * @throws JSONRPC2SessionException
+     */
+    public TransactionInfoWithProof getTransactionProof(String blockHash,long transactionGlobalIndex,int eventIndex,String accessPath) throws JSONRPC2SessionException {
+        JsonRPCClient<TransactionInfoWithProof> client = new JsonRPCClient<>();
+        List<Object> parameter = new ArrayList<>();
+        parameter.add(blockHash);
+        parameter.add(transactionGlobalIndex);
+        parameter.add(eventIndex);
+        parameter.add(accessPath);
+        return client.getObject(session, "chain.get_transaction_proof", parameter, 0, TransactionInfoWithProof.class);
+    }
+
 }

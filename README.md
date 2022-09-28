@@ -13,7 +13,7 @@ Home page: [Home page](https://starcoinorg.github.io/starcoin-java/)
 
 ### 引入依赖
 
-** Maven **
+**Maven**
 
 ```xml
 
@@ -24,25 +24,25 @@ Home page: [Home page](https://starcoinorg.github.io/starcoin-java/)
 </dependency>
 ```
 
-** Gradle **
+**Gradle**
 
 ``` 
 implementation group: 'org.starcoin', name: 'sdk', version: '1.1.18'
 ```
 
-** Gradle short **
+**Gradle short**
 
 ``` 
 implementation 'org.starcoin:sdk:1.1.18'
 ```
 
-** Gradle kotlin **
+**Gradle kotlin**
 
 ``` 
 implementation("org.starcoin:sdk:1.1.18")
 ```
 
-** SBT **
+**SBT**
 
 ``` 
 libraryDependencies += "org.starcoin" % "sdk" % "1.1.18"

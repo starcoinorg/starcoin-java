@@ -13,6 +13,8 @@ import org.starcoin.bean.ScriptFunctionObj;
 import org.starcoin.bean.TypeObj;
 import org.starcoin.types.AccountAddress;
 import org.starcoin.types.Ed25519PrivateKey;
+import org.starcoin.types.RawUserTransaction;
+import org.starcoin.types.TransactionPayload;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -145,6 +147,29 @@ public class StarcoinClientSample {
         String rst = starcoinClient.transfer(sender, privateKey, AccountAddressUtils.create(toAddress),
                 typeObj, new BigInteger("1000"));
         System.out.println(rst);
+    }
+
+    //@Test
+    @SneakyThrows
+    public void testTransfer_2() {
+        String toAddress = "0xd7f20befd34b9f1ab8aeae98b82a5a51";
+        TypeObj typeObj = TypeObj.STC();
+        TransactionPayload.ScriptFunction transactionPayload = (TransactionPayload.ScriptFunction)
+                starcoinClient.buildTransferPayload(AccountAddressUtils.create(toAddress), typeObj, new BigInteger("1000"));
+
+        RawUserTransaction rawUserTransaction = starcoinClient.buildRawUserTransaction(sender, transactionPayload);
+        String rst = starcoinClient.submitHexTransaction(privateKey, rawUserTransaction);
+        System.out.println(rst);
+
+        String txnHashLocally = SignatureUtils.getTransactionHash(privateKey, rawUserTransaction.chain_id.id.intValue(),
+                rawUserTransaction.sender, BigInteger.valueOf(rawUserTransaction.sequence_number),
+                rawUserTransaction.payload,
+                BigInteger.valueOf(rawUserTransaction.gas_unit_price),
+                BigInteger.valueOf(rawUserTransaction.max_gas_amount),
+                rawUserTransaction.expiration_timestamp_secs,
+                rawUserTransaction.gas_token_code //null // default gas token code
+        );
+        System.out.println(txnHashLocally);
     }
 
     public void testPriceOracleRead() {

@@ -86,8 +86,8 @@ public class StarcoinClient {
         return submitTransaction(sender, privateKey, payload);
     }
 
-    private TransactionPayload buildTransferPayload(AccountAddress toAddress, TypeObj typeObj,
-                                                    BigInteger amount) {
+    public TransactionPayload buildTransferPayload(AccountAddress toAddress, TypeObj typeObj,
+                                                   BigInteger amount) {
         return Helpers.encode_peer_to_peer_v2_script_function(typeObj.toTypeTag(),
                 toAddress, amount);
     }
@@ -128,14 +128,14 @@ public class StarcoinClient {
     }
 
     @SneakyThrows
-    private RawUserTransaction buildRawUserTransaction(AccountAddress sender,
-                                                       TransactionPayload payload) {
+    public RawUserTransaction buildRawUserTransaction(AccountAddress sender,
+                                                      TransactionPayload payload) {
         long seqNumber = getAccountSequenceNumber(sender);
         return buildRawUserTransaction(sender, seqNumber, payload);
     }
 
-    private RawUserTransaction buildRawUserTransaction(AccountAddress sender, long seqNumber,
-                                                       TransactionPayload payload) {
+    public RawUserTransaction buildRawUserTransaction(AccountAddress sender, long seqNumber,
+                                                      TransactionPayload payload) {
         ChainId chainId = new ChainId((byte) chaindId);
         return new RawUserTransaction(sender, seqNumber, payload, DEFAULT_MAX_GAS_AMOUNT, getGasUnitPrice(),
                 GAS_TOKEN_CODE, getExpirationTimestampSecs(), chainId);

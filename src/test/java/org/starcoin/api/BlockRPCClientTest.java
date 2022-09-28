@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import junit.framework.TestCase;
 import org.starcoin.bean.Block;
 import org.starcoin.bean.BlockHeader;
+import org.starcoin.bean.BlockInfo;
 import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.net.URL;
@@ -26,7 +27,7 @@ public class BlockRPCClientTest extends TestCase {
         }
     }
 
-    public void testGetBlockByHeight() throws JsonProcessingException {
+    public void testGetBlockByHeight() {
         try {
             Block block = client.getBlockByHeight(5495169L);
             System.out.println(block);
@@ -39,6 +40,15 @@ public class BlockRPCClientTest extends TestCase {
         try {
             Block block = client.getBlockByHash("0xda40a21da882d2c7c0e011d20ff375f31914fd40fad4dd70b12df0ca3733c897");
             System.out.println(block);
+        } catch (JSONRPC2SessionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void testGetBlockInfoByHeight() {
+        try {
+            BlockInfo blockInfo = client.getBlockInfoByHeight(8402745);
+            System.out.println(blockInfo);
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }

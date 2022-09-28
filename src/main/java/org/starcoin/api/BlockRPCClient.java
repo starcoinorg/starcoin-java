@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.starcoin.bean.Block;
 import org.starcoin.bean.BlockHeader;
+import org.starcoin.bean.BlockInfo;
 import org.starcoin.jsonrpc.client.JSONRPC2Session;
 import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
@@ -65,6 +66,17 @@ public class BlockRPCClient {
     public Block getBlockByHeight(long height) throws JSONRPC2SessionException {
         JsonRPCClient<Block> client = new JsonRPCClient<>();
         return client.getObject(session, "chain.get_block_by_number", Collections.singletonList(height), 0, Block.class);
+    }
+
+    /**
+     * 通过block 高度 获取block和transaction的accumulator info
+     * @param height
+     * @return
+     * @throws JSONRPC2SessionException
+     */
+    public BlockInfo getBlockInfoByHeight(long height) throws JSONRPC2SessionException {
+        JsonRPCClient<BlockInfo> client = new JsonRPCClient<>();
+        return client.getObject(session, "chain.get_block_info_by_number", Collections.singletonList(height), 0, BlockInfo.class);
     }
 
     /**

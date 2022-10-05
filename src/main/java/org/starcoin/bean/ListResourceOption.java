@@ -16,13 +16,51 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
+//值为null的字段不参与序列化
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ListResourceOption {
     private boolean decode;
     @JSONField(name = "state_root")
     @JsonProperty("state_root")
     private String stateRoot;
+    @JSONField(name = "max_size")
+    @JsonProperty("max_size")
+    private Integer maxSize;
+    @JSONField(name = "start_index")
+    @JsonProperty("start_index")
+    private Integer startIndex;
+    @JSONField(name = "resource_types")
+    @JsonProperty("resource_types")
+    private List<String> resourceTypes;
+
+    public Integer getMaxSize() {
+        return maxSize;
+    }
+
+    public void setMaxSize(Integer maxSize) {
+        this.maxSize = maxSize;
+    }
+
+    public Integer getStartIndex() {
+        return startIndex;
+    }
+
+    public void setStartIndex(Integer startIndex) {
+        this.startIndex = startIndex;
+    }
+
+    public List<String> getResourceTypes() {
+        return resourceTypes;
+    }
+
+    public void setResourceTypes(List<String> resourceTypes) {
+        this.resourceTypes = resourceTypes;
+    }
 
     public boolean isDecode() {
         return decode;

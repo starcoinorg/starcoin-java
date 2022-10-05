@@ -150,7 +150,7 @@ public class StateRPCClient {
         return "0x1::Token::TokenInfo<" + code + ">";
     }
 
-    private ListResource getListResource(String address,List<String> resourceTypes,String stateRoot,Integer pageNum,Integer pageSize) throws JSONRPC2SessionException{
+    private ListResource getListResource(String address,List<String> resourceTypes,String stateRoot,Integer startIndex,Integer maxSize) throws JSONRPC2SessionException{
         JsonRPCClient<ListResource> client = new JsonRPCClient<>();
         List<Object> parameter = new ArrayList<>();
         parameter.add(address);
@@ -158,8 +158,8 @@ public class StateRPCClient {
         option.setDecode(true);
         option.setResourceTypes(resourceTypes);
         option.setStateRoot(stateRoot);
-        option.setStartIndex(pageNum);
-        option.setMaxSize(pageSize);
+        option.setStartIndex(startIndex);
+        option.setMaxSize(maxSize);
         parameter.add(option);
         return client.getObject(session, "state.list_resource", parameter, 0, ListResource.class);
     }
@@ -199,13 +199,13 @@ public class StateRPCClient {
     /**
      * 通过 address 分页查询当前账户下的所有资源集合
      * @param address
-     * @param pageNum
-     * @param pageSize
+     * @param startIndex
+     * @param maxSize
      * @return
      * @throws JSONRPC2SessionException
      */
-    public ListResource getResourceListByPage(String address,int pageNum,int pageSize) throws JSONRPC2SessionException{
-        return this.getListResource(address,null,null,pageNum,pageSize);
+    public ListResource getResourceListByPage(String address,int startIndex,int maxSize) throws JSONRPC2SessionException{
+        return this.getListResource(address,null,null,startIndex,maxSize);
     }
 
 }

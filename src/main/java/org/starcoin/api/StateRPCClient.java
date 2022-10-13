@@ -19,10 +19,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.starcoin.bean.ListResource;
-import org.starcoin.bean.ListResourceOption;
-import org.starcoin.bean.Resource;
-import org.starcoin.bean.TokenInfo;
+import org.starcoin.bean.*;
 import org.starcoin.jsonrpc.client.JSONRPC2Session;
 import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
@@ -30,6 +27,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -151,4 +149,63 @@ public class StateRPCClient {
     private String tokenInfoParameter(String code) {
         return "0x1::Token::TokenInfo<" + code + ">";
     }
+
+    private ListResource getListResource(String address,List<String> resourceTypes,String stateRoot,Integer startIndex,Integer maxSize) throws JSONRPC2SessionException{
+        JsonRPCClient<ListResource> client = new JsonRPCClient<>();
+        List<Object> parameter = new ArrayList<>();
+        parameter.add(address);
+        ListResourceOption option = new ListResourceOption();
+        option.setDecode(true);
+        option.setResourceTypes(resourceTypes);
+        option.setStateRoot(stateRoot);
+        option.setStartIndex(startIndex);
+        option.setMaxSize(maxSize);
+        parameter.add(option);
+        return client.getObject(session, "state.list_resource", parameter, 0, ListResource.class);
+    }
+
+    /**
+     * 通过 address 查询当前账户下的所有资源集合
+     * @param address 地址
+     * @return
+     * @throws JSONRPC2SessionException
+     */
+    public ListResource getAllResourcesByAddress(String address) throws JSONRPC2SessionException{
+        return this.getListResource(address,null,null,null,null);
+    }
+
+    /**
+     * 通过 address 和 resourceTypes 查询当前账户下的所有资源集合
+     * @param address 地址
+     * @param resourceTypes 资源类型集合
+     * @return
+     * @throws JSONRPC2SessionException
+     */
+    public ListResource getAllResourcesByResourceTypes(String address,List<String> resourceTypes) throws JSONRPC2SessionException{
+        return this.getListResource(address,resourceTypes,null,null,null);
+    }
+
+    /**
+     * 通过 address 和 TypeTags 查询当前账户下的所有资源集合
+     * @param address
+     * @param typeTags
+     * @return
+     * @throws JSONRPC2SessionException
+     */
+    public ListResource getAllResourcesByTypeTags(String address,List<String> typeTags) throws JSONRPC2SessionException{
+        return this.getListResource(address,typeTags,null,null,null);
+    }
+
+    /**
+     * 通过 address 分页查询当前账户下的所有资源集合
+     * @param address
+     * @param startIndex
+     * @param maxSize
+     * @return
+     * @throws JSONRPC2SessionException
+     */
+    public ListResource getResourceListByPage(String address,int startIndex,int maxSize) throws JSONRPC2SessionException{
+        return this.getListResource(address,null,null,startIndex,maxSize);
+    }
+
 }

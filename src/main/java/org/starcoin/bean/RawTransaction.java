@@ -42,6 +42,17 @@ public class RawTransaction {
     @JSONField(name = "transaction_hash")
     String transactionHash;
 
+    public String getDecodedPayload() {
+        return decodedPayload;
+    }
+
+    public void setDecodedPayload(String decodedPayload) {
+        this.decodedPayload = decodedPayload;
+    }
+
+    @JSONField(name = "decoded_payload")
+    String decodedPayload;
+
     public String getSequenceNumber() {
         return sequenceNumber;
     }
@@ -137,12 +148,14 @@ public class RawTransaction {
                 ", chainId=" + chainId +
                 ", sender='" + sender + '\'' +
                 ", payload='" + payload + '\'' +
+                ", transactionPayload=" + transactionPayload +
                 ", gasUnitPrice='" + gasUnitPrice + '\'' +
                 ", gasTokenCode='" + gasTokenCode + '\'' +
                 ", maxGasAmount='" + maxGasAmount + '\'' +
                 ", expirationTimestampSecs='" + expirationTimestampSecs + '\'' +
                 ", authenticator=" + authenticator +
                 ", transactionHash='" + transactionHash + '\'' +
+                ", decodedPayload='" + decodedPayload + '\'' +
                 '}';
     }
 }

@@ -3,9 +3,14 @@ package org.starcoin.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.google.common.primitives.Longs;
+import com.novi.serde.Bytes;
 import com.novi.serde.DeserializationError;
 import org.junit.Test;
 import org.starcoin.types.*;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import static org.junit.Assert.assertEquals;
 import static org.starcoin.utils.AccountAddressUtils.from_hex_literal;
@@ -43,17 +48,32 @@ public class BcsTestCase {
 
     @Test
     public void testAddress() throws DeserializationError {
-        String address = "00000000000000000000000000000001";
-        AccountAddress accountAddress = AccountAddress.bcsDeserialize(Hex.decode(address));
-        System.out.println(accountAddress);
-        address = "1";
-        accountAddress = from_hex_literal(address);
-        System.out.println(accountAddress);
-        assertEquals(accountAddress, AccountAddress.valueOf(Hex.decode("0x00000000000000000000000000000001")));
-        address = "a550c18";
-        accountAddress = from_hex_literal(address);
-        System.out.println(accountAddress);
-        assertEquals(accountAddress, AccountAddress.valueOf(Hex.decode("0x0000000000000000000000000a550c18")));
+//        String address = "00000000000000000000000000000001";
+//        AccountAddress accountAddress = AccountAddress.bcsDeserialize(Hex.decode(address));
+//        System.out.println(accountAddress);
+//        address = "1";
+//        accountAddress = from_hex_literal(address);
+//        System.out.println(accountAddress);
+//        assertEquals(accountAddress, AccountAddress.valueOf(Hex.decode("0x00000000000000000000000000000001")));
+//        address = "a550c18";
+//        accountAddress = from_hex_literal(address);
+//        System.out.println(accountAddress);
+//        assertEquals(accountAddress, AccountAddress.valueOf(Hex.decode("0x0000000000000000000000000a550c18")));
+//        String key ="0x01000000000000001fa1bf569672003a5871c0151bacccff";
+//        EventKey eventKey = new EventKey(Bytes.valueOf(Hex.decode(key)));
+//        System.out.println(eventKey);
+
+//        long seq = Longs.fromByteArray(Hex.decode("0x0100000000000000"));
+        System.out.println("0x010000000000000068cec2df4bca601dc35351a8b7d1e567".substring(0,18));
+        long seq = fromArray(Hex.decode("0x0100000000000000"));
+        System.out.println(seq);
+
+    }
+
+    public static  long fromArray(byte[] payload){
+        ByteBuffer buffer = ByteBuffer.wrap(payload);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        return buffer.getLong();
     }
 
     @Test

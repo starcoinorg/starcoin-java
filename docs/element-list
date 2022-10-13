@@ -3,6 +3,8 @@ com.novi.serde
 org.starcoin.api
 org.starcoin.bean
 org.starcoin.constant
+org.starcoin.jsonrpc
+org.starcoin.jsonrpc.client
 org.starcoin.serde.format
 org.starcoin.serde.format.cli
 org.starcoin.serde.format.jackson

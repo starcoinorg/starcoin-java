@@ -1,1 +1,1 @@
-tagSearchIndex = [{"l":"常量字段值","h":"","u":"constant-values.html"},{"l":"序列化表格","h":"","u":"serialized-form.html"}];updateSearchResults();
+tagSearchIndex = [{"l":"常量字段值","h":"","u":"constant-values.html"},{"l":"序列化表格","h":"","u":"serialized-form.html"},{"l":"已过时的 API","h":"","u":"deprecated-list.html"}];updateSearchResults();

@@ -6,7 +6,7 @@
 
     <groupId>org.starcoin</groupId>
     <artifactId>sdk</artifactId>
-    <version>1.1.25</version>
+    <version>1.1.26</version>
 
     <name>Starcoin Java SDK</name>
     <description>Starcoin Java SDK</description>

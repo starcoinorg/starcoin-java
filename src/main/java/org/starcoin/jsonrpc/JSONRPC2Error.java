@@ -38,12 +38,12 @@ package org.starcoin.jsonrpc;
  * <p id="map">The mapping between JSON and Java entities (as defined by the
  * underlying JSON Smart library):
  * <pre>
- *     true|false  <--->  java.lang.Boolean
- *     number      <--->  java.lang.Number
- *     string      <--->  java.lang.String
- *     array       <--->  java.util.List
- *     object      <--->  java.util.Map
- *     null        <--->  null
+ *     true|false  ---  java.lang.Boolean
+ *     number      ---  java.lang.Number
+ *     string      ---  java.lang.String
+ *     array       ---  java.util.List
+ *     object      ---  java.util.Map
+ *     null        ---  null
  * </pre>
  *
  * @author Vladimir Dzhuvinov

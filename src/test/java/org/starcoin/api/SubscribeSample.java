@@ -15,16 +15,23 @@
  */
 package org.starcoin.api;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.Flowable;
 import org.starcoin.bean.EventFilter;
 import org.starcoin.bean.EventNotification;
 import org.web3j.protocol.websocket.WebSocketService;
 
+import java.io.IOException;
 import java.net.ConnectException;
 
 public class SubscribeSample {
 
     public static void main(String... args) throws ConnectException {
+
         //WebSocketService service = new WebSocketService("ws://localhost:9870", true);
         WebSocketService service = new WebSocketService("ws://barnard4.seed.starcoin.org", true);
         service.connect();

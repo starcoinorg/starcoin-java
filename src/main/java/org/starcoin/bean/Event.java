@@ -16,6 +16,7 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.starcoin.types.AccountAddress;
 
@@ -61,9 +62,11 @@ public class Event extends Base {
 
 
     @JSONField(name = "decode_event_data")
-    @JsonProperty("decode_event_data")
-    Object decodeEventData;
+    @JsonIgnore
+    String decodeEventData;
 
+    @JsonProperty("decode_event_data")
+    Object decodeEventDataObj;
 
     public Long getEventIndex() {
         return eventIndex;
@@ -146,11 +149,11 @@ public class Event extends Base {
         }
     }
 
-    public Object getDecodeEventData() {
+    public String getDecodeEventData() {
         return decodeEventData;
     }
 
-    public void setDecodeEventData(Object decodeEventData) {
+    public void setDecodeEventData(String decodeEventData) {
         this.decodeEventData = decodeEventData;
     }
 
@@ -162,6 +165,13 @@ public class Event extends Base {
         this.transactionGlobalIndex = transactionGlobalIndex;
     }
 
+    public Object getDecodeEventDataObj() {
+        return decodeEventDataObj;
+    }
+
+    public void setDecodeEventDataObj(Object decodeEventDataObj) {
+        this.decodeEventDataObj = decodeEventDataObj;
+    }
 
     @Override
     public String toString() {

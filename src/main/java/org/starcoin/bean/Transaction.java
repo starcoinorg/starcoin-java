@@ -71,7 +71,12 @@ public class Transaction extends Base {
     TransactionType transactionType;
 
 
-    Object status;
+    @JSONField(name = "status")
+    @JsonIgnore
+    String status;
+
+    @JsonProperty("status")
+    Object statusObj;
 
     long timestamp;
 
@@ -108,11 +113,11 @@ public class Transaction extends Base {
         this.gasUsed = gasUsed;
     }
 
-    public Object getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -186,6 +191,14 @@ public class Transaction extends Base {
 
     public void setTransactionGlobalIndex(long transactionGlobalIndex) {
         this.transactionGlobalIndex = transactionGlobalIndex;
+    }
+
+    public Object getStatusObj() {
+        return statusObj;
+    }
+
+    public void setStatusObj(Object statusObj) {
+        this.statusObj = statusObj;
     }
 
     @Override

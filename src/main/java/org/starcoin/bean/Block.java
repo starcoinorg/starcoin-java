@@ -37,6 +37,10 @@ public class Block extends Base {
     @JsonProperty("header")
     private BlockHeader header;
 
+    @JSONField(name = "raw")
+    @JsonProperty("raw")
+    private String raw;
+
     private BlockBody body;
 
     @JSONField(serialize = false)
@@ -84,6 +88,14 @@ public class Block extends Base {
         this.body = body;
     }
 
+    public String getRaw() {
+        return raw;
+    }
+
+    public void setRaw(String raw) {
+        this.raw = raw;
+    }
+
 
     @Override
     public String toString() {
@@ -91,6 +103,7 @@ public class Block extends Base {
                 "blockMetadata=" + blockMetadata +
                 ", uncles=" + uncles +
                 ", header=" + header +
+                ", raw='" + raw + '\'' +
                 ", body=" + body +
                 ", transactionList=" + transactionList +
                 '}';

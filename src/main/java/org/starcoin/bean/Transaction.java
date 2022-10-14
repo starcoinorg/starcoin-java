@@ -18,6 +18,7 @@ package org.starcoin.bean;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.List;
 
@@ -70,13 +71,13 @@ public class Transaction extends Base {
     @JsonProperty("transaction_type")
     TransactionType transactionType;
 
-
     @JSONField(name = "status")
-    @JsonIgnore
+    @JsonProperty("status")
+    @JsonDeserialize(using = CustomStringDeserializer.class)
     String status;
 
-    @JsonProperty("status")
-    Object statusObj;
+//    @JsonProperty("status")
+//    Object statusObj;
 
     long timestamp;
 
@@ -192,14 +193,14 @@ public class Transaction extends Base {
     public void setTransactionGlobalIndex(long transactionGlobalIndex) {
         this.transactionGlobalIndex = transactionGlobalIndex;
     }
-
-    public Object getStatusObj() {
-        return statusObj;
-    }
-
-    public void setStatusObj(Object statusObj) {
-        this.statusObj = statusObj;
-    }
+//
+//    public Object getStatusObj() {
+//        return statusObj;
+//    }
+//
+//    public void setStatusObj(Object statusObj) {
+//        this.statusObj = statusObj;
+//    }
 
     @Override
     public String toString() {

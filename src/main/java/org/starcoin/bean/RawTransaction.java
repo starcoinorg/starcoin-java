@@ -16,31 +16,50 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.starcoin.types.TransactionPayload;
 
 public class RawTransaction {
     @JSONField(name = "sequence_number")
+    @JsonProperty("sequence_number")
     String sequenceNumber;
     @JSONField(name = "chain_id")
+    @JsonProperty("chain_id")
     int chainId;
     @JSONField(name = "sender")
+    @JsonProperty("sender")
     String sender;
     @JSONField(name = "payload")
+    @JsonProperty("payload")
     String payload;
     @JSONField(serialize = false)
+    @JsonIgnore
     TransactionPayload transactionPayload;
     @JSONField(name = "gas_unit_price")
+    @JsonProperty("gas_unit_price")
     String gasUnitPrice;
     @JSONField(name = "gas_token_code")
+    @JsonProperty("gas_token_code")
     String gasTokenCode;
     @JSONField(name = "max_gas_amount")
+    @JsonProperty("max_gas_amount")
     String maxGasAmount;
     @JSONField(name = "expiration_timestamp_secs")
+    @JsonProperty("expiration_timestamp_secs")
     String expirationTimestampSecs;
     @JSONField(name = "authenticator")
+    @JsonProperty("authenticator")
     Authenticator authenticator;
     @JSONField(name = "transaction_hash")
+    @JsonProperty("transaction_hash")
     String transactionHash;
+
+    @JSONField(name = "decoded_payload")
+    @JsonProperty("decoded_payload")
+    @JsonDeserialize(using = CustomStringDeserializer.class)
+    String decodedPayload;
 
     public String getDecodedPayload() {
         return decodedPayload;
@@ -49,9 +68,6 @@ public class RawTransaction {
     public void setDecodedPayload(String decodedPayload) {
         this.decodedPayload = decodedPayload;
     }
-
-    @JSONField(name = "decoded_payload")
-    String decodedPayload;
 
     public String getSequenceNumber() {
         return sequenceNumber;

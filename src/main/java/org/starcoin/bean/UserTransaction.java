@@ -16,13 +16,16 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserTransaction {
 
     @JSONField(name = "transaction_hash")
+    @JsonProperty("transaction_hash")
     String transactionHash;
 
     @JSONField(name = "raw_txn")
+    @JsonProperty("raw_txn")
     RawTransaction rawTransaction;
 
     Authenticator authenticator;

@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -140,7 +139,6 @@ public class StateRPCClient {
         }
         return BigInteger.valueOf(0);
     }
-
 
     private String getResourceMapTokenKey(String token) {
         return "0x00000000000000000000000000000001::Account::Balance<" + token + ">";

@@ -25,6 +25,9 @@ public class BlockBody {
     @JsonProperty("Full")
     List<UserTransaction> userTransactions;
 
+    @JSONField(name = "Hashes")
+    @JsonProperty("Hashes")
+    List<String> hashes;
     public List<UserTransaction> getUserTransactions() {
         return userTransactions;
     }
@@ -33,10 +36,19 @@ public class BlockBody {
         this.userTransactions = userTransactions;
     }
 
+    public List<String> getHashes() {
+        return hashes;
+    }
+
+    public void setHashes(List<String> hashes) {
+        this.hashes = hashes;
+    }
+
     @Override
     public String toString() {
         return "BlockBody{" +
                 "userTransactions=" + userTransactions +
+                ", hashes=" + hashes +
                 '}';
     }
 }

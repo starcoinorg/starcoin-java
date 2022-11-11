@@ -8,6 +8,7 @@ import org.starcoin.bean.BlockInfo;
 import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.net.URL;
+import java.util.List;
 
 public class BlockRPCClientTest extends TestCase {
     private BlockRPCClient client;
@@ -54,4 +55,12 @@ public class BlockRPCClientTest extends TestCase {
         }
     }
 
+    public void testGetBlockListFromHeight() {
+        try {
+            List<Block> blockList = client.getBlockListFromHeight(34401, 10);
+            System.out.println(blockList.size());
+        } catch (JSONRPC2SessionException e) {
+            e.printStackTrace();
+        }
+    }
 }

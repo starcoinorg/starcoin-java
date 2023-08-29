@@ -148,7 +148,7 @@ public class StateRPCClient {
         return "0x1::Token::TokenInfo<" + code + ">";
     }
 
-    private ListResource getListResource(String address,List<String> resourceTypes,String stateRoot,Integer startIndex,Integer maxSize) throws JSONRPC2SessionException{
+    private ListResource getListResource(String address, List<String> resourceTypes, String stateRoot, Integer startIndex, Integer maxSize) throws JSONRPC2SessionException {
         JsonRPCClient<ListResource> client = new JsonRPCClient<>();
         List<Object> parameter = new ArrayList<>();
         parameter.add(address);
@@ -164,46 +164,67 @@ public class StateRPCClient {
 
     /**
      * 通过 address 查询当前账户下的所有资源集合
+     *
      * @param address 地址
      * @return
      * @throws JSONRPC2SessionException
      */
-    public ListResource getAllResourcesByAddress(String address) throws JSONRPC2SessionException{
-        return this.getListResource(address,null,null,null,null);
+    public ListResource getAllResourcesByAddress(String address) throws JSONRPC2SessionException {
+        return this.getListResource(address, null, null, null, null);
     }
 
     /**
      * 通过 address 和 resourceTypes 查询当前账户下的所有资源集合
-     * @param address 地址
+     *
+     * @param address       地址
      * @param resourceTypes 资源类型集合
      * @return
      * @throws JSONRPC2SessionException
      */
-    public ListResource getAllResourcesByResourceTypes(String address,List<String> resourceTypes) throws JSONRPC2SessionException{
-        return this.getListResource(address,resourceTypes,null,null,null);
+    public ListResource getAllResourcesByResourceTypes(String address, List<String> resourceTypes) throws JSONRPC2SessionException {
+        return this.getListResource(address, resourceTypes, null, null, null);
     }
 
     /**
      * 通过 address 和 TypeTags 查询当前账户下的所有资源集合
+     *
      * @param address
      * @param typeTags
      * @return
      * @throws JSONRPC2SessionException
      */
-    public ListResource getAllResourcesByTypeTags(String address,List<String> typeTags) throws JSONRPC2SessionException{
-        return this.getListResource(address,typeTags,null,null,null);
+    public ListResource getAllResourcesByTypeTags(String address, List<String> typeTags) throws JSONRPC2SessionException {
+        return this.getListResource(address, typeTags, null, null, null);
     }
 
     /**
      * 通过 address 分页查询当前账户下的所有资源集合
+     *
      * @param address
      * @param startIndex
      * @param maxSize
      * @return
      * @throws JSONRPC2SessionException
      */
-    public ListResource getResourceListByPage(String address,int startIndex,int maxSize) throws JSONRPC2SessionException{
-        return this.getListResource(address,null,null,startIndex,maxSize);
+    public ListResource getResourceListByPage(String address, int startIndex, int maxSize) throws JSONRPC2SessionException {
+        return this.getListResource(address, null, null, startIndex, maxSize);
+    }
+
+    /**
+     * 通过 address 查询 TableInfo
+     *
+     * @param address
+     * @return
+     * @throws JSONRPC2SessionException
+     */
+    public TableInfo getTableInfo(String address) throws JSONRPC2SessionException, JsonProcessingException {
+        JsonRPCClient<TableInfo> client = new JsonRPCClient<>();
+        List<Object> param = new ArrayList<>();
+        param.add(address);
+        ListResourceOption option = new ListResourceOption();
+        option.setDecode(true);
+        param.add(option);
+        return client.getSubObject(session, "state.get_table_info", param, 0, "json", TableInfo.class);
     }
 
 }

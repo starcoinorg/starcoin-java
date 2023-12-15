@@ -35,6 +35,8 @@ public class TokenContractRPCClient extends ContractRPCClient {
     public static final String TreasuryBalanceTypeTag = "0x00000000000000000000000000000001::Treasury::balance";
     public static final String TokenMarketCapTypeTag = "0x00000000000000000000000000000001::Token::market_cap";
 
+    public static final String AssociactionAddress = "0x0000000000000000000000000a550c18";
+
     public TokenContractRPCClient(URL baseUrl) {
         super(baseUrl);
     }
@@ -105,7 +107,9 @@ public class TokenContractRPCClient extends ContractRPCClient {
      * 用于获取 STC 在国库中的数量
      */
     public BigInteger getSTCTreasurBalance() throws JSONRPC2SessionException {
-        return this.getTreasuryBalance(STCTypeTag);
+        StateRPCClient stateRPCClient = new StateRPCClient(session.getURL());
+        BigInteger amount = stateRPCClient.getAddressAmountValue(AssociactionAddress, STCTypeTag);
+        return this.getTreasuryBalance(STCTypeTag).add(amount);
     }
 
     /**

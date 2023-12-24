@@ -231,3 +231,13 @@ mvn clean deploy
 ## License
 
 starcoin-java is licensed as [Apache 2.0](./LICENSE).
+
+
+## Deploy maven
+
+In DigitOcean machine
+
+```shell
+export GPG_TTY=$(tty)
+mvn clean deploy
+```

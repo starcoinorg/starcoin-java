@@ -16,7 +16,8 @@ public class ContractRPCClientTestCase extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        client = new ContractRPCClient(new URL("http://localhost:9850"));
+       // client = new ContractRPCClient(new URL("http://localhost:9850"));
+        client = new ContractRPCClient(new URL("https://barnard-seed.starcoin.org"));
     }
 
     public void testCall() {
@@ -43,7 +44,8 @@ public class ContractRPCClientTestCase extends TestCase {
     }
 
     public void testSTCMarketCap() throws MalformedURLException, JSONRPC2SessionException {
-        TokenContractRPCClient tokenContractRPCClient = new TokenContractRPCClient(new URL("http://localhost:9850"));
+        // TokenContractRPCClient tokenContractRPCClient = new TokenContractRPCClient(new URL("http://localhost:9850"));
+        TokenContractRPCClient tokenContractRPCClient = new TokenContractRPCClient(new URL("https://barnard-seed.starcoin.org"));
         BigInteger cap = tokenContractRPCClient.getSTCMarketCap();
         System.out.println(cap);
 

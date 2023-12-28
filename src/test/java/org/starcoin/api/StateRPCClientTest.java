@@ -32,7 +32,8 @@ public class StateRPCClientTest {
 
     @Before
     public void setUp() throws Exception {
-        stateRPCClient = new StateRPCClient(new URL("http://localhost:9850"));
+        // stateRPCClient = new StateRPCClient(new URL("http://localhost:9850"));
+        stateRPCClient = new StateRPCClient(new URL("https://barnard-seed.starcoin.org"));
     }
 
     @Test
@@ -59,7 +60,7 @@ public class StateRPCClientTest {
 
     @Test
     public void testGetStateWithRoot() throws JSONRPC2SessionException {
-        ListResource resource = stateRPCClient.getState("0x8c109349c6bd91411d6bc962e080c4a3", true, "0xfd8077594464567fd1c60ec59e7d6bc78312d674ac3710febd2898d172f6e113");
+        ListResource resource = stateRPCClient.getState("0x8c109349c6bd91411d6bc962e080c4a3", true, "0x5ee196ac92839743e79db7e6a7d75acdd4afe02b3c89c036e498f66df996c0cf");
         System.out.println(resource);
         for (String key : resource.getResources().keySet()) {
              if(key.contains("TokenSwapPair")) {

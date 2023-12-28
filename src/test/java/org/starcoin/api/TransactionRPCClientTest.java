@@ -30,7 +30,8 @@ public class TransactionRPCClientTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        client = new TransactionRPCClient(new URL("http://localhost:9850"));
+        // client = new TransactionRPCClient(new URL("http://localhost:9850"));
+        client = new TransactionRPCClient(new URL("https://barnard-seed.starcoin.org"));
     }
 
     public void testGetTransactionByHash() {

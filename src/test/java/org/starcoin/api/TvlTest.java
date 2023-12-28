@@ -15,8 +15,8 @@ public class TvlTest {
 
     @Test
     public void testTvl() throws MalformedURLException, JSONRPC2SessionException {
-        StateRPCClient stateRPCClient = new StateRPCClient(new URL("http://barnard1.seed.starcoin.org:9850"));
-
+        // StateRPCClient stateRPCClient = new StateRPCClient(new URL("http://barnard1.seed.starcoin.org:9850"));
+        StateRPCClient stateRPCClient = new StateRPCClient(new URL("https://barnard-seed.starcoin.org"));
         String address = "0xbd7e8be8fae9f60f2f5136433e36a091";
         ListResource resources = stateRPCClient.getState(address);
 

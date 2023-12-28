@@ -109,7 +109,7 @@ public class TokenContractRPCClient extends ContractRPCClient {
     public BigInteger getSTCTreasurBalance() throws JSONRPC2SessionException {
         StateRPCClient stateRPCClient = new StateRPCClient(session.getURL());
         BigInteger amount = stateRPCClient.getAddressAmountValue(AssociactionAddress, STCTypeTag);
-        return this.getTreasuryBalance(STCTypeTag).add(amount);
+        return this.getTreasurBalance(STCTypeTag).add(amount);
     }
 
     /**

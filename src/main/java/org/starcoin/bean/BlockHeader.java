@@ -20,6 +20,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Vector;
+
 @JSONType(naming = PropertyNamingStrategy.SnakeCase)
 public class BlockHeader extends Base {
     long timestamp;
@@ -77,6 +79,10 @@ public class BlockHeader extends Base {
     @JSONField(name = "txn_accumulator_root")
     @JsonProperty("txn_accumulator_root")
     private String txnAccumulatorRoot;
+
+    @JSONField(name = "parents_hash")
+    @JsonProperty("parents_hash")
+    private Vector<String> parentsHash;
 
     public String getAuthor() {
         return author;
@@ -206,6 +212,14 @@ public class BlockHeader extends Base {
         this.difficultyHexStr = difficultyHexStr;
     }
 
+    public Vector<String> getParentsHash() {
+        return parentsHash;
+    }
+
+    public void setParentsHash(Vector<String> parentsHash) {
+        this.parentsHash = parentsHash;
+    }
+
     @Override
     public String toString() {
         return "BlockHeader{" +
@@ -225,6 +239,7 @@ public class BlockHeader extends Base {
                 ", parentHash='" + parentHash + '\'' +
                 ", stateRoot='" + stateRoot + '\'' +
                 ", txnAccumulatorRoot='" + txnAccumulatorRoot + '\'' +
+                ", parents_hash='" + parentsHash + '\'' +
                 '}';
     }
 }

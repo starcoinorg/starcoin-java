@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.starcoin.bean.Block;
+import org.starcoin.bean.BlockGhostdagData;
 import org.starcoin.bean.BlockHeader;
 import org.starcoin.bean.BlockInfo;
 import org.starcoin.jsonrpc.client.JSONRPC2Session;
@@ -90,4 +91,8 @@ public class BlockRPCClient {
         return client.getObjectArray(session, "chain.get_blocks_by_number", params, 0, Block.class);
     }
 
+    public BlockGhostdagData getBlockGhostdagData(String hash) throws JSONRPC2SessionException {
+        JsonRPCClient<BlockGhostdagData> client = new JsonRPCClient<>();
+        return client.getObject(session, "chain.get_ghostdagdata", Collections.singletonList(hash), 0, BlockGhostdagData.class);
+    }
 }

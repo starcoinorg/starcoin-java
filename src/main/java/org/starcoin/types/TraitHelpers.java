@@ -1,5 +1,7 @@
 package org.starcoin.types;
 
+import java.util.List;
+
 final class TraitHelpers {
     static void serialize_array16_u8_array(java.util.@com.novi.serde.ArrayLen(length = 16) List<@com.novi.serde.Unsigned Byte> value, com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
         if (value.size() != 16) {
@@ -101,6 +103,15 @@ final class TraitHelpers {
         java.util.List<String> obj = new java.util.ArrayList<String>((int) length);
         for (long i = 0; i < length; i++) {
             obj.add(deserializer.deserialize_str());
+        }
+        return obj;
+    }
+
+    static java.util.List<HashValue> deserialize_vector_hashvalue(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
+        long length = deserializer.deserialize_len();
+        java.util.List<HashValue> obj = new java.util.ArrayList<>((int) length);
+        for (long i = 0; i < length; i++) {
+            obj.add(HashValue.deserialize(deserializer));
         }
         return obj;
     }
@@ -299,6 +310,13 @@ final class TraitHelpers {
             obj.add(deserializer.deserialize_u8());
         }
         return obj;
+    }
+
+    static void serialize_vector_hashvalue(List<HashValue> hashValueList, com.novi.serde.Serializer serializer) throws com.novi.serde.SerializationError {
+        serializer.serialize_len(hashValueList.size());
+        for (HashValue hash : hashValueList) {
+            hash.serialize(serializer);
+        }
     }
 
 }

@@ -16,6 +16,7 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BlockMetadata {
@@ -43,6 +44,11 @@ public class BlockMetadata {
     @JSONField(name = "parent_gas_used")
     @JsonProperty("parent_gas_used")
     long parentGasUsed;
+
+    @JSONField(name = "parents_hash")
+    @JsonProperty("parents_hash")
+    @JsonIgnore
+    String parentsHash;
 
     public String getParentHash() {
         return parentHash;
@@ -108,6 +114,14 @@ public class BlockMetadata {
         this.parentGasUsed = parentGasUsed;
     }
 
+    public String getParentsHash() {
+        return parentsHash;
+    }
+
+    public void setParentsHash(String parentsHash) {
+        this.parentsHash = parentsHash;
+    }
+
     @Override
     public String toString() {
         return "BlockMetadata{" +
@@ -119,6 +133,7 @@ public class BlockMetadata {
                 ", number='" + number + '\'' +
                 ", chainId='" + chainId + '\'' +
                 ", parentGasUsed=" + parentGasUsed +
+                ", parentsHash=" + parentsHash +
                 '}';
     }
 }

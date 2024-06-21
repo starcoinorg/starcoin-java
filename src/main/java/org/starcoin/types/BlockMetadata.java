@@ -1,6 +1,12 @@
 package org.starcoin.types;
 
 
+import com.novi.serde.Unsigned;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 public final class BlockMetadata {
     public final HashValue parent_hash;
     public final @com.novi.serde.Unsigned Long timestamp;
@@ -10,8 +16,19 @@ public final class BlockMetadata {
     public final @com.novi.serde.Unsigned Long number;
     public final ChainId chain_id;
     public final @com.novi.serde.Unsigned Long parent_gas_used;
+    public final List<HashValue> parents_hash;
 
-    public BlockMetadata(HashValue parent_hash, @com.novi.serde.Unsigned Long timestamp, AccountAddress author, java.util.Optional<AuthenticationKey> author_auth_key, @com.novi.serde.Unsigned Long uncles, @com.novi.serde.Unsigned Long number, ChainId chain_id, @com.novi.serde.Unsigned Long parent_gas_used) {
+    public BlockMetadata(
+            HashValue parent_hash,
+            @Unsigned Long timestamp,
+            AccountAddress author,
+            Optional<AuthenticationKey> author_auth_key,
+            @Unsigned Long uncles,
+            @Unsigned Long number,
+            ChainId chain_id,
+            @Unsigned Long parent_gas_used,
+            List<HashValue> parents_hash
+    ) {
         java.util.Objects.requireNonNull(parent_hash, "parent_hash must not be null");
         java.util.Objects.requireNonNull(timestamp, "timestamp must not be null");
         java.util.Objects.requireNonNull(author, "author must not be null");
@@ -28,6 +45,7 @@ public final class BlockMetadata {
         this.number = number;
         this.chain_id = chain_id;
         this.parent_gas_used = parent_gas_used;
+        this.parents_hash = parents_hash;
     }
 
     public static BlockMetadata deserialize(com.novi.serde.Deserializer deserializer) throws com.novi.serde.DeserializationError {
@@ -41,7 +59,8 @@ public final class BlockMetadata {
         builder.number = deserializer.deserialize_u64();
         builder.chain_id = ChainId.deserialize(deserializer);
         builder.parent_gas_used = deserializer.deserialize_u64();
-        deserializer.decrease_container_depth();
+        builder.parents_hash = TraitHelpers.deserialize_vector_hashvalue(deserializer);
+
         return builder.build();
     }
 
@@ -67,6 +86,7 @@ public final class BlockMetadata {
         serializer.serialize_u64(number);
         chain_id.serialize(serializer);
         serializer.serialize_u64(parent_gas_used);
+        TraitHelpers.serialize_vector_hashvalue(parents_hash, serializer);
         serializer.decrease_container_depth();
     }
 
@@ -105,7 +125,7 @@ public final class BlockMetadata {
         if (!java.util.Objects.equals(this.parent_gas_used, other.parent_gas_used)) {
             return false;
         }
-        return true;
+        return java.util.Objects.equals(this.parents_hash, other.parents_hash);
     }
 
     public int hashCode() {
@@ -130,6 +150,7 @@ public final class BlockMetadata {
         public @com.novi.serde.Unsigned Long number;
         public ChainId chain_id;
         public @com.novi.serde.Unsigned Long parent_gas_used;
+        public List<HashValue> parents_hash;
 
         public BlockMetadata build() {
             return new BlockMetadata(
@@ -140,7 +161,8 @@ public final class BlockMetadata {
                     uncles,
                     number,
                     chain_id,
-                    parent_gas_used
+                    parent_gas_used,
+                    parents_hash
             );
         }
     }

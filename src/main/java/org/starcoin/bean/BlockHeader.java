@@ -18,11 +18,14 @@ package org.starcoin.bean;
 import com.alibaba.fastjson.PropertyNamingStrategy;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
 import java.util.Vector;
 
 @JSONType(naming = PropertyNamingStrategy.SnakeCase)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BlockHeader extends Base {
     long timestamp;
 
@@ -82,7 +85,7 @@ public class BlockHeader extends Base {
 
     @JSONField(name = "parents_hash")
     @JsonProperty("parents_hash")
-    private Vector<String> parentsHash;
+    private List<String> parentsHash;
 
     public String getAuthor() {
         return author;
@@ -212,11 +215,11 @@ public class BlockHeader extends Base {
         this.difficultyHexStr = difficultyHexStr;
     }
 
-    public Vector<String> getParentsHash() {
+    public List<String> getParentsHash() {
         return parentsHash;
     }
 
-    public void setParentsHash(Vector<String> parentsHash) {
+    public void setParentsHash(List<String> parentsHash) {
         this.parentsHash = parentsHash;
     }
 

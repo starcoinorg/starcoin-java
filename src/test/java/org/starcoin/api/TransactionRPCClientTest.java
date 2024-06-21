@@ -36,12 +36,12 @@ public class TransactionRPCClientTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         //client = new TransactionRPCClient(new URL("http://localhost:9850"));
-        client = new TransactionRPCClient(new URL("https://barnard-seed.starcoin.org"));
+        client = new TransactionRPCClient(new URL("https://halley-seed.starcoin.org"));
     }
 
     public void testGetTransactionByHash() {
         try {
-            Transaction transaction = client.getTransactionByHash("0x88e2f199dba3c4bef8b29b8e21a38cb4a6d36f17b5bd5f3394bfbf8268342ff2");
+            Transaction transaction = client.getTransactionByHash("0x9a69d759c0e2437699814ee9c059b5ea846712b55de75cfb66331d2ebdff4bec");
             System.out.println(transaction);
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();

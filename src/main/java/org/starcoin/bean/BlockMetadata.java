@@ -19,6 +19,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class BlockMetadata {
 
     @JSONField(name = "parent_hash")
@@ -47,8 +49,7 @@ public class BlockMetadata {
 
     @JSONField(name = "parents_hash")
     @JsonProperty("parents_hash")
-    @JsonIgnore
-    String parentsHash;
+    List<String> parentsHash;
 
     public String getParentHash() {
         return parentHash;
@@ -114,11 +115,11 @@ public class BlockMetadata {
         this.parentGasUsed = parentGasUsed;
     }
 
-    public String getParentsHash() {
+    public List<String> getParentsHash() {
         return parentsHash;
     }
 
-    public void setParentsHash(String parentsHash) {
+    public void setParentsHash(List<String> parentsHash) {
         this.parentsHash = parentsHash;
     }
 

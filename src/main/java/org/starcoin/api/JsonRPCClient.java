@@ -62,7 +62,11 @@ class JsonRPCClient<T> {
                 logger.warn("get object result is null, method:" + method);
             }
         } else {
-            logger.error("get object array error:" + response.getError());
+            logger.error("get object array error, method: {}, class: {}, error: {}",
+                    method,
+                    clazz,
+                    response.getError()
+            );
         }
         return null;
     }
@@ -89,9 +93,12 @@ class JsonRPCClient<T> {
             } else {
                 logger.warn("get object parse jackson result is null, method:" + method);
             }
-
         } else {
-            logger.error("get object parse jackson array error:" + response.getError());
+            logger.error("get get object parse jackson array error, method: {}, class: {}, error: {}",
+                    method,
+                    clazz,
+                    response.getError()
+            );
         }
         return null;
     }
@@ -121,7 +128,11 @@ class JsonRPCClient<T> {
                 logger.warn("get sub object result is null, method:" + method);
             }
         } else {
-            logger.error("get sub object array error:" + response.getError());
+            logger.error("get sub object array error, method: {}, class: {}, error: {}",
+                    method,
+                    clazz,
+                    response.getError()
+            );
         }
         return null;
     }
@@ -151,7 +162,11 @@ class JsonRPCClient<T> {
                 logger.warn("get object result is null, method:" + method);
             }
         } else {
-            logger.error("get object array error:" + response.getError());
+            logger.error("get object array error, method: {}, class: {}, error: {}",
+                    method,
+                    clazz,
+                    response.getError()
+            );
         }
         return null;
     }

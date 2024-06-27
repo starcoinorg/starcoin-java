@@ -62,8 +62,9 @@ class JsonRPCClient<T> {
                 logger.warn("get object result is null, method:" + method);
             }
         } else {
-            logger.error("get object array error, method: {}, class: {}, error: {}",
-                    method,
+            logger.error("getObject error, url:{}, request:{}, class: {}, error: {}",
+                    session.getURL(),
+                    request,
                     clazz,
                     response.getError()
             );
@@ -94,8 +95,9 @@ class JsonRPCClient<T> {
                 logger.warn("get object parse jackson result is null, method:" + method);
             }
         } else {
-            logger.error("get get object parse jackson array error, method: {}, class: {}, error: {}",
-                    method,
+            logger.error("getObjectParseJackson failed, url:{}, request:{}, class: {}, error: {}",
+                    session.getURL(),
+                    request,
                     clazz,
                     response.getError()
             );
@@ -128,8 +130,9 @@ class JsonRPCClient<T> {
                 logger.warn("get sub object result is null, method:" + method);
             }
         } else {
-            logger.error("get sub object array error, method: {}, class: {}, error: {}",
-                    method,
+            logger.error("getSubObject error, url:{}, request:{}, class: {}, error: {}",
+                    session.getURL(),
+                    request,
                     clazz,
                     response.getError()
             );
@@ -162,8 +165,9 @@ class JsonRPCClient<T> {
                 logger.warn("get object result is null, method:" + method);
             }
         } else {
-            logger.error("get object array error, method: {}, class: {}, error: {}",
-                    method,
+            logger.error("getObjectArray error, url:{}, request:{}, class: {}, error: {}",
+                    session.getURL(),
+                    request,
                     clazz,
                     response.getError()
             );

@@ -62,11 +62,11 @@ class JsonRPCClient<T> {
                 logger.warn("get object result is null, method:" + method);
             }
         } else {
-            logger.error("getObject error, url:{}, request:{}, class: {}, error: {}",
+            logger.error("getObject error, url:{}, request:{}, class: {}, response: {}",
                     session.getURL(),
                     request,
                     clazz,
-                    response.getError()
+                    response
             );
         }
         return null;
@@ -95,11 +95,11 @@ class JsonRPCClient<T> {
                 logger.warn("get object parse jackson result is null, method:" + method);
             }
         } else {
-            logger.error("getObjectParseJackson failed, url:{}, request:{}, class: {}, error: {}",
+            logger.error("getObjectParseJackson failed, url:{}, request:{}, class: {}, response: {}",
                     session.getURL(),
                     request,
                     clazz,
-                    response.getError()
+                    response
             );
         }
         return null;
@@ -130,11 +130,11 @@ class JsonRPCClient<T> {
                 logger.warn("get sub object result is null, method:" + method);
             }
         } else {
-            logger.error("getSubObject error, url:{}, request:{}, class: {}, error: {}",
+            logger.error("getSubObject error, url:{}, request:{}, class: {}, response: {}",
                     session.getURL(),
                     request,
                     clazz,
-                    response.getError()
+                    response
             );
         }
         return null;
@@ -165,11 +165,11 @@ class JsonRPCClient<T> {
                 logger.warn("get object result is null, method:" + method);
             }
         } else {
-            logger.error("getObjectArray error, url:{}, request:{}, class: {}, error: {}",
+            logger.error("getObjectArray error, url:{}, request:{}, class: {}, response: {}",
                     session.getURL(),
                     request,
                     clazz,
-                    response.getError()
+                    response
             );
         }
         return null;

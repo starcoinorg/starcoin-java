@@ -48,7 +48,7 @@ public class ContractRPCClientTestCase extends TestCase {
         BigInteger cap = tokenContractRPCClient.getSTCMarketCap();
         System.out.println(cap);
 
-        BigInteger balance = tokenContractRPCClient.getSTCTreasurBalance();
+        BigInteger balance = tokenContractRPCClient.getSTCTreasuryBalance();
         System.out.println(balance);
 
         System.out.println(tokenContractRPCClient.getSTCCurrentSupply());

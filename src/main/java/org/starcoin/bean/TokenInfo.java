@@ -35,7 +35,6 @@ public class TokenInfo extends Base {
     private Object burnEvents;
 
     @JSONField(name = "mint_events")
-
     private Object mintEvents;
 
     public Object getMintEvents() {

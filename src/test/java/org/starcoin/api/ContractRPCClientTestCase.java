@@ -1,9 +1,8 @@
 package org.starcoin.api;
 
-
+import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import junit.framework.TestCase;
 import org.starcoin.bean.ContractCall;
-import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.math.BigInteger;
 import java.net.MalformedURLException;

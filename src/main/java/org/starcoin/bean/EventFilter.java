@@ -25,16 +25,12 @@ public class EventFilter {
     private static final String recvPrefix = "0100000000000000";
     private static final String sendPrefix = "0000000000000000";
 
-    @JsonProperty("from_block")
     private long fromBlock;
 
-    @JsonProperty("event_keys")
     private List<String> eventKeys;
 
-    @JsonProperty("addrs")
     private List<String> accountAddress;
 
-    @JsonProperty("decode")
     private boolean decode = true;
 
     public EventFilter(long fromBlock, String address) {

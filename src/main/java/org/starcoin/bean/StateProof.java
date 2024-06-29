@@ -6,15 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class StateProof {
 
     @JSONField(name = "account_proof")
-    @JsonProperty("account_proof")
     private AccountProof accountProof;
 
     @JSONField(name = "account_state")
-    @JsonProperty("account_state")
     private String accountState;
 
     @JSONField(name = "account_state_proof")
-    @JsonProperty("account_state_proof")
     private AccountProof accountStateProof;
 
     private String state;

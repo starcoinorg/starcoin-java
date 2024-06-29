@@ -15,6 +15,7 @@
  */
 package org.starcoin.api;
 
+import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Before;
@@ -22,7 +23,6 @@ import org.junit.Test;
 import org.starcoin.bean.ListResource;
 import org.starcoin.bean.Resource;
 import org.starcoin.bean.TokenInfo;
-import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.math.BigInteger;
 import java.net.MalformedURLException;

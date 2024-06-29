@@ -6,19 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class BlockInfo {
 
     @JSONField(name = "block_accumulator_info")
-    @JsonProperty("block_accumulator_info")
     private AccumulatorNode blockAccumulatorInfo;
 
     @JSONField(name = "block_hash")
-    @JsonProperty("block_hash")
     private String blockHash;
 
     @JSONField(name = "total_difficulty")
-    @JsonProperty("total_difficulty")
     private String totalDifficulty;
 
     @JSONField(name = "txn_accumulator_info")
-    @JsonProperty("txn_accumulator_info")
     private AccumulatorNode txnAccumulatorInfo;
 
     public AccumulatorNode getBlockAccumulatorInfo() {

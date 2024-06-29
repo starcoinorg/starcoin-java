@@ -20,10 +20,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Ed25519 {
     @JSONField(name = "public_key")
-    @JsonProperty("public_key")
     String publicKey;
     @JSONField(name = "signature")
-    @JsonProperty("signature")
     String signature;
 
     public String getPublicKey() {

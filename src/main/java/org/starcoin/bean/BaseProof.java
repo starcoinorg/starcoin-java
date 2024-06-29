@@ -8,7 +8,6 @@ import java.util.List;
 public class BaseProof {
 
     @JSONField(name = "siblings")
-    @JsonProperty("siblings")
     public List<String> siblings;
 
     public List<String> getSiblings() {

@@ -15,6 +15,7 @@
  */
 package org.starcoin.api;
 
+import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +23,6 @@ import junit.framework.TestCase;
 import org.starcoin.bean.Event;
 import org.starcoin.bean.Transaction;
 import org.starcoin.bean.TransactionInfoWithProof;
-import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.net.URL;
 import java.util.Collections;

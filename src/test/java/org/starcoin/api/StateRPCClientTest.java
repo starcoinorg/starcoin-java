@@ -56,7 +56,7 @@ public class StateRPCClientTest {
             System.out.println(token.substring(0, 34));
             tokenInfo = stateRPCClient.getTokenInfo("0x8c109349c6bd91411d6bc962e080c4a3", "0x8c109349c6bd91411d6bc962e080c4a3::STAR::STAR");
             System.out.println(tokenInfo);
-        } catch (JSONRPC2SessionException | JsonProcessingException e) {
+        } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }
     }

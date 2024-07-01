@@ -22,47 +22,37 @@ import org.starcoin.types.AccountAddress;
 
 public class Event extends Base {
     @JSONField(name = "block_hash")
-    @JsonProperty("block_hash")
     String blockHash;
 
     @JSONField(name = "block_number")
-    @JsonProperty("block_number")
     String blockNumber;
 
     @JSONField(name = "transaction_hash")
-    @JsonProperty("transaction_hash")
     String transactionHash;
 
     @JSONField(name = "transaction_index")
-    @JsonProperty("transaction_index")
     int transactionIndex;
 
     @JSONField(name = "transaction_global_index")
-    @JsonProperty("transaction_global_index")
     long transactionGlobalIndex;
 
     String data;
 
     @JSONField(name = "type_tag")
-    @JsonProperty("type_tag")
     String typeTag;
 
     @JSONField(name = "event_key")
-    @JsonProperty("event_key")
     String eventKey;
 
     @JSONField(name = "event_seq_number")
-    @JsonProperty("event_seq_number")
     String eventSeqNumber;
 
 
     @JSONField(name = "event_index")
-    @JsonProperty("event_index")
     Long eventIndex;
 
 
     @JSONField(name = "decode_event_data")
-    @JsonProperty("decode_event_data")
     @JsonDeserialize(using = CustomStringDeserializer.class)
     String decodeEventData;
 

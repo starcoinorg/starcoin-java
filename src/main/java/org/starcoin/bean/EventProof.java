@@ -6,11 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class EventProof {
 
     @JSONField(name = "event")
-    @JsonProperty("event")
     private String event;
 
     @JSONField(name = "proof")
-    @JsonProperty("proof")
     private BaseProof proof;
 
     public String getEvent() {

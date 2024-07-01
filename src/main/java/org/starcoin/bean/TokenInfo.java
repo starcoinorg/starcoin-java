@@ -23,23 +23,18 @@ import java.math.BigInteger;
 
 public class TokenInfo extends Base {
     @JSONField(name = "token_code")
-    @JsonProperty("token_code")
     private String tokenCode;
 
     @JSONField(name = "total_value")
-    @JsonProperty("total_value")
     private BigInteger totalValue;
 
     @JSONField(name = "scaling_factor")
-    @JsonProperty("scaling_factor")
     private long scalingFactor;
 
     @JSONField(name = "burn_events")
-    @JsonProperty("burn_events")
     private Object burnEvents;
 
     @JSONField(name = "mint_events")
-    @JsonProperty("mint_events")
     private Object mintEvents;
 
     public Object getMintEvents() {

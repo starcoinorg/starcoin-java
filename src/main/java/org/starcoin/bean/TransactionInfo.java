@@ -6,39 +6,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class TransactionInfo {
 
     @JSONField(name = "block_hash")
-    @JsonProperty("block_hash")
     private String blockHash;
 
     @JSONField(name = "block_number")
-    @JsonProperty("block_number")
     private String blockNumber;
 
     @JSONField(name = "transaction_hash")
-    @JsonProperty("transaction_hash")
     private String transactionHash;
 
     @JSONField(name = "transaction_index")
-    @JsonProperty("transaction_index")
     private int transactionIndex;
 
     @JSONField(name = "transaction_global_index")
-    @JsonProperty("transaction_global_index")
     private long transactionGlobalIndex;
 
     @JSONField(name = "state_root_hash")
-    @JsonProperty("state_root_hash")
     private String stateRootHash;
 
     @JSONField(name = "event_root_hash")
-    @JsonProperty("event_root_hash")
     private String eventRootHash;
 
     @JSONField(name = "gas_used")
-    @JsonProperty("gas_used")
     private String gasUsed;
 
     @JSONField(name = "status")
-    @JsonProperty("status")
     private String status;
 
     public String getBlockHash() {

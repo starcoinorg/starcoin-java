@@ -1,12 +1,12 @@
 package org.starcoin.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import junit.framework.TestCase;
 import org.starcoin.bean.Block;
 import org.starcoin.bean.BlockGhostdagData;
 import org.starcoin.bean.BlockHeader;
 import org.starcoin.bean.BlockInfo;
-import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.net.URL;
 import java.util.List;

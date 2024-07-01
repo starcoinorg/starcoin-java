@@ -17,7 +17,6 @@ package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -26,16 +25,12 @@ import java.util.List;
 public class ListResourceOption {
     private boolean decode;
     @JSONField(name = "state_root")
-    @JsonProperty("state_root")
     private String stateRoot;
     @JSONField(name = "max_size")
-    @JsonProperty("max_size")
     private Integer maxSize;
     @JSONField(name = "start_index")
-    @JsonProperty("start_index")
     private Integer startIndex;
     @JSONField(name = "resource_types")
-    @JsonProperty("resource_types")
     private List<String> resourceTypes;
 
     public Integer getMaxSize() {

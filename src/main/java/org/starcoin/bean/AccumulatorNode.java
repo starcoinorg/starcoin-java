@@ -1,26 +1,21 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 public class AccumulatorNode {
 
     @JSONField(name = "accumulator_root")
-    @JsonProperty("accumulator_root")
     private String accumulatorRoot;
 
     @JSONField(name = "frozen_subtree_roots")
-    @JsonProperty("frozen_subtree_roots")
     private List<String> frozenSubtreeRoots;
 
     @JSONField(name = "num_leaves")
-    @JsonProperty("num_leaves")
     private String numLeaves;
 
     @JSONField(name = "num_nodes")
-    @JsonProperty("num_nodes")
     private String numNodes;
 
     public String getAccumulatorRoot() {

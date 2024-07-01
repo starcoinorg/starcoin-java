@@ -10,27 +10,21 @@ import java.util.List;
 public class BlockGhostdagData {
 
     @JSONField(name = "blue_work")
-    @JsonProperty("blue_work")
     private String blueWork;
 
     @JSONField(name = "blue_score")
-    @JsonProperty("blue_score")
     private Long blueScore;
 
     @JSONField(name = "blues_anticone_sizes")
-    @JsonProperty("blues_anticone_sizes")
     private HashMap<String, Integer> bluesAnticoneSizes;
 
     @JSONField(name = "mergeset_blues")
-    @JsonProperty("mergeset_blues")
     private List<String> mergesetBlues;
 
     @JSONField(name = "mergeset_reds")
-    @JsonProperty("mergeset_reds")
     private List<String> mergesetReds;
 
     @JSONField(name = "selected_parent")
-    @JsonProperty("selected_parent")
     private String selectedParent;
 
     public String getBlueWork() {

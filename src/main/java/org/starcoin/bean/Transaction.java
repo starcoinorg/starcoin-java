@@ -24,55 +24,42 @@ import java.util.List;
 
 public class Transaction extends Base {
     @JSONField(name = "block_hash")
-    @JsonProperty("block_hash")
     String blockHash;
 
     @JSONField(name = "block_number")
-    @JsonProperty("block_number")
     String blockNumber;
 
     @JSONField(name = "transaction_hash")
-    @JsonProperty("transaction_hash")
     String transactionHash;
 
     @JSONField(name = "transaction_index")
-    @JsonProperty("transaction_index")
     int transactionIndex;
 
     @JSONField(name = "transaction_global_index")
-    @JsonProperty("transaction_global_index")
     long transactionGlobalIndex;
 
     @JSONField(name = "state_root_hash")
-    @JsonProperty("state_root_hash")
     String stateRootHash;
 
     @JSONField(name = "event_root_hash")
-    @JsonProperty("event_root_hash")
     String eventRootHash;
 
     @JSONField(name = "gas_used")
-    @JsonProperty("gas_used")
     String gasUsed;
 
     @JSONField(name = "user_transaction")
-    @JsonProperty("user_transaction")
     UserTransaction userTransaction;
 
     @JSONField(name = "block_metadata")
-    @JsonProperty("block_metadata")
     BlockMetadata blockMetadata;
 
     @JSONField(serialize = false)
-    @JsonIgnore
     List<Event> events;
 
     @JSONField(name = "transaction_type")
-    @JsonProperty("transaction_type")
     TransactionType transactionType;
 
     @JSONField(name = "status")
-    @JsonProperty("status")
     @JsonDeserialize(using = CustomStringDeserializer.class)
     String status;
 

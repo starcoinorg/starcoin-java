@@ -16,17 +16,14 @@
 package org.starcoin.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 public class BlockBody {
     @JSONField(name = "Full")
-    @JsonProperty("Full")
     List<UserTransaction> userTransactions;
 
     @JSONField(name = "Hashes")
-    @JsonProperty("Hashes")
     List<String> hashes;
     public List<UserTransaction> getUserTransactions() {
         return userTransactions;

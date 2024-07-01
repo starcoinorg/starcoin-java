@@ -1,9 +1,8 @@
 package org.starcoin.api;
 
-
+import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import junit.framework.TestCase;
 import org.starcoin.bean.ContractCall;
-import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
 import java.math.BigInteger;
 import java.net.MalformedURLException;
@@ -49,7 +48,7 @@ public class ContractRPCClientTestCase extends TestCase {
         BigInteger cap = tokenContractRPCClient.getSTCMarketCap();
         System.out.println(cap);
 
-        BigInteger balance = tokenContractRPCClient.getSTCTreasurBalance();
+        BigInteger balance = tokenContractRPCClient.getSTCTreasuryBalance();
         System.out.println(balance);
 
         System.out.println(tokenContractRPCClient.getSTCCurrentSupply());

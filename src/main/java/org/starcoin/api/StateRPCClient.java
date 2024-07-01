@@ -15,13 +15,17 @@
  */
 package org.starcoin.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
+import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.starcoin.bean.*;
-import org.starcoin.jsonrpc.client.JSONRPC2Session;
-import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
+import org.starcoin.bean.ListResource;
+import org.starcoin.bean.ListResourceOption;
+import org.starcoin.bean.Resource;
+import org.starcoin.bean.TokenInfo;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -81,7 +85,7 @@ public class StateRPCClient {
         return null;
     }
 
-    public TokenInfo getTokenInfo(String address, String tokenCode) throws JSONRPC2SessionException, JsonProcessingException {
+    public TokenInfo getTokenInfo(String address, String tokenCode) throws JSONRPC2SessionException {
         JsonRPCClient<TokenInfo> client = new JsonRPCClient<>();
         List<Object> param = new ArrayList<>();
         param.add(address);
@@ -148,7 +152,7 @@ public class StateRPCClient {
         return "0x1::Token::TokenInfo<" + code + ">";
     }
 
-    private ListResource getListResource(String address,List<String> resourceTypes,String stateRoot,Integer startIndex,Integer maxSize) throws JSONRPC2SessionException{
+    private ListResource getListResource(String address, List<String> resourceTypes, String stateRoot, Integer startIndex, Integer maxSize) throws JSONRPC2SessionException {
         JsonRPCClient<ListResource> client = new JsonRPCClient<>();
         List<Object> parameter = new ArrayList<>();
         parameter.add(address);
@@ -164,46 +168,50 @@ public class StateRPCClient {
 
     /**
      * 通过 address 查询当前账户下的所有资源集合
+     *
      * @param address 地址
      * @return
      * @throws JSONRPC2SessionException
      */
-    public ListResource getAllResourcesByAddress(String address) throws JSONRPC2SessionException{
-        return this.getListResource(address,null,null,null,null);
+    public ListResource getAllResourcesByAddress(String address) throws JSONRPC2SessionException {
+        return this.getListResource(address, null, null, null, null);
     }
 
     /**
      * 通过 address 和 resourceTypes 查询当前账户下的所有资源集合
-     * @param address 地址
+     *
+     * @param address       地址
      * @param resourceTypes 资源类型集合
      * @return
      * @throws JSONRPC2SessionException
      */
-    public ListResource getAllResourcesByResourceTypes(String address,List<String> resourceTypes) throws JSONRPC2SessionException{
-        return this.getListResource(address,resourceTypes,null,null,null);
+    public ListResource getAllResourcesByResourceTypes(String address, List<String> resourceTypes) throws JSONRPC2SessionException {
+        return this.getListResource(address, resourceTypes, null, null, null);
     }
 
     /**
      * 通过 address 和 TypeTags 查询当前账户下的所有资源集合
+     *
      * @param address
      * @param typeTags
      * @return
      * @throws JSONRPC2SessionException
      */
-    public ListResource getAllResourcesByTypeTags(String address,List<String> typeTags) throws JSONRPC2SessionException{
-        return this.getListResource(address,typeTags,null,null,null);
+    public ListResource getAllResourcesByTypeTags(String address, List<String> typeTags) throws JSONRPC2SessionException {
+        return this.getListResource(address, typeTags, null, null, null);
     }
 
     /**
      * 通过 address 分页查询当前账户下的所有资源集合
+     *
      * @param address
      * @param startIndex
      * @param maxSize
      * @return
      * @throws JSONRPC2SessionException
      */
-    public ListResource getResourceListByPage(String address,int startIndex,int maxSize) throws JSONRPC2SessionException{
-        return this.getListResource(address,null,null,startIndex,maxSize);
+    public ListResource getResourceListByPage(String address, int startIndex, int maxSize) throws JSONRPC2SessionException {
+        return this.getListResource(address, null, null, startIndex, maxSize);
     }
 
 }

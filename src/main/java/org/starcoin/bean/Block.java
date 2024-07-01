@@ -26,19 +26,15 @@ import java.util.List;
 @JSONType(naming = PropertyNamingStrategy.SnakeCase)
 public class Block extends Base {
     @JSONField(name = "metadata")
-    @JsonProperty("metadata")
     BlockMetadata blockMetadata;
 
     @JSONField(name = "uncles")
-    @JsonProperty("uncles")
     List<BlockHeader> uncles;
 
     @JSONField(name = "header")
-    @JsonProperty("header")
     private BlockHeader header;
 
     @JSONField(name = "raw")
-    @JsonProperty("raw")
     private String raw;
 
     private BlockBody body;
